@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Shy 的博客</title>
+  <title>MAKER相关操作 | Shy 的博客</title>
   <meta name="author" content="Shy">
   
   <meta name="description" content="Shy 的博客">
@@ -14,7 +14,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="MAKER相关操作">
   <meta property="og:site_name" content="Shy 的博客">
 
   
@@ -113,51 +113,29 @@ var _hmt = _hmt || [];
 
   <div class="container">
   	<div class="content">
-    	 <div class="page-header logo">
-  <h1>Keep doing<span class="blink-fast">∎</span></h1>
-</div>
+    	 
 
-<div class="row page">
 
 	
+		<div class="page-header">
+			<h1> MAKER相关操作</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
 	<div class="col-md-9">
 	
 
-		<div class="slogan">
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-		<i class="fa fa-heart blink-slow"></i>
-
-		Keep and carry on.
-
-</div>    
-
-		<div id="top_search"></div>
-		<div class="mypage">
-		
-		<!-- title and entry -->
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/21/MAKER相关操作/" >MAKER相关操作</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>####maker pipeline</p>
+	  <p>####maker pipeline</p>
 <p>1.Initial MAKER Analysis</p>
 <p>2.Training Gene Prediction (snap, augustus) </p>
 <p>3.Round 2 MAKER Analysis</p>
@@ -232,141 +210,83 @@ var _hmt = _hmt || [];
 
 <h5 id="7-PASA-prediect-utr-region"><a href="#7-PASA-prediect-utr-region" class="headerlink" title="7.PASA prediect utr region"></a>7.PASA prediect utr region</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> gmap cds2gff</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> clean cds 去除低质量序列</span><br><span class="line"><span class="meta">#</span> /data/maker/PASA_20/data</span><br><span class="line">/home/maker/software/PASApipeline/bin/seqclean XZ15142.hq.fasta</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> custom alignments gff  首先对基因组index然后比对生成 cds 和 gene 模式gff</span><br><span class="line">/home/maker/software/PASApipeline/scripts/process_GMAP_alignments_gff3_chimeras_ok.pl --genome Prunella_strophita_assemble.fa  --transcripts XZ15142.hq.fasta.clean --CPU 2 -N 2  -I 500000  &gt; gmap.spliced_alignments.gff3</span><br><span class="line"></span><br><span class="line">gmap -D . -d Prunella_strophita_assemble.fa.gmap -f 2 -n 2 -x 50 -t 2 -B 5  --max-intronlength-middle=500000 --max-intronlength-ends=500000 XZ15142.hq.fasta.clean</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Running Alignment Assembly 将基因组与cds信息比对</span><br><span class="line">/home/maker/software/PASApipeline/Launch_PASA_pipeline.pl -c sqlite_conf/alignAssembly.config -C -r -R -g data/Prunella_strophita_assemble.fa -t data/XZ15142.hq.fasta.clean -T -u data/XZ15142.hq.fasta --ALIGNERS blat --CPU 2 -N 2 --IMPORT_CUSTOM_ALIGNMENTS_GFF3 data/gmap.spliced_alignments.gff3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Building comprehensive transcriptome database 将结果输入到sqlite数据库</span><br><span class="line">~/software/PASApipeline/scripts/build_comprehensive_transcriptome.dbi -c sqlite_conf/alignAssembly.config -t data/XZ15142.hq.fasta.clean</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> First round, using pre-existing gene structure annotations 对 gff进行update</span><br><span class="line">  ~/software/PASApipeline/Launch_PASA_pipeline.pl -c sqlite_conf/annotCompare.config -g data/Prunella_strophita_assemble.fa -t data/XZ15142.hq.fasta.clean -A -L --annots data/gmap_gene.gff3 --CPU 2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> Second round</span><br><span class="line">~/software/PASApipeline/Launch_PASA_pipeline.pl -c sqlite_conf/annotCompare.config -g data/Prunella_strophita_assemble.fa -t data/XZ15142.hq.fasta.clean -A -L --annots  --CPU 2</span><br></pre></td></tr></table></figure>
 
-
-	
-	</div>
-  <a type="button" href="/2019/08/21/MAKER相关操作/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/13/hello-world/" >Hello World</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-	
-	</div>
-  <a type="button" href="/2019/08/13/hello-world/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-
-		</div>
-
-		<!-- pagination -->
-		<div>
-  		<center>
-		<div class="pagination">
-
-   
-</div>
-
-  		</center>
-		</div>
-
-		
-		
-	</div> <!-- col-md-9 -->
-
-	
-		<div class="col-md-3">
-	<div id="sidebar">
-	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
-
-
-		
-			
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/Markdown-maker/">Markdown maker<span>1</span></a></li>
-		
-		 
-		</ul>
+	  
 	</div>
 
+	<div>
+  	<center>
+	<div class="pagination">
 
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
     
-      <li>
-        <a href="/2019/08/21/MAKER相关操作/" ><i class="fa fa-file-o"></i>MAKER相关操作</a>
-      </li>
     
-      <li>
-        <a href="/2019/08/13/hello-world/" ><i class="fa fa-file-o"></i>Hello World</a>
-      </li>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
-  </ul>
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2019/08/13/hello-world/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
 </div>
 
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
 		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/wzpan/hexo-theme-freemind" title="Freemind's Github repository." target="_blank"]);">Freemind</a></li>
-	
-		<li><i class="fa fa-github"></i><a href="https://github.com/kristopolous/BOOTSTRA.386" title="BOOTSTRA.386's Github repository." target="_blank"]);">BOOTSTRA.386</a></li>
-	
-		<li><i class="fa fa-github"></i><a href="https://github.com/blackshow/hexo-theme-freemind.386" title="Freemind.386's Github repository." target="_blank"]);">Freemind.386</a></li>
-	
-		<li><i class="fa fa-github"></i><a href="http://www.github.com/blackshow" title="My Github account." target="_blank"]);">My Github</a></li>
-	
-	</ul>
-</div>
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
 
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-08-21 
+	</div>
+	
 
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Markdown-maker/">Markdown maker<span>1</span></a></li>
+    </ul>
+	</div>
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
 
+	<!-- toc -->
+	<div class="meta-widget">
 	
+	</div>
 	
-</div> <!-- row-fluid -->
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
 	</div>
   </div>
   <div class="container-narrow">
