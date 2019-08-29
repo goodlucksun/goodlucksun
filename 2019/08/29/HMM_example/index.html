@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>HMM 隐式马尔可夫模型 | Shy 的博客</title>
+  <meta name="author" content="Shy">
+  
+  <meta name="description" content="Shy 的博客">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="HMM 隐式马尔可夫模型">
+  <meta property="og:site_name" content="Shy 的博客">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Shy 的博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> HMM 隐式马尔可夫模型</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例"><a href="#Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例" class="headerlink" title="Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例"></a>Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例</h2><p>基本概念：首先它得是一个统计模型，通过已有的样本来预测马尔可夫过程中的隐含参数。</p>
+<p>可见状态链：观测得到的样本组成的数据集</p>
+<p>隐含状态链：样本背后的隐含的数据集</p>
+<p>转换概率 transition probability：可随意设定转换概率，根据不同的转换概率会得到不同的HMM模型</p>
+<p>输出概率 emission probability：从隐含状态转换为可见状态时的概率，也可自由设定</p>
+<p>提到马尔可夫链，基本上指的都是隐含状态链，因为在隐含状态链之间存在转换概率。我们在求马尔可夫过程的时候，可以分为以下情况：</p>
+<p>​                知道<strong><em>隐含状态数量</em></strong>，知道<strong><em>转换概率</em></strong>，根据<strong><em>可见状态链</em></strong>，求<strong><em>隐含状态链</em></strong>。这是最简单的解码问题，有两种解决方法，两种都对，但结果的意义不一样。一种解法，通过最大似然直接对链的整体找到最可能的解，另一种通过对每一个单次事件概率。两种的差异个人觉得在于看中整体与局部。</p>
+<p>​                知道<strong><em>隐含状态数量</em></strong>，知道<strong><em>转换概率</em></strong>，根据<strong><em>可见状态链</em></strong>，求<strong><em>发生可见状态链的概率</em></strong>。这种问题是用来检测数据是否真的与模型吻合。</p>
+<p>​                知道<strong><em>隐含状态数量</em></strong>，不知道<strong><em>转换概率</em></strong>，根据<strong><em>可见状态链</em></strong>，求<strong><em>转换概率</em></strong>。这种为最常见的情况。此处用到Viterbi algorithm 算法。直接以下面的晴雨天为例子</p>
+<blockquote>
+<p> 说两句废话，答主认为呢，要了解一个算法，要做到以下两点：会其意，知其形。答主回答的，其实主要是第一点。但是这一点呢，恰恰是最重要，而且很多书上不会讲的。正如你在追一个姑娘，姑娘对你说“你什么都没做错！”你要是只看姑娘的表达形式呢，认为自己什么都没做错，显然就理解错了。你要理会姑娘的意思，“你赶紧给我道歉！”这样当你看到对应的表达形式呢，赶紧认错，跪地求饶就对了。数学也是一样，你要是不理解意思，光看公式，往往一头雾水。不过呢，数学的表达顶多也就是晦涩了点，姑娘的表达呢，有的时候就完全和本意相反。所以答主一直认为理解姑娘比理解数学难多了。</p>
+</blockquote>
+<p>HMM（隐马尔可夫模型）是用来描述隐含未知参数的统计模型，举一个经典的例子：一个东京的朋友每天根据天气{下雨，天晴}决定当天的活动{公园散步,购物,清理房间}中的一种，我每天只能在twitter上看到她发的推“啊，我前天公园散步、昨天购物、今天清理房间了！”，那么我可以根据她发的推特推断东京这三天的天气。在这个例子里，显状态是活动，隐状态是天气</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># Filename: viterbi.py</span></span><br><span class="line"><span class="comment"># Author：hankcs</span></span><br><span class="line"><span class="comment"># Date: 2014-05-13 下午8:51</span></span><br><span class="line"></span><br><span class="line">states = (<span class="string">'Rainy'</span>, <span class="string">'Sunny'</span>)</span><br><span class="line"></span><br><span class="line">observations = (<span class="string">'walk'</span>, <span class="string">'shop'</span>, <span class="string">'clean'</span>)</span><br><span class="line"></span><br><span class="line">start_probability = &#123;<span class="string">'Rainy'</span>: <span class="number">0.6</span>, <span class="string">'Sunny'</span>: <span class="number">0.4</span>&#125;</span><br><span class="line"></span><br><span class="line">transition_probability = &#123;</span><br><span class="line">    <span class="string">'Rainy'</span>: &#123;<span class="string">'Rainy'</span>: <span class="number">0.7</span>, <span class="string">'Sunny'</span>: <span class="number">0.3</span>&#125;,</span><br><span class="line">    <span class="string">'Sunny'</span>: &#123;<span class="string">'Rainy'</span>: <span class="number">0.4</span>, <span class="string">'Sunny'</span>: <span class="number">0.6</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">emission_probability = &#123;</span><br><span class="line">    <span class="string">'Rainy'</span>: &#123;<span class="string">'walk'</span>: <span class="number">0.1</span>, <span class="string">'shop'</span>: <span class="number">0.4</span>, <span class="string">'clean'</span>: <span class="number">0.5</span>&#125;,</span><br><span class="line">    <span class="string">'Sunny'</span>: &#123;<span class="string">'walk'</span>: <span class="number">0.6</span>, <span class="string">'shop'</span>: <span class="number">0.3</span>, <span class="string">'clean'</span>: <span class="number">0.1</span>&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印路径概率表</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_dptable</span><span class="params">(V)</span>:</span></span><br><span class="line">    print(<span class="string">"    "</span>),</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(V)):</span><br><span class="line">        print(<span class="string">"%7d"</span> % i),</span><br><span class="line">    <span class="keyword">print</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> V[<span class="number">0</span>].keys():</span><br><span class="line">        print(<span class="string">"%.5s: "</span> % y),</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> range(len(V)):</span><br><span class="line">            print(<span class="string">"%.7s"</span> % (<span class="string">"%f"</span> % V[t][y])),</span><br><span class="line">        <span class="keyword">print</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">viterbi</span><span class="params">(obs, states, start_p, trans_p, emit_p)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    # 任何一个HMM都可以通过下列五元组来描述</span></span><br><span class="line"><span class="string">    :param obs:观测序列</span></span><br><span class="line"><span class="string">    :param states:隐状态</span></span><br><span class="line"><span class="string">    :param start_p:初始概率（隐状态）</span></span><br><span class="line"><span class="string">    :param trans_p:转移概率（隐状态）</span></span><br><span class="line"><span class="string">    :param emit_p: 发射概率 （隐状态表现为显状态的概率）</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># 路径概率表 V[时间][隐状态] = 概率</span></span><br><span class="line">    V = [&#123;&#125;]</span><br><span class="line">    <span class="comment"># 一个中间变量，代表当前状态是哪个隐状态</span></span><br><span class="line">    path = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化初始状态 (t == 0)</span></span><br><span class="line">    print(<span class="string">'Day 1(walk): '</span>)</span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> states:</span><br><span class="line">        V[<span class="number">0</span>][y] = start_p[y] * emit_p[y][obs[<span class="number">0</span>]]</span><br><span class="line">        path[y] = [y]</span><br><span class="line">        <span class="keyword">print</span> y, V[<span class="number">0</span>][y], <span class="string">'='</span>, start_p[y], <span class="string">'*'</span>, emit_p[y][obs[<span class="number">0</span>]]</span><br><span class="line">    print(<span class="string">'_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _'</span>)</span><br><span class="line">    <span class="keyword">print</span><span class="string">'V: '</span>, V</span><br><span class="line">    print(<span class="string">'__________________________________________'</span>)</span><br><span class="line">    <span class="comment"># 对 t &gt; 0 跑一遍维特比算法</span></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>, len(obs)):</span><br><span class="line">        V.append(&#123;&#125;)</span><br><span class="line">        newpath = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'Day'</span>, t+<span class="number">1</span>, <span class="string">'('</span>+obs[t]+<span class="string">')'</span></span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> states:</span><br><span class="line">            <span class="comment"># 概率 隐状态 =    前状态是y0的概率 * y0转移到y的概率 * y表现为当前状态的概率</span></span><br><span class="line">            <span class="comment"># (prob, state) = max([(V[t - 1][y0] * trans_p[y0][y] * emit_p[y][obs[t]], y0) for y0 in states])</span></span><br><span class="line">            tmpList = []</span><br><span class="line">            <span class="keyword">print</span></span><br><span class="line">            <span class="keyword">for</span> y0 <span class="keyword">in</span> states:</span><br><span class="line">                tmpList.append((V[t - <span class="number">1</span>][y0] * trans_p[y0][y] * \</span><br><span class="line">                emit_p[y][obs[t]], y0))</span><br><span class="line"></span><br><span class="line">                <span class="keyword">print</span> <span class="string">'當天'</span>+y+<span class="string">': '</span>, <span class="string">"%.7s"</span> % (V[t - <span class="number">1</span>][y0] * trans_p[y0][y] * \</span><br><span class="line">emit_p[y][obs[t]]),</span><br><span class="line">                <span class="keyword">print</span> <span class="string">'='</span>,</span><br><span class="line">                <span class="keyword">print</span> V[t - <span class="number">1</span>][y0], <span class="string">'(前一天 '</span>+y0+<span class="string">')'</span>, <span class="string">'*'</span>,</span><br><span class="line">                <span class="keyword">print</span> trans_p[y0][y], <span class="string">'('</span>+y0+<span class="string">' to '</span>+y+<span class="string">')'</span>, <span class="string">'*'</span>,</span><br><span class="line">                <span class="keyword">print</span> emit_p[y][obs[t]], <span class="string">'('</span>+y, obs[t]+<span class="string">')'</span></span><br><span class="line">            <span class="keyword">print</span> <span class="string">'當天'</span>+y+<span class="string">'  最大的是: '</span>, max(tmpList)[<span class="number">0</span>]</span><br><span class="line">            (prob, state) = max(tmpList)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 记录最大概率</span></span><br><span class="line">            V[t][y] = prob</span><br><span class="line">            <span class="comment"># 记录路径</span></span><br><span class="line">            newpath[y] = path[state] + [y]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 不需要保留旧路径</span></span><br><span class="line">        path = newpath</span><br><span class="line">        print(<span class="string">'__________________________________________'</span>)</span><br><span class="line"></span><br><span class="line">    print_dptable(V)</span><br><span class="line">    (prob, state) = max([(V[len(obs) - <span class="number">1</span>][y], y) <span class="keyword">for</span> y <span class="keyword">in</span> states])</span><br><span class="line">    <span class="keyword">return</span> (prob, path[state])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> viterbi(observations,</span><br><span class="line">                   states,</span><br><span class="line">                   start_probability,</span><br><span class="line">                   transition_probability,</span><br><span class="line">                   emission_probability)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(example())</span><br><span class="line"></span><br><span class="line">print(<span class="string">'\n訣竅: 從最後一天推算，\n1. Day3 機率最大的那條路徑\n2. 其Day2 機率最大那條路徑\n3. 的最可能Day1'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>所以说 逐渐增加长度，每增加一次长度，之后再重新算一遍在这个长度下最后一个位置的转换概率，计算到最后一位时，就知道了每个位置的最大概率。</p>
+<blockquote>
+<p><a href="https://gist.github.com/yesseecity" target="_blank" rel="noopener">https://gist.github.com/yesseecity</a> 将步骤列出</p>
+<p><a href="http://www.hankcs.com/nlp/hmm-and-segmentation-tagging-named-entity-recognition.html" target="_blank" rel="noopener">http://www.hankcs.com/nlp/hmm-and-segmentation-tagging-named-entity-recognition.html</a> 一个根据天气和推特的例子</p>
+<p><a href="https://cloud.tencent.com/developer/article/1066699" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1066699</a> 马尔可夫模型简单理解</p>
+</blockquote>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2019/08/21/MAKER相关操作/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-08-29 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 Shy
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
