@@ -143,6 +143,282 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/04/22/Nature 配色风格pal_npg/" >ggsci自动生成适合学术期刊的配色</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-04-22  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>最近做了很多图被说不好看。想到ggsci可以自动给分组添加颜色，就想看看他可不可以把颜色的十六进制码输出出来，然后发现是有这个函数的。</p>
+<p>ggsci提供以下颜色</p>
+<blockquote>
+<p>Name    Scales    Palette Types    Palette Generator</p>
+<p>NPG    scale_color_npg() scale_fill_npg()    “nrc”    pal_npg()</p>
+<p>AAAS    scale_color_aaas() scale_fill_aaas()    “default”    pal_aaas()</p>
+<p>NEJM    scale_color_nejm() scale_fill_nejm()    “default”    pal_nejm()</p>
+<p>Lancet    scale_color_lancet() scale_fill_lancet()    “lanonc”    pal_lancet()</p>
+<p>JAMA    scale_color_jama() scale_fill_jama()    “default”    pal_jama()</p>
+<p>JCO    scale_color_jco() scale_fill_jco()    “default”    pal_jco()</p>
+<p>UCSCGB    scale_color_ucscgb() scale_fill_ucscgb()    “default”    pal_ucscgb()</p>
+<p>D3    scale_color_d3()</p>
+</blockquote>
+	
+	</div>
+  <a type="button" href="/2020/04/22/Nature 配色风格pal_npg/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/03/09/identify/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-03-09  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">hmmsearch -o batatas.hmmsearch.log --tblout batatas.hmmsearch.tblout SBP.hmm  longest.renamehead.transcript.fasta.transdecoder.pep</span><br><span class="line"></span><br><span class="line">awk '&#123;if ($1!~/^#/)print $1&#125;' batatas.hmmsearch.tblout &gt; batatas.hmmsearch.seqid</span><br><span class="line"></span><br><span class="line">makeblastdb -in  longest.renamehead.transcript.fasta.transdecoder.pep -title batatas -dbtype prot -parse_seqids -out batatas</span><br><span class="line"></span><br><span class="line">blastp -db batatas -query atspl.pep.fa -evalue 1e-3 -outfmt 6 &gt; batatas.blastp</span><br><span class="line"></span><br><span class="line">awk '&#123;print $2&#125;' batatas.blastp | sort | uniq &gt; batatas.blastp.seqid</span><br><span class="line"></span><br><span class="line">cat batatas*seqid | sort | uniq &gt; batatas.spl.seqid</span><br><span class="line"></span><br><span class="line">perl extract.pl batatas.spl.seqid batatas.pep.fa &gt; batatas.spl.fa</span><br><span class="line"></span><br><span class="line">grep '&gt;' trifida.spl.long.fa &gt; trifida.spl.seqid</span><br><span class="line"></span><br><span class="line">cat batatas.smart.remove batatas.spl.seqid| sort | uniq -u &gt; batatas.smartSBP.seqid</span><br><span class="line"></span><br><span class="line">perl extract.pl batatas.smartSBP.seqid batatas.pep.fa &gt; batatas.spl.smart.fa</span><br><span class="line">	</span><br><span class="line">blastp -query batatas.spl.smart.fa -subject trifida.spl.smart.fa -outfmt 6 -max_target_seqs 1 &gt; b2t.log</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less batatas.spl.seqid | while read line; do grep $&#123;line&#125; transcript.fasta.transdecoder.gff3 | awk -v OFS="\t" '&#123; if ($3 == "mRNA") print $1, $4, $5 &#125;' &gt;&gt; blast_result.bed; done</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/03/09/identify/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/03/09/文献记录/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-03-09  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="Genome-wide-identification-and-characterization-phylogenetic-comparison-and-expression-profiles-of-SPL-transcription-factor-family-in-B-juncea-Cruciferae"><a href="#Genome-wide-identification-and-characterization-phylogenetic-comparison-and-expression-profiles-of-SPL-transcription-factor-family-in-B-juncea-Cruciferae" class="headerlink" title="Genome-wide identification and characterization, phylogenetic comparison and expression profiles of SPL transcription factor family in B. juncea (Cruciferae)"></a>Genome-wide identification and characterization, phylogenetic comparison and expression profiles of <em>SPL</em> transcription factor family in <em>B</em>. <em>juncea</em> (Cruciferae)</h1><p>Sixteen SBP-LIKE (SPL) genes were grouped into eight clades following their conserved SBP domain in Arabidopsis [1]. Of those, 10 SPL genes belong to five clades are targeted by miR156 [2, 3], which might highly conserved and acted as important regulators in vegetative phase change in plants [4, 5].</p>
+<p>此外，SPL基因在不同植物物种的多种植物发育过程中起着重要的调节作用，如植物营养相变[6号、雄性育性[7号、赤霉素生物合成[8号、植物结构[9号和植物对胁迫的响应[9号。然而，与其他植物物种相比，由于缺乏基因组信息，SPL基因的全基因组分析在灯心草中几乎没有。</p>
+
+	
+	</div>
+  <a type="button" href="/2020/03/09/文献记录/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/12/27/寻找新的marker/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-12-27  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="寻找新的marker"><a href="#寻找新的marker" class="headerlink" title="寻找新的marker"></a>寻找新的marker</h3><p>大概意思就是要找到位于内含子区域的，比较保守的marker（类似CNEEs？）。考虑目前手头上有的数据，17个组装过了的<em>Prunella</em>的基因组，老板的意思是每个基因组文件makeblastdb，然后用<em>strophiata</em>的注释得到的intron去库里面blast，然后再对得到的intron划分500bp的window去看有哪些位置是特别特别保守的。</p>
+<p>张老师的意思是，不管组装不组装，直接用bam去看，因为每个bam都是bwa mem到<em>strophiata</em>的，如果我们把每个bam的文件都按照<em>strophiata</em>的位置信息替换成相应序列，（其实我感觉应该先filter 掉indel），然后直接用<em>strophiata</em>的gff里面的intron位置去提出来，就能得到序列了。然后再去划分500bp去看 ，效果是一样的。我就是不太确定这么做的INDEL区域如果在intron和exon的边界会对结果有多大的差异。</p>
+<p>但是我感觉 intron本身的进化速率就要高一些，在这个里面找conserve的不知道有什么生物学意义。</p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>####提取一致性序列，一定要使用很老版本的samtools，新版本只能通过vcf提取consensus序列</p>
+<p>samtools mpileup -uf my_reference.fna my_file.bam | bcftools view -cg - | vcfutils.pl vcf2fq &gt; my_consensus.fq</p>
+<p>fq2fa</p>
+<p>####统计genome长度，划分region，统计差异度</p>
+<p>这个就自己写脚本看就行</p>
+<h5 id="统计差异度的脚本1。分为16个状态，从0到1"><a href="#统计差异度的脚本1。分为16个状态，从0到1" class="headerlink" title="统计差异度的脚本1。分为16个状态，从0到1"></a>统计差异度的脚本1。分为16个状态，从0到1</h5><p>得到的16个序列一起比较a[1] = b[1] …….h[1] : parttern =1</p>
+<p>感觉这个是写起来最麻烦，因为每个位点要做16*15*14*13*12*11…..个判断，但是可以直接把图画出来，不过还是运算太大，放弃</p>
+<h5 id="统计差异度的脚本2-。只统计pair-wise的差异度，再找所有pair-wise都为0或者1的，就是最保守的"><a href="#统计差异度的脚本2-。只统计pair-wise的差异度，再找所有pair-wise都为0或者1的，就是最保守的" class="headerlink" title="统计差异度的脚本2 。只统计pair-wise的差异度，再找所有pair-wise都为0或者1的，就是最保守的"></a>统计差异度的脚本2 。只统计pair-wise的差异度，再找所有pair-wise都为0或者1的，就是最保守的</h5><p> 统计差异度的脚本3</p>
+<p>直接去alignment</p>
+<p>![image-20191227161628708](/Users/sunhaoyun/Library/Application Support/typora-user-images/image-20191227161628708.png)</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>Both pairs mapped</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prunella_collaris_S26913_per</td>
+<td>95.6%</td>
+</tr>
+<tr>
+<td>Mike</td>
+<td>32</td>
+</tr>
+</tbody></table>
+
+	
+	</div>
+  <a type="button" href="/2019/12/27/寻找新的marker/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/12/17/1217liuliang/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-12-17  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>1217</p>
+
+	
+	</div>
+  <a type="button" href="/2019/12/17/1217liuliang/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2019/12/15/mysql -u root -p/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-12-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>mysql -u root -p</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 创建本地登录的账户</span><br><span class="line">create user &apos;mysql&apos;@&apos;localhost&apos; identified by &apos;111111&apos;;</span><br><span class="line"></span><br><span class="line"># 创建远程可登录的账户</span><br><span class="line">create user &apos;mysql&apos;@&apos;%&apos; identified by &apos;111111&apos;;</span><br><span class="line"></span><br><span class="line"># 用户创建完成后，刷新授权</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line"># 创建一个新的数据库</span><br><span class="line">create database orthomcl DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line"># 授权</span><br><span class="line">GRANT ALL PRIVILEGES ON orthomcl.* TO &apos;orthomcl&apos;@&apos;localhost&apos;   IDENTIFIED BY &apos;111111&apos;;</span><br><span class="line">GRANT ALL PRIVILEGES ON orthomcl.* TO &apos;orthomcl&apos;@&apos;%&apos;   IDENTIFIED BY &apos;111111&apos;;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line"># 查看结果</span><br><span class="line">show databases;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">perl scripts/orthomcl-setup-database.pl --user orthomcl --password 111111 --host 127.0.0.1 --database orthomcl --outfile configure_outfile.conf [--no-create-database]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">perl scripts/orthomcl-pipeline.pl -i ../../data/orthomcl/ -o ../../data/orthomcl_out -m configure_outfile.conf --nocompliant</span><br></pre></td></tr></table></figure>
+
+<p>Warning: directory “../../data/orthomcl_out” already exists, are you sure you want to store data here [Y]? Y</p>
+<p>Starting OrthoMCL pipeline on: Sun Dec 15 11:12:16 2019</p>
+<p>Git commit: 08bd2baf43db6e35afb3e22e95dce8a3f740729c</p>
+<p>=Stage 1: Validate Files =</p>
+<p>Validating Pcollaris_S26913_per_pep.fasta … 6276 sequences</p>
+<p>Validating Pocularis_EAK479_pep.fasta … 6224 sequences</p>
+<p>Validating Prubeculoides_QHH0839_pep.fasta … 6704 sequences</p>
+<p>Validating Pimmaculata_XZ14285_pep.fasta … 5791 sequences</p>
+<p>Validating Pkoslowi_26923_pep.fasta … 11783 sequences</p>
+<p>Validating Pcollaris_PA20150614-Sichuan_pep.fasta … 8328 sequences</p>
+<p>Validating Prubida_2S_63614_pep.fasta … 12875 sequences</p>
+<p>Validating Pstrophita_assemble_pep.fasta … 20581 sequences</p>
+<p>Validating Pcollaris_130562_Jon_Italy_pep.fasta … 6855 sequences</p>
+<p>Validating Patrogularis_141230_pep.fasta … 10880 sequences</p>
+<p>Validating Pmodularis_117541_pep.fasta … 8978 sequences</p>
+<p>Validating Pmontanella_m80200_pep.fasta … 8534 sequences</p>
+<p>Validating Pcollaris_S1318_taiwan_pep.fasta … 14461 sequences</p>
+<p>Validating Pocularis_MR1290_pep.fasta … 6774 sequences</p>
+<p>Validating Phimalayana_66660_pep.fasta … 6852 sequences</p>
+<p>Validating Phimalayana_57883_pep.fasta … 7552 sequences</p>
+<p>Validating Pfulvescens_QHH0845_pep.fasta … 9746 sequences</p>
+<p>Validating Gallus_gallus_pep.fasta … 28444 sequences</p>
+<p>Validated 18 files</p>
+<p>Stage 1 took 0.17 minutes </p>
+<p>=Stage 2: Validate Database=</p>
+<p>Warning: some tables exist already in database dbi:mysql:orthomcl_new:127.0.0.1:mysql_local_infile, user=root, database_name=orthomcl_new. Do you want to remove (y/n)? y</p>
+<p>Executing: ‘drop database orthomcl_new’</p>
+<p>Executing: ‘create database orthomcl_new’</p>
+<p>Successfully removed old database entries</p>
+<p>Stage 2 took 0.02 minutes </p>
+<p>=Stage 3: Load OrthoMCL Database Schema=</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclInstallSchema “/home/sunhaoyun/software/orthomcl-pipeline/configure_outfile.conf” “/home/sunhaoyun/data/orthomcl_out/log/orthomclSchema.log” 1&gt;/home/sunhaoyun/data/orthomcl_out/log/3.loadschema.stdout.log 2&gt;/home/sunhaoyun/data/orthomcl_out/log/3.loadschema.stderr.log</p>
+<p>Stage 3 took 0.00 minutes </p>
+<p>=Stage 4: Adjust Fasta=</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_S26913_per_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_S26913_per_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pocularis_EAK479_pep “/home/sunhaoyun/data/orthomcl/Pocularis_EAK479_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Prubeculoides_QHH0839_pep “/home/sunhaoyun/data/orthomcl/Prubeculoides_QHH0839_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pimmaculata_XZ14285_pep “/home/sunhaoyun/data/orthomcl/Pimmaculata_XZ14285_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pkoslowi_26923_pep “/home/sunhaoyun/data/orthomcl/Pkoslowi_26923_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_PA20150614-Sichuan_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_PA20150614-Sichuan_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Prubida_2S_63614_pep “/home/sunhaoyun/data/orthomcl/Prubida_2S_63614_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pstrophita_assemble_pep “/home/sunhaoyun/data/orthomcl/Pstrophita_assemble_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_130562_Jon_Italy_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_130562_Jon_Italy_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Patrogularis_141230_pep “/home/sunhaoyun/data/orthomcl/Patrogularis_141230_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pmodularis_117541_pep “/home/sunhaoyun/data/orthomcl/Pmodularis_117541_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pmontanella_m80200_pep “/home/sunhaoyun/data/orthomcl/Pmontanella_m80200_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_S1318_taiwan_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_S1318_taiwan_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pocularis_MR1290_pep “/home/sunhaoyun/data/orthomcl/Pocularis_MR1290_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Phimalayana_66660_pep “/home/sunhaoyun/data/orthomcl/Phimalayana_66660_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Phimalayana_57883_pep “/home/sunhaoyun/data/orthomcl/Phimalayana_57883_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pfulvescens_QHH0845_pep “/home/sunhaoyun/data/orthomcl/Pfulvescens_QHH0845_pep.fasta” 1</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Gallus_gallus_pep “/home/sunhaoyun/data/orthomcl/Gallus_gallus_pep.fasta” 1</p>
+<p>Stage 4 took 0.08 minutes </p>
+<p>=Stage 5: Filter Fasta=</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclFilterFasta “/home/sunhaoyun/data/orthomcl_out/compliant_fasta” 10 20</p>
+<p>Stage 5 took 0.12 minutes </p>
+<p>=Stage 6: Split Fasta=</p>
+<p>splitting /home/sunhaoyun/data/orthomcl_out/blast_dir/goodProteins.fasta into 4 pieces</p>
+<p>jStage 6 took 0.42 minutes </p>
+<p>=Stage 7: Format Database=</p>
+<p>/home/sunhaoyun/software/orthomcl-pipeline/blast-2.2.26/bin/formatdb -i “/home/sunhaoyun/data/orthomcl_out/blast_dir/goodProteins.fasta” -p “T” -l “/home/sunhaoyun/data/orthomcl_out/log/formatdb.log” 1&gt;/home/sunhaoyun/data/orthomcl_out/log/7.format-stdout.log 2&gt;/home/sunhaoyun/data/orthomcl_out/log/7.format-stderr.log</p>
+
+	
+	</div>
+  <a type="button" href="/2019/12/15/mysql -u root -p/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2019/12/06/基因组组装评价/" >Genome assemble statistic</a>
 		</h3>
 		</div>
@@ -306,148 +582,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/09/12/Record/" >坑爹的Mac 和离家出走</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-09-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>到新的学校之后发现，shadowsocks代理无法使用了，主要现象为国内网站可以正常访问，国外网站访问不了，打开之前学校的VPN才可以访问内外网，但网速又受到了限制。因为手机上可以正常访问ins youtube，怀疑电脑DNS解析有问题，然后修改偏好设置里的DNS发现没什么卵用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前网络</span><br><span class="line">networksetup -listallnetworkservices</span><br><span class="line"># 修改WIFI</span><br><span class="line">networksetup -setdnsservers Wi-Fi 114.114.114.114</span><br><span class="line"># 确认一下</span><br><span class="line">networksetup -getdnsservers Wi-Fi</span><br><span class="line"># 刷新DNS</span><br><span class="line">dscacheutil -flushcache</span><br></pre></td></tr></table></figure>
-
-<p>成功解决</p>
-<p>但是在修改完成后，下楼取了个快递，回来发现依然不能访问外网</p>
-<p>发现极其不稳定</p>
-<p>打开shadowsocks的全局模式 </p>
-<p>成功解决，暂时较为稳定</p>
-<p>下次研究一下如何代理打开terminal，因为现在两个学校的服务器都只能内网访问，资料传输及其不方便</p>
-<p><strong><em>同时还发现Mac的一个问题，在打开MotionPro的情况下，由于软件兼容性问题会造成闪屏，类似触电的赶脚，哎</em></strong></p>
-
-	
-	</div>
-  <a type="button" href="/2019/09/12/Record/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/29/HMM_example/" >HMM 隐式马尔可夫模型</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-29  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例"><a href="#Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例" class="headerlink" title="Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例"></a>Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例</h2><p>基本概念：首先它得是一个统计模型，通过已有的样本来预测马尔可夫过程中的隐含参数。</p>
-<p>可见状态链：观测得到的样本组成的数据集</p>
-<p>隐含状态链：样本背后的隐含的数据集</p>
-<p>转换概率 transition probability：可随意设定转换概率，根据不同的转换概率会得到不同的HMM模型</p>
-<p>输出概率 emission probability：从隐含状态转换为可见状态时的概率，也可自由设定</p>
-	
-	</div>
-  <a type="button" href="/2019/08/29/HMM_example/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/21/MAKER相关操作/" >MAKER相关操作</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>####maker pipeline</p>
-<p>1.Initial MAKER Analysis</p>
-<p>2.Training Gene Prediction (snap, augustus) </p>
-<p>3.Round 2 MAKER Analysis</p>
-<p>4.Training Gene Prediction (snap, augustus)</p>
-<p>5.Round 3 MAKER Analysis</p>
-<p>6.Create Maker standard gene set file</p>
-<p>7.PASA </p>
-	
-	</div>
-  <a type="button" href="/2019/08/21/MAKER相关操作/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/13/hello-world/" >Hello World</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-	
-	</div>
-  <a type="button" href="/2019/08/13/hello-world/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -457,6 +591,16 @@ var _hmt = _hmt || [];
 		<div class="pagination">
 
    
+    
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+        
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
 </div>
 
   		</center>
@@ -489,17 +633,17 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/evolution/">evolution<span>1</span></a></li>
 		
-			<li><a href="/tags/Mac/">Mac<span>1</span></a></li>
-		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
 		
 			<li><a href="/tags/geome/">geome<span>1</span></a></li>
 		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>1</span></a></li>
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+		
+			<li><a href="/tags/Mac/">Mac<span>1</span></a></li>
 		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
+		
+			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -513,23 +657,23 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2019/12/06/基因组组装评价/" ><i class="fa fa-file-o"></i>Genome assemble statistic</a>
+        <a href="/2020/04/22/Nature 配色风格pal_npg/" ><i class="fa fa-file-o"></i>ggsci自动生成适合学术期刊的配色</a>
       </li>
     
       <li>
-        <a href="/2019/12/04/shimei/" ><i class="fa fa-file-o"></i>建一颗ML树</a>
+        <a href="/2020/03/09/identify/" ><i class="fa fa-file-o"></i></a>
       </li>
     
       <li>
-        <a href="/2019/10/01/re/" ><i class="fa fa-file-o"></i>李笑来老板的re part</a>
+        <a href="/2020/03/09/文献记录/" ><i class="fa fa-file-o"></i></a>
       </li>
     
       <li>
-        <a href="/2019/09/12/SVDQUARTETS AND ASTRAL ACTIVITY/" ><i class="fa fa-file-o"></i>evomics 课程</a>
+        <a href="/2019/12/27/寻找新的marker/" ><i class="fa fa-file-o"></i></a>
       </li>
     
       <li>
-        <a href="/2019/09/12/Record/" ><i class="fa fa-file-o"></i>坑爹的Mac 和离家出走</a>
+        <a href="/2019/12/17/1217liuliang/" ><i class="fa fa-file-o"></i></a>
       </li>
     
   </ul>
@@ -558,7 +702,7 @@ var _hmt = _hmt || [];
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2019 Shy
+  &copy; 2020 Shy
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
      <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
