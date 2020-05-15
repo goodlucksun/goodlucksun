@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>KaKs 计算进化速率 | Shy 的博客</title>
+  <meta name="author" content="Shy">
+  
+  <meta name="description" content="Shy 的博客">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="KaKs 计算进化速率">
+  <meta property="og:site_name" content="Shy 的博客">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Shy 的博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> KaKs 计算进化速率</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>KaKs calculator</p>
+<h1 id="首先这里还需要再运行一次pal2nal-nogap版本的"><a href="#首先这里还需要再运行一次pal2nal-nogap版本的" class="headerlink" title="首先这里还需要再运行一次pal2nal nogap版本的"></a>首先这里还需要再运行一次pal2nal nogap版本的</h1><h1 id="因为paml内设-clean-data-会将序列里的gap去掉"><a href="#因为paml内设-clean-data-会将序列里的gap去掉" class="headerlink" title="因为paml内设 clean data  会将序列里的gap去掉"></a>因为paml内设 clean data  会将序列里的gap去掉</h1><h1 id="但是KaKS-calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错"><a href="#但是KaKS-calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错" class="headerlink" title="但是KaKS_calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错"></a>但是KaKS_calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错</h1><h1 id="所以"><a href="#所以" class="headerlink" title="所以"></a>所以</h1><p>perl ~/Downloads/softwares/pal2nal.v14/pal2nal.pl 4fanshu.spl.muscle.pep.fa  4fanshu.spl_id.wid70.cds.fa –nogap &gt; t1</p>
+<h1 id="将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C-2-5356对"><a href="#将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C-2-5356对" class="headerlink" title="将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C 2  5356对"></a>将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C 2  5356对</h1><pre><code>104</code></pre><p>AXTConvertor t1 t2 </p>
+<h1 id="这里用的估算kaks的方法是平均法-Model-Averaging-on-a-set-of-candidate-models，在一篇frontiersin和BMC-genomics里发现都是这个方法，"><a href="#这里用的估算kaks的方法是平均法-Model-Averaging-on-a-set-of-candidate-models，在一篇frontiersin和BMC-genomics里发现都是这个方法，" class="headerlink" title="这里用的估算kaks的方法是平均法 Model Averaging on a set of candidate models，在一篇frontiersin和BMC genomics里发现都是这个方法，"></a>这里用的估算kaks的方法是平均法 Model Averaging on a set of candidate models，在一篇frontiersin和BMC genomics里发现都是这个方法，</h1><h1 id="但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对"><a href="#但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对" class="headerlink" title="但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对"></a>但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对</h1><p>KaKS_calculator -i t2 -o t3 -m MA<br>#</p>
+<h1 id="整理过程-⬇️"><a href="#整理过程-⬇️" class="headerlink" title="整理过程 ⬇️"></a>整理过程 ⬇️</h1><h1 id="首先提取id-和-Ka-Ks"><a href="#首先提取id-和-Ka-Ks" class="headerlink" title="首先提取id 和 Ka/Ks"></a>首先提取id 和 Ka/Ks</h1><p>awk ‘{print $1,$5}’ t3  &gt; t3_filter</p>
+<h1 id="将id列中的两个id分为两列"><a href="#将id列中的两个id分为两列" class="headerlink" title="将id列中的两个id分为两列"></a>将id列中的两个id分为两列</h1><p>awk -v OFS=’\t’ -F ‘&amp;’ ‘{print $1,$2}’ t3_filter &gt; t3_fltered</p>
+<h1 id="用ggtree提取一下树文件中的-Tips-label-生成8个-tips-label文件"><a href="#用ggtree提取一下树文件中的-Tips-label-生成8个-tips-label文件" class="headerlink" title="用ggtree提取一下树文件中的 Tips label 生成8个 tips label文件"></a>用ggtree提取一下树文件中的 Tips label 生成8个 tips label文件</h1><pre><code>library(ggtree)
+tree &lt;- read.newick(&quot;4fanshu.spl.muscle.gb.pep.meg.nwk&quot;)
+tree_label &lt;- tree[[&quot;tip.label&quot;]]
+clade1 &lt;- tree_label[1:31]
+clade2 &lt;- tree_label[32:40]
+clade3 &lt;- tree_label[41:46]
+clade4 &lt;- tree_label[47:59]
+clade5 &lt;- tree_label[60:75]
+clade6 &lt;- tree_label[76:83]
+clade7 &lt;- tree_label[84:87]
+clade8 &lt;- tree_label[88:104]
+
+write.table(tree_label,file=&quot;t4.label&quot;,
+            quote = FALSE,row.names = FALSE,col.names = FALSE)
+
+for(i  in 1:8){
+  val_name = paste(&quot;clade&quot;,i,sep = &quot;&quot;)
+  output_name = paste(&quot;t4.&quot;,val_name,&quot;.label&quot;,sep = &quot;&quot;)
+  clade_id = eval(parse(text = paste(&quot;em &lt;- rbind(&quot;, val_name, &quot;)&quot;, sep = &quot;&quot;)))
+  write.table(clade_id,file=output_name,sep = &apos;\n&apos;,
+              quote = FALSE,row.names = FALSE,col.names = FALSE)
+}
+
+```R_script
+
+
+# 对每一个label文件 都把对应的ka ks文件中的基因对提取出来，并且是两个基因都在的
+ls *clade* | while read line
+do
+python sort_kaks.py  ${line} t3_filtered &gt; ${line}.t5
+done
+
+#对每一个clade生成对角矩阵</code></pre>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2020/05/15/PAML/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-05-15 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2020 Shy
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

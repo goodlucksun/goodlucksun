@@ -143,6 +143,120 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/15/KaKs_calculator/" >KaKs 计算进化速率</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>KaKs calculator</p>
+<h1 id="首先这里还需要再运行一次pal2nal-nogap版本的"><a href="#首先这里还需要再运行一次pal2nal-nogap版本的" class="headerlink" title="首先这里还需要再运行一次pal2nal nogap版本的"></a>首先这里还需要再运行一次pal2nal nogap版本的</h1><h1 id="因为paml内设-clean-data-会将序列里的gap去掉"><a href="#因为paml内设-clean-data-会将序列里的gap去掉" class="headerlink" title="因为paml内设 clean data  会将序列里的gap去掉"></a>因为paml内设 clean data  会将序列里的gap去掉</h1><h1 id="但是KaKS-calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错"><a href="#但是KaKS-calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错" class="headerlink" title="但是KaKS_calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错"></a>但是KaKS_calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错</h1><h1 id="所以"><a href="#所以" class="headerlink" title="所以"></a>所以</h1><p>perl ~/Downloads/softwares/pal2nal.v14/pal2nal.pl 4fanshu.spl.muscle.pep.fa  4fanshu.spl_id.wid70.cds.fa –nogap &gt; t1</p>
+<h1 id="将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C-2-5356对"><a href="#将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C-2-5356对" class="headerlink" title="将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C 2  5356对"></a>将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C 2  5356对</h1><pre><code>104</code></pre><p>AXTConvertor t1 t2 </p>
+<h1 id="这里用的估算kaks的方法是平均法-Model-Averaging-on-a-set-of-candidate-models，在一篇frontiersin和BMC-genomics里发现都是这个方法，"><a href="#这里用的估算kaks的方法是平均法-Model-Averaging-on-a-set-of-candidate-models，在一篇frontiersin和BMC-genomics里发现都是这个方法，" class="headerlink" title="这里用的估算kaks的方法是平均法 Model Averaging on a set of candidate models，在一篇frontiersin和BMC genomics里发现都是这个方法，"></a>这里用的估算kaks的方法是平均法 Model Averaging on a set of candidate models，在一篇frontiersin和BMC genomics里发现都是这个方法，</h1><h1 id="但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对"><a href="#但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对" class="headerlink" title="但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对"></a>但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对</h1><p>KaKS_calculator -i t2 -o t3 -m MA<br>#</p>
+<h1 id="整理过程-⬇️"><a href="#整理过程-⬇️" class="headerlink" title="整理过程 ⬇️"></a>整理过程 ⬇️</h1><h1 id="首先提取id-和-Ka-Ks"><a href="#首先提取id-和-Ka-Ks" class="headerlink" title="首先提取id 和 Ka/Ks"></a>首先提取id 和 Ka/Ks</h1><p>awk ‘{print $1,$5}’ t3  &gt; t3_filter</p>
+<h1 id="将id列中的两个id分为两列"><a href="#将id列中的两个id分为两列" class="headerlink" title="将id列中的两个id分为两列"></a>将id列中的两个id分为两列</h1><p>awk -v OFS=’\t’ -F ‘&amp;’ ‘{print $1,$2}’ t3_filter &gt; t3_fltered</p>
+<h1 id="用ggtree提取一下树文件中的-Tips-label-生成8个-tips-label文件"><a href="#用ggtree提取一下树文件中的-Tips-label-生成8个-tips-label文件" class="headerlink" title="用ggtree提取一下树文件中的 Tips label 生成8个 tips label文件"></a>用ggtree提取一下树文件中的 Tips label 生成8个 tips label文件</h1><pre><code>library(ggtree)
+tree &lt;- read.newick(&quot;4fanshu.spl.muscle.gb.pep.meg.nwk&quot;)
+tree_label &lt;- tree[[&quot;tip.label&quot;]]
+clade1 &lt;- tree_label[1:31]
+clade2 &lt;- tree_label[32:40]
+clade3 &lt;- tree_label[41:46]
+clade4 &lt;- tree_label[47:59]
+clade5 &lt;- tree_label[60:75]
+clade6 &lt;- tree_label[76:83]
+clade7 &lt;- tree_label[84:87]
+clade8 &lt;- tree_label[88:104]
+
+write.table(tree_label,file=&quot;t4.label&quot;,
+            quote = FALSE,row.names = FALSE,col.names = FALSE)
+
+for(i  in 1:8){
+  val_name = paste(&quot;clade&quot;,i,sep = &quot;&quot;)
+  output_name = paste(&quot;t4.&quot;,val_name,&quot;.label&quot;,sep = &quot;&quot;)
+  clade_id = eval(parse(text = paste(&quot;em &lt;- rbind(&quot;, val_name, &quot;)&quot;, sep = &quot;&quot;)))
+  write.table(clade_id,file=output_name,sep = &apos;\n&apos;,
+              quote = FALSE,row.names = FALSE,col.names = FALSE)
+}
+
+```R_script
+
+
+# 对每一个label文件 都把对应的ka ks文件中的基因对提取出来，并且是两个基因都在的
+ls *clade* | while read line
+do
+python sort_kaks.py  ${line} t3_filtered &gt; ${line}.t5
+done
+
+#对每一个clade生成对角矩阵</code></pre>
+	
+	</div>
+  <a type="button" href="/2020/05/15/KaKs_calculator/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
+<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
+<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
+<p>这一篇用branch sites model的</p>
+<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
+<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
+<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
+<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
+<p>####1.WGD</p>
+<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
+<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
+<p>####2.Tandem and Proximal</p>
+<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
+<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
+<p>####3.Dispersed</p>
+<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
+<p>####4.Transposed</p>
+<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
+<p>NOTE！</p>
+<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
+<p>NOTE！</p>
+<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
+
+	
+	</div>
+  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/15/OrthoFinde/" >OrthoFinder 寻找同源基因</a>
 		</h3>
 		</div>
@@ -497,80 +611,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/21/MAKER相关操作/" >MAKER相关操作</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>####maker pipeline</p>
-<p>1.Initial MAKER Analysis</p>
-<p>2.Training Gene Prediction (snap, augustus) </p>
-<p>3.Round 2 MAKER Analysis</p>
-<p>4.Training Gene Prediction (snap, augustus)</p>
-<p>5.Round 3 MAKER Analysis</p>
-<p>6.Create Maker standard gene set file</p>
-<p>7.PASA </p>
-	
-	</div>
-  <a type="button" href="/2019/08/21/MAKER相关操作/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/13/hello-world/" >Hello World</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-	
-	</div>
-  <a type="button" href="/2019/08/13/hello-world/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -580,6 +620,16 @@ var _hmt = _hmt || [];
 		<div class="pagination">
 
    
+    
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+        
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
 </div>
 
   		</center>
@@ -614,11 +664,15 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
 			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+		
 			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
@@ -634,6 +688,14 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2020/05/15/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率</a>
+      </li>
+    
+      <li>
+        <a href="/2020/05/15/PAML/" ><i class="fa fa-file-o"></i>PAML and MCScanX-transposed</a>
+      </li>
+    
+      <li>
         <a href="/2020/05/15/OrthoFinde/" ><i class="fa fa-file-o"></i>OrthoFinder 寻找同源基因</a>
       </li>
     
@@ -643,14 +705,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2020/03/09/identify/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2019/12/15/mysql -u root -p/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2019/12/06/基因组组装评价/" ><i class="fa fa-file-o"></i>Genome assemble statistic</a>
       </li>
     
   </ul>

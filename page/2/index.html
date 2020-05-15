@@ -143,74 +143,6 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2019/09/12/Record/" >坑爹的Mac 和离家出走</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-09-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>到新的学校之后发现，shadowsocks代理无法使用了，主要现象为国内网站可以正常访问，国外网站访问不了，打开之前学校的VPN才可以访问内外网，但网速又受到了限制。因为手机上可以正常访问ins youtube，怀疑电脑DNS解析有问题，然后修改偏好设置里的DNS发现没什么卵用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查看当前网络</span><br><span class="line">networksetup -listallnetworkservices</span><br><span class="line"># 修改WIFI</span><br><span class="line">networksetup -setdnsservers Wi-Fi 114.114.114.114</span><br><span class="line"># 确认一下</span><br><span class="line">networksetup -getdnsservers Wi-Fi</span><br><span class="line"># 刷新DNS</span><br><span class="line">dscacheutil -flushcache</span><br></pre></td></tr></table></figure>
-
-<p>成功解决</p>
-<p>但是在修改完成后，下楼取了个快递，回来发现依然不能访问外网</p>
-<p>发现极其不稳定</p>
-<p>打开shadowsocks的全局模式 </p>
-<p>成功解决，暂时较为稳定</p>
-<p>下次研究一下如何代理打开terminal，因为现在两个学校的服务器都只能内网访问，资料传输及其不方便</p>
-<p><strong><em>同时还发现Mac的一个问题，在打开MotionPro的情况下，由于软件兼容性问题会造成闪屏，类似触电的赶脚，哎</em></strong></p>
-
-	
-	</div>
-  <a type="button" href="/2019/09/12/Record/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/29/HMM_example/" >HMM 隐式马尔可夫模型</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-29  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例"><a href="#Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例" class="headerlink" title="Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例"></a>Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例</h2><p>基本概念：首先它得是一个统计模型，通过已有的样本来预测马尔可夫过程中的隐含参数。</p>
-<p>可见状态链：观测得到的样本组成的数据集</p>
-<p>隐含状态链：样本背后的隐含的数据集</p>
-<p>转换概率 transition probability：可随意设定转换概率，根据不同的转换概率会得到不同的HMM模型</p>
-<p>输出概率 emission probability：从隐含状态转换为可见状态时的概率，也可自由设定</p>
-	
-	</div>
-  <a type="button" href="/2019/08/29/HMM_example/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2019/08/21/MAKER相关操作/" >MAKER相关操作</a>
 		</h3>
 		</div>
@@ -330,15 +262,17 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/geome/">geome<span>1</span></a></li>
 		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
-			<li><a href="/tags/evolution/">evolution<span>1</span></a></li>
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
-			<li><a href="/tags/Mac/">Mac<span>1</span></a></li>
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
 		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
 		
 			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
 		
@@ -354,23 +288,23 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2020/05/15/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率</a>
+      </li>
+    
+      <li>
+        <a href="/2020/05/15/PAML/" ><i class="fa fa-file-o"></i>PAML and MCScanX-transposed</a>
+      </li>
+    
+      <li>
+        <a href="/2020/05/15/OrthoFinde/" ><i class="fa fa-file-o"></i>OrthoFinder 寻找同源基因</a>
+      </li>
+    
+      <li>
         <a href="/2020/04/22/Nature 配色风格pal_npg/" ><i class="fa fa-file-o"></i>ggsci自动生成适合学术期刊的配色</a>
       </li>
     
       <li>
         <a href="/2020/03/09/identify/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2020/03/09/文献记录/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2019/12/27/寻找新的marker/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2019/12/17/1217liuliang/" ><i class="fa fa-file-o"></i></a>
       </li>
     
   </ul>
