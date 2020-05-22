@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Shy 的博客</title>
+  <meta name="author" content="Shy">
+  
+  <meta name="description" content="Shy 的博客">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Shy 的博客">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Shy 的博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> </h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h1 id="ortholog-identification"><a href="#ortholog-identification" class="headerlink" title="ortholog identification"></a>ortholog identification</h1><h2 id="filter-Prunella-strophiata"><a href="#filter-Prunella-strophiata" class="headerlink" title="filter Prunella strophiata"></a>filter Prunella strophiata</h2><h3 id="in-order-to-keep-gene-id-format-consistantly-use-awk-and-python-scripts-and-gffread-and-transeq-for-refomating"><a href="#in-order-to-keep-gene-id-format-consistantly-use-awk-and-python-scripts-and-gffread-and-transeq-for-refomating" class="headerlink" title="in order to keep gene id format consistantly, use awk and python scripts and gffread and transeq for refomating"></a>in order to keep gene id format consistantly, use awk and python scripts and gffread and transeq for refomating</h3><h3 id="1-gene-and-mRNA-will-cause-redirect-error-remove-first"><a href="#1-gene-and-mRNA-will-cause-redirect-error-remove-first" class="headerlink" title="1. gene and mRNA will cause redirect error, remove first"></a>1. gene and mRNA will cause redirect error, remove first</h3><h4 id="因为原始的Prunella-strophiata的注释文件中，gene-id-的格式如下"><a href="#因为原始的Prunella-strophiata的注释文件中，gene-id-的格式如下" class="headerlink" title="因为原始的Prunella strophiata的注释文件中，gene id 的格式如下"></a>因为原始的Prunella strophiata的注释文件中，gene id 的格式如下</h4><blockquote>
+<p>contig1000      EVM     gene    23218   23970   .       +       .       ID=evm.TU.contig1000.2;Name=EVM%20prediction%20contig1000.2<br>contig1000      EVM     mRNA    23218   23970   .       +       .       ID=evm.model.contig1000.2;Parent=evm.TU.contig1000.2;Name=EVM%20predicti<br>on%20contig1000.2<br>contig1000      EVM     exon    23218   23970   .       +       .       ID=evm.model.contig1000.2.exon1;Parent=evm.model.contig1000.2<br>contig1000      EVM     CDS     23218   23970   .       +       0       ID=cds.evm.model.contig1000.2;Parent=evm.model.contig1000.2</p>
+</blockquote>
+<h4 id="但是为了在最终结果的-Orthogroups-中能清楚的看出来group中包含哪些物种，所以把注释文件中的-gene-id-替换为物种名加序号的格式"><a href="#但是为了在最终结果的-Orthogroups-中能清楚的看出来group中包含哪些物种，所以把注释文件中的-gene-id-替换为物种名加序号的格式" class="headerlink" title="但是为了在最终结果的 Orthogroups 中能清楚的看出来group中包含哪些物种，所以把注释文件中的 gene id 替换为物种名加序号的格式"></a>但是为了在最终结果的 Orthogroups 中能清楚的看出来group中包含哪些物种，所以把注释文件中的 gene id 替换为物种名加序号的格式</h4><h4 id="如Prunella-strophiata中的基因，需要修改命名为-Prunella-strophiata-best-assembled-1-Prunella-strophiata-best-assembled-2"><a href="#如Prunella-strophiata中的基因，需要修改命名为-Prunella-strophiata-best-assembled-1-Prunella-strophiata-best-assembled-2" class="headerlink" title="如Prunella strophiata中的基因，需要修改命名为 Prunella_strophiata_best_assembled_1, Prunella_strophiata_best_assembled_2"></a>如Prunella strophiata中的基因，需要修改命名为 Prunella_strophiata_best_assembled_1, Prunella_strophiata_best_assembled_2</h4><h4 id="因为gene和的信息内容是一致的，使用下面的命令先去除包含mrna的行"><a href="#因为gene和的信息内容是一致的，使用下面的命令先去除包含mrna的行" class="headerlink" title="因为gene和的信息内容是一致的，使用下面的命令先去除包含mrna的行"></a>因为gene和的信息内容是一致的，使用下面的命令先去除包含mrna的行</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk '&#123;if($3 != "mRNA")print $0&#125;' Prunella_strophiata_assemble.evm.gff3  &gt; Prunella_strophiata_assemble.remove_mRNA.gff3</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-replace-gene-id"><a href="#2-replace-gene-id" class="headerlink" title="2. replace gene id"></a>2. replace gene id</h3><h4 id="使用-reformat-py2-脚本去替换原始的gff3文件中的-gene-id"><a href="#使用-reformat-py2-脚本去替换原始的gff3文件中的-gene-id" class="headerlink" title="使用 reformat.py2 脚本去替换原始的gff3文件中的 gene id"></a>使用 reformat.py2 脚本去替换原始的gff3文件中的 gene id</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python reformat.py2 Prunella_strophiata_assemble.remove_mRNA.gff3 &gt;  Prunella_strophiata.best_assembled.gff3</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改后的注释文件如下-差别只在最后一列，这样输出还有一个目的是为了gffread软件的读取"><a href="#修改后的注释文件如下-差别只在最后一列，这样输出还有一个目的是为了gffread软件的读取" class="headerlink" title="修改后的注释文件如下,差别只在最后一列，这样输出还有一个目的是为了gffread软件的读取"></a>修改后的注释文件如下,差别只在最后一列，这样输出还有一个目的是为了gffread软件的读取</h4><blockquote>
+<p>contig1000      EVM     gene    23218   23970   .       +       .       ID=Prunella_strophita_best_assembled_1<br>contig1000      EVM     exon    23218   23970   .       +       .       Parent=Prunella_strophita_best_assembled_1<br>contig1000      EVM     CDS     23218   23970   .       +       0       Parent=Prunella_strophita_best_assembled_1</p>
+</blockquote>
+<h3 id="3-extract-cds-sequence"><a href="#3-extract-cds-sequence" class="headerlink" title="3. extract cds sequence"></a>3. extract cds sequence</h3><h4 id="使用-gffread-软件，输入修改过的gff文件和基因组序列，提取出其中的cds序列，gffread在提取的时候会识别第七列的正负链信息取反向互补"><a href="#使用-gffread-软件，输入修改过的gff文件和基因组序列，提取出其中的cds序列，gffread在提取的时候会识别第七列的正负链信息取反向互补" class="headerlink" title="使用 gffread 软件，输入修改过的gff文件和基因组序列，提取出其中的cds序列，gffread在提取的时候会识别第七列的正负链信息取反向互补"></a>使用 gffread 软件，输入修改过的gff文件和基因组序列，提取出其中的cds序列，gffread在提取的时候会识别第七列的正负链信息取反向互补</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gffread Prunella_strophiata.best_assembled.gff3 -g Prunella_strophiata_assemble.fa -x Prunella_strophiata.best_assembled.cds.fa</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-cds2protein"><a href="#4-cds2protein" class="headerlink" title="4. cds2protein"></a>4. cds2protein</h3><h4 id="使用EMBOSS数据包中的-transeq-程序对上一步提取出来的cds序列进行翻译"><a href="#使用EMBOSS数据包中的-transeq-程序对上一步提取出来的cds序列进行翻译" class="headerlink" title="使用EMBOSS数据包中的 transeq 程序对上一步提取出来的cds序列进行翻译"></a>使用EMBOSS数据包中的 transeq 程序对上一步提取出来的cds序列进行翻译</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transeq -sequence Prunella_strophiata.best_assembled.cds.fa -outseq Prunella_strophaita.best_assembled.pep.fa</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-remove-the-info-added-by-transeq"><a href="#5-remove-the-info-added-by-transeq" class="headerlink" title="5. remove the info added by transeq"></a>5. remove the info added by transeq</h3><h4 id="因为EMBOSS-中的-transeq-软件会对-gene-id-进行修改，将Prunella-strophiata-best-assembled-1改为了Prunella-strophiata-best-assembled-1-1"><a href="#因为EMBOSS-中的-transeq-软件会对-gene-id-进行修改，将Prunella-strophiata-best-assembled-1改为了Prunella-strophiata-best-assembled-1-1" class="headerlink" title="因为EMBOSS 中的 transeq 软件会对 gene id 进行修改，将Prunella_strophiata_best_assembled_1改为了Prunella_strophiata_best_assembled_1_1"></a>因为EMBOSS 中的 transeq 软件会对 gene id 进行修改，将Prunella_strophiata_best_assembled_1改为了Prunella_strophiata_best_assembled_1_1</h4><h4 id="所以使用sed命令去除掉gene-id末尾的-1-同时就得到了最终的蛋白文件"><a href="#所以使用sed命令去除掉gene-id末尾的-1-同时就得到了最终的蛋白文件" class="headerlink" title="所以使用sed命令去除掉gene id末尾的_1 同时就得到了最终的蛋白文件"></a>所以使用sed命令去除掉gene id末尾的_1 同时就得到了最终的蛋白文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i 's/\(.*\)_1\(.*\)/\1\2/g' Prunella_strophiata.best_assembled.pep.fa</span><br></pre></td></tr></table></figure>
+
+<h2 id="filter-Du’s-file"><a href="#filter-Du’s-file" class="headerlink" title="filter Du’s file"></a>filter Du’s file</h2><h4 id="杜老师的16个岩鹨基因组的原始注释文件中即没有包含cds的信息，也没有包含gene-id的信息"><a href="#杜老师的16个岩鹨基因组的原始注释文件中即没有包含cds的信息，也没有包含gene-id的信息" class="headerlink" title="杜老师的16个岩鹨基因组的原始注释文件中即没有包含cds的信息，也没有包含gene id的信息"></a>杜老师的16个岩鹨基因组的原始注释文件中即没有包含cds的信息，也没有包含gene id的信息</h4><h4 id="原始注释如下"><a href="#原始注释如下" class="headerlink" title="原始注释如下"></a>原始注释如下</h4><blockquote>
+<p>C26941125       exonerate:protein2genome:local  gene    1346    2626    1492    -       .       gene_id 1 ; sequence evm.model.contig1003.2 ; gene_orientation + ; identity 99.30 ; similarity 99.30<br>C26941125       exonerate:protein2genome:local  exon    2490    2626    .       -       .       insertions 0 ; deletions 0 ; identity 95.56 ; similarity 95.56<br>C26941125       exonerate:protein2genome:local  intron  2378    2489    .       -       .       intron_id 1<br>C26941125       exonerate:protein2genome:local  exon    2235    2377    .       -       .       insertions 0 ; deletions 1 ; identity 100.00 ; similarity 100.00 ; frameshifts 2<br>C26941125       exonerate:protein2genome:local  intron  2148    2234    .       -       .       intron_id 2<br>C26941125       exonerate:protein2genome:local  exon    2116    2147    .       -       .       insertions 0 ; deletions 0 ; identity 100.00 ; similarity 100.00<br>C26941125       exonerate:protein2genome:local  intron  1897    2115    .       -       .       intron_id 3<br>C26941125       exonerate:protein2genome:local  exon    1346    1896    .       -       .       insertions 0 ; deletions 0 ; identity 100.00 ; similarity 100.00<br>scaffold175008  exonerate:protein2genome:local  gene    1423    2438    1202    +       .       gene_id 1 ; sequence evm.model.contig1003.1 ; gene_orientation + ; identity 89.45 ; similarity 89.84<br>scaffold175008  exonerate:protein2genome:local  exon    1423    2014    .       +       .       insertions 0 ; deletions 0 ; identity 86.80 ; similarity 86.80<br>scaffold175008  exonerate:protein2genome:local  intron  2015    2259    .       +       .       intron_id 1<br>scaffold175008  exonerate:protein2genome:local  exon    2260    2438    .       +       .       insertions 0 ; deletions 0 ; identity 98.31 ; similarity 100.00</p>
+</blockquote>
+<h4 id="所以首先要做的是先添加gene-id的信息，然后再根据注释文件中的exon的位置信息，提取出所有转录本"><a href="#所以首先要做的是先添加gene-id的信息，然后再根据注释文件中的exon的位置信息，提取出所有转录本" class="headerlink" title="所以首先要做的是先添加gene id的信息，然后再根据注释文件中的exon的位置信息，提取出所有转录本"></a>所以首先要做的是先添加gene id的信息，然后再根据注释文件中的exon的位置信息，提取出所有转录本</h4><h4 id="再用transdecoder软件，对所有的转录本去预测ORF，得到最长ORF"><a href="#再用transdecoder软件，对所有的转录本去预测ORF，得到最长ORF" class="headerlink" title="再用transdecoder软件，对所有的转录本去预测ORF，得到最长ORF"></a>再用transdecoder软件，对所有的转录本去预测ORF，得到最长ORF</h4><h3 id="1-get-cdna-file-and-transdecoder-commands"><a href="#1-get-cdna-file-and-transdecoder-commands" class="headerlink" title="1. get cdna file and transdecoder commands"></a>1. get cdna file and transdecoder commands</h3><h3 id="This-step-aims-at-reformat-16-genome-annotation-of-Du-by-adding-gene-id"><a href="#This-step-aims-at-reformat-16-genome-annotation-of-Du-by-adding-gene-id" class="headerlink" title="This step aims at reformat 16 genome annotation of Du by adding gene id"></a>This step aims at reformat 16 genome annotation of Du by adding gene id</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ls *gff3 | sed 's/.gff3//g' | while read line;</span><br><span class="line">do python reformat.py $&#123;line&#125;.gff3  &gt; $&#123;line&#125;.refomat.gff3;</span><br><span class="line">gffread $&#123;line&#125;.refomat.gff3 -g $&#123;line&#125;.fa  -w $&#123;line&#125;.cdna.fa;</span><br><span class="line">echo "TransDecoder.LongOrfs -t "$&#123;line&#125;".cdna.fa &amp;" &gt;&gt; run_TransDecoder.LongOrfs.sh</span><br><span class="line">echo "TransDecoder.Predict -t "$&#123;line&#125;".cdna.fa &amp;" &gt;&gt; run_TransDecoder.Predict.sh</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h4 id="在上面的循环中，执行了4个循环的命令，在下面分四个说明"><a href="#在上面的循环中，执行了4个循环的命令，在下面分四个说明" class="headerlink" title="在上面的循环中，执行了4个循环的命令，在下面分四个说明"></a>在上面的循环中，执行了4个循环的命令，在下面分四个说明</h4><h4 id="1-使用reformat-py脚本修改gene-id的格式"><a href="#1-使用reformat-py脚本修改gene-id的格式" class="headerlink" title="1. 使用reformat.py脚本修改gene id的格式"></a>1. 使用reformat.py脚本修改gene id的格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python reformat.py $&#123;line&#125;.gff3  &gt; $&#123;line&#125;.refomat.gff3;</span><br></pre></td></tr></table></figure>
+
+<h4 id="reformat-py-脚本如下，各部分代表的意义与上面的-reformat-py2-类似"><a href="#reformat-py-脚本如下，各部分代表的意义与上面的-reformat-py2-类似" class="headerlink" title="reformat.py 脚本如下，各部分代表的意义与上面的 reformat.py2 类似"></a>reformat.py 脚本如下，各部分代表的意义与上面的 reformat.py2 类似</h4><h4 id="修改后的gff文件格式如下，差别只在最后一列"><a href="#修改后的gff文件格式如下，差别只在最后一列" class="headerlink" title="修改后的gff文件格式如下，差别只在最后一列"></a>修改后的gff文件格式如下，差别只在最后一列</h4><blockquote>
+<p>C26941125       exonerate:protein2genome:local  gene    1346    2626    1492    -       .       ID=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  exon    2490    2626    .       -       .       Parent=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  intron  2378    2489    .       -       .       Parent=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  exon    2235    2377    .       -       .       Parent=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  intron  2148    2234    .       -       .       Parent=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  exon    2116    2147    .       -       .       Parent=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  intron  1897    2115    .       -       .       Parent=Prunella_atrogularis_141230_1<br>C26941125       exonerate:protein2genome:local  exon    1346    1896    .       -       .       Parent=Prunella_atrogularis_141230_1</p>
+</blockquote>
+<h4 id="2-使用gffread提取exons组成的cdna序列"><a href="#2-使用gffread提取exons组成的cdna序列" class="headerlink" title="2.使用gffread提取exons组成的cdna序列"></a>2.使用gffread提取exons组成的cdna序列</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gffread $&#123;line&#125;.refomat.gff3 -g $&#123;line&#125;.fa  -w $&#123;line&#125;.cdna.fa;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-与-4-的命令的目的就是生成TransDecoder软件所诉需要的命令行，即软件名字-cdna序列名字"><a href="#3-与-4-的命令的目的就是生成TransDecoder软件所诉需要的命令行，即软件名字-cdna序列名字" class="headerlink" title="3. 与 4. 的命令的目的就是生成TransDecoder软件所诉需要的命令行，即软件名字+cdna序列名字"></a>3. 与 4. 的命令的目的就是生成TransDecoder软件所诉需要的命令行，即软件名字+cdna序列名字</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;TransDecoder.LongOrfs -t &quot;$&#123;line&#125;&quot;.cdna.fa &amp;&quot; &gt;&gt; run_TransDecoder.LongOrfs.sh</span><br><span class="line">echo &quot;TransDecoder.Predict -t &quot;$&#123;line&#125;&quot;.cdna.fa &amp;&quot; &gt;&gt; run_TransDecoder.Predict.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 2. use TransDecoder to predict ORF region</span><br><span class="line">#### 运行上一步保存的命令行，TransDecoder使用cdna序列预测cds序列</span><br><span class="line">nohup sh run_TransDecoder.LongOrfs.sh &gt; run_TransDecoder.LongOrfs.log</span><br><span class="line">nohup sh run_TransDecoder.Predict.sh &gt; run_TransDecoder.Predict.log</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 3. generate longest transcripts and remove duplicated sequence in pep file</span><br><span class="line">```shell</span><br><span class="line">ls *.transdecoder.pep | while read line</span><br><span class="line">do</span><br><span class="line">/usr/bin/perl retrive_longest_splicing_variant.pl $&#123;line&#125; longest.$&#123;line&#125;</span><br><span class="line">/usr/bin/perl rm_dup_fasta.pl longest.$&#123;line&#125; temp.longest.$&#123;line&#125;</span><br><span class="line">awk -F &apos;#&apos; &apos;&#123;if($0 ~&quot;^&gt;&quot;)&#123;print $1&#125;else&#123;print $0&#125;&#125;&apos; temp.$&#123;line&#125; &gt;   final.$&#123;line&#125;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h4 id="在上面的循环中，执行了3个循环的命令，在下面分三个说明"><a href="#在上面的循环中，执行了3个循环的命令，在下面分三个说明" class="headerlink" title="在上面的循环中，执行了3个循环的命令，在下面分三个说明"></a>在上面的循环中，执行了3个循环的命令，在下面分三个说明</h4><h4 id="1-对TransDecoder的结果中的蛋白文件进行提取最长转录本"><a href="#1-对TransDecoder的结果中的蛋白文件进行提取最长转录本" class="headerlink" title="1. 对TransDecoder的结果中的蛋白文件进行提取最长转录本"></a>1. 对TransDecoder的结果中的蛋白文件进行提取最长转录本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/perl retrive_longest_splicing_variant.pl $&#123;line&#125; longest.$&#123;line&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-对TransDecoder的结果中的蛋白文件进行去重复"><a href="#2-对TransDecoder的结果中的蛋白文件进行去重复" class="headerlink" title="2. 对TransDecoder的结果中的蛋白文件进行去重复"></a>2. 对TransDecoder的结果中的蛋白文件进行去重复</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/perl rm_dup_fasta.pl longest.$&#123;line&#125; temp.longest.$&#123;line&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-对蛋白文件的gene-id进行修改，将冗余的部分去掉"><a href="#3-对蛋白文件的gene-id进行修改，将冗余的部分去掉" class="headerlink" title="3. 对蛋白文件的gene id进行修改，将冗余的部分去掉"></a>3. 对蛋白文件的gene id进行修改，将冗余的部分去掉</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F '#' '&#123;if($0 ~"^&gt;")&#123;print $1&#125;else&#123;print $0&#125;&#125;' temp.$&#123;line&#125; &gt;   final.$&#123;line&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="filter-BGI-file"><a href="#filter-BGI-file" class="headerlink" title="filter BGI file"></a>filter BGI file</h2><h3 id="因为BGI的gff注释文件中，已经有了原始的基因名，所以先提取出原始的基因名，再添加一个对应的基因名，再将原始的注释文件替换"><a href="#因为BGI的gff注释文件中，已经有了原始的基因名，所以先提取出原始的基因名，再添加一个对应的基因名，再将原始的注释文件替换" class="headerlink" title="因为BGI的gff注释文件中，已经有了原始的基因名，所以先提取出原始的基因名，再添加一个对应的基因名，再将原始的注释文件替换"></a>因为BGI的gff注释文件中，已经有了原始的基因名，所以先提取出原始的基因名，再添加一个对应的基因名，再将原始的注释文件替换</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ls *BGI*  | while read line</span><br><span class="line">do</span><br><span class="line">grep '&gt;' $&#123;line&#125;.pep | sed 's/&gt;//g' &gt; $&#123;line&#125;.modify.seqid</span><br><span class="line">awk '&#123;if($3 =="gene")&#123;a=index($0,"~~");b=index($0,";");print substr($0,a+2,b-a-2)&#125;&#125;' &gt; $&#123;line&#125;.origin.seqid</span><br><span class="line">paste -d '\t' $&#123;line&#125;.origin.seqid $&#123;line&#125;.modify.seqid &gt; $&#123;line&#125;_coress.seqid</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">python  replace_gff_gene_id.py Prunella_fulvescens_BGI_coress.seqid Prunella_fulvescens.homolog.gff &gt; Prunella_fulvescens.modify.gff3</span><br><span class="line">python  replace_gff_gene_id.py Prunella_himalayana_BGI_coress.seqid Prunella_himalayana.homolog.gff &gt;  Prunella_himalayana.modify.gff3</span><br></pre></td></tr></table></figure>
+
+<h2 id="download-Gallus-genome-from-Ensembl-database-and-remove-reduant-transcripts"><a href="#download-Gallus-genome-from-Ensembl-database-and-remove-reduant-transcripts" class="headerlink" title="download Gallus genome from Ensembl database and remove reduant transcripts"></a>download Gallus genome from Ensembl database and remove reduant transcripts</h2><h3 id="1-下载人和鸡的蛋白序列"><a href="#1-下载人和鸡的蛋白序列" class="headerlink" title="1. 下载人和鸡的蛋白序列"></a>1. 下载人和鸡的蛋白序列</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.all.fa.gz</span><br><span class="line">gunzip Gallus_gallus.GRCg6a.pep.all.fa.gz</span><br><span class="line"></span><br><span class="line">wget ftp://ftp.ensembl.org/pub/release-100/fasta/homo_sapiens/pep/Homo_sapiens.GRCh38.pep.all.fa.gz</span><br><span class="line">gunzip Homo_sapiens.GRCh38.pep.all.fa.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-过滤掉同一gene-id中短的mrna序列"><a href="#2-过滤掉同一gene-id中短的mrna序列" class="headerlink" title="2. 过滤掉同一gene id中短的mrna序列"></a>2. 过滤掉同一gene id中短的mrna序列</h3><h3 id="retrive-longest-transcripts-from-above-protein-fasta-file"><a href="#retrive-longest-transcripts-from-above-protein-fasta-file" class="headerlink" title="retrive longest transcripts from above protein fasta file"></a>retrive longest transcripts from above protein fasta file</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ls *fa | while read line</span><br><span class="line">do</span><br><span class="line">python ~/software/OrthoFinder/tools/primary_transcript.py $&#123;line&#125;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h1 id="CORE-PROGRAM"><a href="#CORE-PROGRAM" class="headerlink" title="CORE PROGRAM"></a>CORE PROGRAM</h1><h2 id="run-OrthoFinder-and-get-the-Orthogroups"><a href="#run-OrthoFinder-and-get-the-Orthogroups" class="headerlink" title="run OrthoFinder and get the Orthogroups"></a>run OrthoFinder and get the Orthogroups</h2><h3 id="将上述所有蛋白序列文件作为输入去预测Orthogroups"><a href="#将上述所有蛋白序列文件作为输入去预测Orthogroups" class="headerlink" title="将上述所有蛋白序列文件作为输入去预测Orthogroups"></a>将上述所有蛋白序列文件作为输入去预测Orthogroups</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/software/OrthoFinder/orthofinder -f pep -S diamond</span><br></pre></td></tr></table></figure>
+
+<h2 id="published-info"><a href="#published-info" class="headerlink" title="published info"></a>published info</h2><h3 id="OrthoFinder发表在GB的文章，引用次数一年内已经有69次"><a href="#OrthoFinder发表在GB的文章，引用次数一年内已经有69次" class="headerlink" title="OrthoFinder发表在GB的文章，引用次数一年内已经有69次"></a>OrthoFinder发表在GB的文章，引用次数一年内已经有69次</h3><blockquote>
+<p>Emms D.M. &amp; Kelly S. OrthoFinder: phylogenetic orthology inference for comparative<br>genomics (2019), Genome Biology 20:238</p>
+</blockquote>
+<h2 id="use-longest-transcripts-gene-ids-filter-gff-file-and-get-intron-sequences"><a href="#use-longest-transcripts-gene-ids-filter-gff-file-and-get-intron-sequences" class="headerlink" title="use longest transcripts gene ids filter gff file and get intron sequences"></a>use longest transcripts gene ids filter gff file and get intron sequences</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">less *.seqid |sed 's/seqid//g'| while read line</span><br><span class="line">do cat $&#123;line&#125; | while read row</span><br><span class="line">grep -w $&#123;row&#125; $&#123;line&#125;.gff3</span><br><span class="line">done &gt; $&#123;line&#125;.reformat.gff3</span><br><span class="line">/usr/bin/perl extract_intron_from_gff3_based_on_exon.pl $&#123;line&#125;.fa $&#123;line&#125;.reformat.gff3 $&#123;line&#125;.intron.fa</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2020/05/15/KaKs_calculator/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-05-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2020 Shy
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
