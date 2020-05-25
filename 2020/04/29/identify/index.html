@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Phylogeny | Shy 的博客</title>
+  <title>Blast + Hmmsearch 鉴定一个基因家族 | Shy 的博客</title>
   <meta name="author" content="Shy">
   
   <meta name="description" content="Shy 的博客">
@@ -14,7 +14,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Blast + Hmmsearch 鉴定一个基因家族">
   <meta property="og:site_name" content="Shy 的博客">
 
   
@@ -115,136 +115,105 @@ var _hmt = _hmt || [];
   	<div class="content">
     	 
 
-<!-- title -->
-<div class="page-header">
-  <h1 class="archive-title-tag"><i class="fa fa-archive"></i> Phylogeny</h1>
-</div>
 
-<div class="row page">
-  <!-- cols -->
-  
-  <div class="col-md-9">
 	
-
-	  <div id="top_search"></div>
-
-	  <div class="archive">
-		
-		
-		
-			
-			
-			<h4 class="archive-ul" data-toggle="collapse" data-target="#2019">2019<b class="caret"></b></h4>
-			<ul id="2019" class="collapse in">
-			
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-12-04 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/12/04/shimei/" >建一颗ML树</a></span>
-		
-		</li>			
-		
-		</ul>
+		<div class="page-header">
+			<h1> Blast + Hmmsearch 鉴定一个基因家族</h1>
 		</div>
-
-</div> <!-- col-md-9/col-md-12 -->
-
-
-<div class="col-md-3">
-	<div id="sidebar">
 	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
 
 
-		
-			
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
-		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
-			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
-		
-			<li><a href="/tags/geome/">geome<span>1</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-		 
-		</ul>
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">hmmsearch -o batatas.hmmsearch.log --tblout batatas.hmmsearch.tblout SBP.hmm  longest.renamehead.transcript.fasta.transdecoder.pep</span><br><span class="line"></span><br><span class="line">awk '&#123;if ($1!~/^#/)print $1&#125;' batatas.hmmsearch.tblout &gt; batatas.hmmsearch.seqid</span><br><span class="line"></span><br><span class="line">makeblastdb -in  longest.renamehead.transcript.fasta.transdecoder.pep -title batatas -dbtype prot -parse_seqids -out batatas</span><br><span class="line"></span><br><span class="line">blastp -db batatas -query atspl.pep.fa -evalue 1e-3 -outfmt 6 &gt; batatas.blastp</span><br><span class="line"></span><br><span class="line">awk '&#123;print $2&#125;' batatas.blastp | sort | uniq &gt; batatas.blastp.seqid</span><br><span class="line"></span><br><span class="line">cat batatas*seqid | sort | uniq &gt; batatas.spl.seqid</span><br><span class="line"></span><br><span class="line">perl extract.pl batatas.spl.seqid batatas.pep.fa &gt; batatas.spl.fa</span><br><span class="line"></span><br><span class="line">grep '&gt;' trifida.spl.long.fa &gt; trifida.spl.seqid</span><br><span class="line"></span><br><span class="line">cat batatas.smart.remove batatas.spl.seqid| sort | uniq -u &gt; batatas.smartSBP.seqid</span><br><span class="line"></span><br><span class="line">perl extract.pl batatas.smartSBP.seqid batatas.pep.fa &gt; batatas.spl.smart.fa</span><br><span class="line">	</span><br><span class="line">blastp -query batatas.spl.smart.fa -subject trifida.spl.smart.fa -outfmt 6 -max_target_seqs 1 &gt; b2t.log</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less batatas.spl.seqid | while read line; do grep $&#123;line&#125; transcript.fasta.transdecoder.gff3 | awk -v OFS="\t" '&#123; if ($3 == "mRNA") print $1, $4, $5 &#125;' &gt;&gt; blast_result.bed; done</span><br></pre></td></tr></table></figure>
+
+	  
 	</div>
 
+	<div>
+  	<center>
+	<div class="pagination">
 
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
     
-      <li>
-        <a href="/2020/05/25/Ensembl_filter/" ><i class="fa fa-file-o"></i>过滤Ensembl中数据的冗余信息</a>
-      </li>
     
-      <li>
-        <a href="/2020/05/25/wget_Ensembl/" ><i class="fa fa-file-o"></i>下载 Ensembl 里面所有鸟类的 基因组……</a>
-      </li>
+    <a href="/2020/05/15/KaKs_calculator/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
-      <li>
-        <a href="/2020/05/15/详细注释的OrthoFinder/" ><i class="fa fa-file-o"></i>详细一点的Orthofinder，与之前英文的没区别</a>
-      </li>
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-      <li>
-        <a href="/2020/05/15/OrthoFinde/" ><i class="fa fa-file-o"></i>OrthoFinder 寻找同源基因</a>
-      </li>
+    <a href="/2020/04/22/Nature 配色风格pal_npg/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
-      <li>
-        <a href="/2020/05/15/PAML/" ><i class="fa fa-file-o"></i>PAML and MCScanX-transposed</a>
-      </li>
+
     
-  </ul>
 </div>
 
-		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
+    </center>
+	</div>
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/goodlucksun" title="All Github repository." target="_blank"]);">My github</a></li>
+	<!-- comment -->
 	
-	</ul>
-</div>
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
 
 
+	</div> <!-- col-md-9/col-md-12 -->
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
 
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-04-29 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
 
