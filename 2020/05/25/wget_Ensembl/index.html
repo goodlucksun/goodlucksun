@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>PAML and MCScanX-transposed | Shy 的博客</title>
+  <title>下载 Ensembl 里面所有鸟类的 基因组…… | Shy 的博客</title>
   <meta name="author" content="Shy">
   
   <meta name="description" content="Shy 的博客">
@@ -14,7 +14,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="PAML and MCScanX-transposed">
+  <meta property="og:title" content="下载 Ensembl 里面所有鸟类的 基因组……">
   <meta property="og:site_name" content="Shy 的博客">
 
   
@@ -118,7 +118,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> PAML and MCScanX-transposed</h1>
+			<h1> 下载 Ensembl 里面所有鸟类的 基因组……</h1>
 		</div>
 	
 
@@ -135,28 +135,14 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
-<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
-<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
-<p>这一篇用branch sites model的</p>
-<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
-<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
-<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
-<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
-<p>####1.WGD</p>
-<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
-<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
-<p>####2.Tandem and Proximal</p>
-<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
-<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
-<p>####3.Dispersed</p>
-<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
-<p>####4.Transposed</p>
-<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
-<p>NOTE！</p>
-<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
-<p>NOTE！</p>
-<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
+	  <h1 id="如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件"><a href="#如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件" class="headerlink" title="如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件"></a>如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件</h1><p>去年下过一次 但是当时没有存下过程<br>首先进入Ensmbl数据库下载 all Species list (首页给出的Sp list 只有动物的)<br>然后根据图片和common name挑选出哪些是鸟类，并把前两列存在一个新的txt文件中</p>
+<p>38bird.ensembl.list.txt</p>
+<p>然后观察ftp网址发现，只需要有scientific name就可以下载，但是所有字母都为小写，且string之间有下划线</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;&apos; &apos;s/ /_/g&apos; 38bird.ensembl.list.txt</span><br><span class="line">awk &apos;&#123;print $2&#125;&apos; 38bird.ensembl.list.txt &gt; specific_name.list</span><br><span class="line">cat scientific_name.list | tr  &apos;[A-Z]&apos; &apos;[a-z]&apos; &gt; xiaoxie.scientific.list</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以根据 xiaoxie.scientific.list 循环输出wget下载命令,用wget -c 可以续传，因为下载速度实在太慢了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/cds/*.cds.all.fa.gz&apos;</span><br><span class="line">done &gt; download_cds.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/gff3/&apos;$&#123;line&#125;&apos;/*.100.gff3.gz&apos;</span><br><span class="line">done &gt; download_gff3.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/pep/*.100.gff3.gz&apos;</span><br><span class="line">done &gt; download_protein.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/dna/*.dna_sm.toplevel.fa.gz&apos;</span><br><span class="line">done &gt; download_genome.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nohup sh *.sh &gt; run_gwt.log</span><br></pre></td></tr></table></figure>
+
 	  
 	</div>
 
@@ -166,13 +152,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2020/05/22/详细注释的OrthoFinder/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2020/05/15/KaKs_calculator/" type="button" class="btn btn-default ">Next<i
+    <a href="/2020/05/25/Ensembl_filter/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -201,7 +186,7 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2020-05-15 
+	2020-05-25 
 	</div>
 	
 
@@ -214,7 +199,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+  <li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
     </ul>
 	</div>
 		

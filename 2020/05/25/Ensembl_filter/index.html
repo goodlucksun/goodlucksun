@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>过滤Ensembl中数据的冗余信息 | Shy 的博客</title>
+  <meta name="author" content="Shy">
+  
+  <meta name="description" content="Shy 的博客">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="过滤Ensembl中数据的冗余信息">
+  <meta property="og:site_name" content="Shy 的博客">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Shy 的博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 过滤Ensembl中数据的冗余信息</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="Ensembl-格式介绍"><a href="#Ensembl-格式介绍" class="headerlink" title="Ensembl 格式介绍"></a>Ensembl 格式介绍</h2><p>u1s1 真的佩服Emsembl数据库的开发团队，十分想问候他们怎么做的这么详细的</p>
+<hr>
+<p>sudo killall coreaudiod</p>
+<p>Ensembl 数据库格式十分简洁明了，每一个基因都有对应的 gene id, 每一个转录本有对应的<br>trasncript id, 每一个蛋白有对应的 protein id, 而且这三个id之间。。没有规律</p>
+<p>比如 这是鸡中的一个蛋白序列的简化stable的信息</p>
+<blockquote>
+<p>ENSGALG00000009622    ENSGALT00000032268     ENSGALP00000031632<br>其实在真实的序列中，也不是上面的样子而是如下这样包含了stableeversion的</p>
+<blockquote>
+<p>ENSGALP00000073247.1 pep chromosome:GRCg6a:15:8238927:8239208:1<br>gene:ENSGALG00000049010.1 transcript:ENSGALT00000103863.1<br>gene_biotype:IG_V_gene transcript_biotype:IG_V_gene</p>
+</blockquote>
+</blockquote>
+<p>在biomart中 除了stable id 还有很多label .. awesome～</p>
+<h3 id="我想要得到蛋白序列中同一个gene-id中最长的蛋白序列"><a href="#我想要得到蛋白序列中同一个gene-id中最长的蛋白序列" class="headerlink" title="我想要得到蛋白序列中同一个gene id中最长的蛋白序列"></a>我想要得到蛋白序列中同一个gene id中最长的蛋白序列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$PATH:OrthoFinder/tools/primary_transcript.py</span><br></pre></td></tr></table></figure>
+
+<p>orthofinder 中已经给出了怎么提取最长转录本的python脚本。并且最长的转录本的id被替换为gene id输出</p>
+<p>提蛋白真的很方便，但是，老师还需要对应基因的intron序列<br>intron序列就需要gff文件中的exon信息和mRNA信息</p>
+<p>怎么通过带着gene id的最长转录本去过滤gff文件呢。</p>
+<blockquote>
+<p>经过一系列的测试。。比如带gene id的蛋白序列blastp回去找到transcript id。但是blast的算法导致 multi match的情况不好去除</p>
+</blockquote>
+<p>所以还是得写个脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"></span><br><span class="line">lst = []</span><br><span class="line">Sequence = &#123;&#125;</span><br><span class="line"></span><br><span class="line">transcript2gene = &#123;&#125;</span><br><span class="line">pep2gene = &#123;&#125;</span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_emsembl_fasta:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_emsembl_fasta:</span><br><span class="line">        <span class="keyword">if</span> row.startswith(<span class="string">'&gt;'</span>):</span><br><span class="line">            lst = row.split(<span class="string">" "</span>)</span><br><span class="line">            pep_id = lst[<span class="number">0</span>].replace(<span class="string">'&gt;'</span>,<span class="string">''</span>)</span><br><span class="line">            gene_id = lst[<span class="number">3</span>].replace(<span class="string">'gene:'</span>,<span class="string">''</span>)</span><br><span class="line">            transcript_id = lst[<span class="number">4</span>].replace(<span class="string">'transcript:'</span>,<span class="string">''</span>)</span><br><span class="line">            Sequence[transcript_id] = <span class="string">''</span></span><br><span class="line">            transcript2gene[transcript_id] = gene_id</span><br><span class="line">            pep2gene[transcript_id] = pep_id</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            Sequence[transcript_id] += row.strip()</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"t1.temp"</span>,<span class="string">'w'</span>) <span class="keyword">as</span> Out:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> Sequence.keys():</span><br><span class="line">        Out.write(i+<span class="string">"\t"</span>+str(len(Sequence[i]))+<span class="string">"\t"</span>+transcript2gene[i]+<span class="string">'\t'</span>+pep2gene[i]+<span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line">gene_id_len=open(<span class="string">"t1.temp"</span>,<span class="string">"r"</span>)</span><br><span class="line">table = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> gene_id_len:</span><br><span class="line">    col = line.strip().split(<span class="string">"\t"</span>)</span><br><span class="line">    col[<span class="number">0</span>] = str(col[<span class="number">0</span>])</span><br><span class="line">    col[<span class="number">1</span>] = int(col[<span class="number">1</span>])</span><br><span class="line">    col[<span class="number">2</span>] = str(col[<span class="number">2</span>])</span><br><span class="line">    col[<span class="number">3</span>] = str(col[<span class="number">3</span>])</span><br><span class="line">    table.append(col)</span><br><span class="line"><span class="comment">#print(table)</span></span><br><span class="line">table_sorted = sorted(table, key=itemgetter(<span class="number">2</span>, <span class="number">1</span>),reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#print(table_sorted)</span></span><br><span class="line">output_file = open(<span class="string">"t2.temp"</span>,<span class="string">"w"</span>)</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> table_sorted:</span><br><span class="line">    row = [str(x) <span class="keyword">for</span> x <span class="keyword">in</span> row]</span><br><span class="line">    output_file.write(<span class="string">"\t"</span>.join(row) + <span class="string">'\n'</span>)</span><br><span class="line">output_file.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">input_file=open(<span class="string">"t2.temp"</span>,<span class="string">"r"</span>)</span><br><span class="line">dict2=&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> input_file.readlines():</span><br><span class="line">    col = line.strip().split(<span class="string">"\t"</span>)</span><br><span class="line">    col[<span class="number">0</span>] = str(col[<span class="number">0</span>])</span><br><span class="line">    col[<span class="number">1</span>] = int(col[<span class="number">1</span>])</span><br><span class="line">    col[<span class="number">2</span>] = str(col[<span class="number">2</span>])</span><br><span class="line">    col[<span class="number">3</span>] = str(col[<span class="number">3</span>])</span><br><span class="line">    <span class="keyword">if</span> col[<span class="number">2</span>] <span class="keyword">not</span> <span class="keyword">in</span> dict2:</span><br><span class="line">        dict2[col[<span class="number">2</span>]]=col[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        dict2[col[<span class="number">2</span>]]+= <span class="string">'\t'</span>+col[<span class="number">0</span>]</span><br><span class="line"><span class="comment">#print(dict2)</span></span><br><span class="line"><span class="comment">#print(dict2.values())</span></span><br><span class="line">list_values=list(dict2.values())</span><br><span class="line"><span class="comment">#print(list_values)</span></span><br><span class="line">result_file = open(<span class="string">"final.fa"</span>,<span class="string">"w"</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> list_values:</span><br><span class="line">    col = line.strip().split(<span class="string">"\t"</span>)</span><br><span class="line">    col[<span class="number">0</span>] = str(col[<span class="number">0</span>])</span><br><span class="line">    <span class="comment">#print(col[0])</span></span><br><span class="line"></span><br><span class="line">    result_file.write(col[<span class="number">0</span>]+<span class="string">"\n"</span>)</span><br><span class="line">result_file.close()</span><br></pre></td></tr></table></figure>
+
+<p>专为Ensembl设计，结果会保存最长转录本的 transcript id， gene id， pep id</p>
+<p>然后再过滤gff</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line"></span><br><span class="line">ab = &#123;&#125;</span><br><span class="line">with open(sys.argv[1]) as  rename_file:</span><br><span class="line">    for row in rename_file:</span><br><span class="line">        lst1 = row.strip().split(&apos;\t&apos;)</span><br><span class="line">        ab[lst1[0]] = lst1[1]</span><br><span class="line"></span><br><span class="line">with open(sys.argv[2]) as gff_file:</span><br><span class="line">    for row in gff_file:</span><br><span class="line">	for key,value in ab.items():</span><br><span class="line">       	    if &quot;ID=gene:&quot;+key in row:</span><br><span class="line">                print(row.strip())</span><br><span class="line">            elif value in row:</span><br><span class="line">                print(row.strip())</span><br></pre></td></tr></table></figure>
+
+<p>这样就得到了只包含最长转录本的gff文件</p>
+<p>再用张老师的提取intron的脚本就可以得到intron文件</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl -w</span></span><br><span class="line"><span class="keyword">use</span> warnings;</span><br><span class="line"><span class="keyword">use</span> strict;</span><br><span class="line"><span class="keyword">use</span> Set::IntSpan;</span><br><span class="line"><span class="keyword">use</span> Bio::DB::Fasta;</span><br><span class="line"></span><br><span class="line"><span class="comment"># date, 2016-12-30, zhanglei</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $ref       = $ARGV[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">my</span> $gene2pep  = $ARGV[<span class="number">1</span>];</span><br><span class="line"><span class="keyword">my</span> $gene2tran = $ARGV[<span class="number">2</span>];</span><br><span class="line"><span class="keyword">my</span> $gtf       = $ARGV[<span class="number">3</span>];</span><br><span class="line"><span class="keyword">my</span> $out       = $ARGV[<span class="number">4</span>];</span><br><span class="line"><span class="keyword">die</span> <span class="string">"Usage: $0 ref.fa gene2pep gene2transcript file.gff3 out.fa</span></span><br><span class="line"><span class="string">This script is used to extract intron from the gff3 file(NOT GTF file!)\n"</span> <span class="keyword">if</span> @ARGV &lt; <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Loading the ID file\t"</span>;</span><br><span class="line"><span class="keyword">my</span> %gene2peps;</span><br><span class="line"><span class="keyword">my</span> %trans2gene;</span><br><span class="line"><span class="keyword">open</span> IN, <span class="string">"&lt;$gene2pep"</span>;</span><br><span class="line"><span class="keyword">while</span> (&lt;IN&gt;) &#123;</span><br><span class="line">	<span class="keyword">chomp</span>;</span><br><span class="line">	<span class="keyword">my</span> @array = (<span class="keyword">split</span> <span class="regexp">/\s+/</span>);</span><br><span class="line">	$gene2peps&#123;$array[<span class="number">0</span>]&#125; = $array[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">close</span> IN;</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> IN, <span class="string">"&lt;$gene2tran"</span>;</span><br><span class="line"><span class="keyword">while</span> (&lt;IN&gt;) &#123;</span><br><span class="line">	<span class="keyword">chomp</span>;</span><br><span class="line">	<span class="keyword">my</span> @array = (<span class="keyword">split</span> <span class="regexp">/\s+/</span>);</span><br><span class="line">	$trans2gene&#123;$array[<span class="number">1</span>]&#125; = $array[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">close</span> IN;</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Extracting gff3 file\t"</span>;</span><br><span class="line"><span class="comment"># extract gtf</span></span><br><span class="line"><span class="keyword">open</span> IN, <span class="string">"&lt;$gtf"</span>;</span><br><span class="line"><span class="keyword">my</span> @lines;</span><br><span class="line"><span class="keyword">while</span> (&lt;IN&gt;) &#123;</span><br><span class="line">	<span class="keyword">my</span> @array = (<span class="keyword">split</span> <span class="regexp">/\s+/</span>, $_);</span><br><span class="line">	<span class="keyword">if</span> ($array[<span class="number">2</span>] eq <span class="string">'mRNA'</span> || $array[<span class="number">2</span>] eq <span class="string">'exon'</span>) &#123;</span><br><span class="line">		<span class="keyword">push</span> @lines, $_;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">close</span> IN;</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"done\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Formatdb $ref\t"</span>;</span><br><span class="line"><span class="comment"># sequence DB</span></span><br><span class="line"><span class="keyword">my</span> $ref_db = Bio::DB::Fasta -&gt; new($ref);</span><br><span class="line"><span class="keyword">print</span> <span class="string">"done\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Get gene id from gff3\t"</span>;</span><br><span class="line"><span class="comment"># load the gff file</span></span><br><span class="line"><span class="keyword">open</span> OUT, <span class="string">"&gt;$out"</span>;</span><br><span class="line"><span class="keyword">my</span> %hash;</span><br><span class="line"><span class="keyword">foreach</span> (@lines) &#123;</span><br><span class="line">	<span class="keyword">chomp</span>;</span><br><span class="line">	<span class="keyword">next</span> <span class="keyword">if</span> /^<span class="comment">#/;</span></span><br><span class="line">	<span class="keyword">next</span> <span class="keyword">if</span> /^\<span class="keyword">s</span>+<span class="regexp">/;</span></span><br><span class="line"><span class="regexp">	my @cols = (split /</span>\<span class="keyword">s</span>+<span class="regexp">/, $_);</span></span><br><span class="line"><span class="regexp">	my $gene_id = my $trans_id = my $pep_id;</span></span><br><span class="line"><span class="regexp">	if ($cols[2] eq 'mRNA') &#123;</span></span><br><span class="line"><span class="regexp">		($gene_id) = (/</span>Parent\=gene\:(\w+);<span class="regexp">/);   #Parent=gene:ENSGALG00000053455</span></span><br><span class="line"><span class="regexp">		($trans_id) = (/</span>ID\=transcript\:(\w+);<span class="regexp">/);</span></span><br><span class="line"><span class="regexp">#		print "mRNA $gene_id $trans_id\n";</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">	elsif ($cols[2] eq 'exon') &#123;</span></span><br><span class="line"><span class="regexp">		($trans_id) = (/</span>Parent\=transcript\:(\w+);<span class="regexp">/);  #Parent=transcript:</span></span><br><span class="line"><span class="regexp">		$gene_id = $trans2gene&#123;$trans_id&#125;;</span></span><br><span class="line"><span class="regexp">#		print "exon $gene_id $trans_id\n";</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">	$pep_id = $gene2peps&#123;$gene_id&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	next unless $gene_id;</span></span><br><span class="line"><span class="regexp">	# chr, strand, gene start and end</span></span><br><span class="line"><span class="regexp">	# chr, strand, gene start and end</span></span><br><span class="line"><span class="regexp">	if ($cols[2] eq 'mRNA' ) &#123;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;chr&#125; = $cols[0];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;strand&#125; = $cols[6];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;start&#125; = $cols[3];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;end&#125; = $cols[4];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;ex_num&#125; = 0;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;pep_id&#125; = $pep_id;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;trans_id&#125; = $trans_id;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;exon&#125; = new Set::IntSpan;</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">	# exon number</span></span><br><span class="line"><span class="regexp">	if ($cols[2] eq 'exon' &amp;&amp; exists $hash&#123;$gene_id&#125;) &#123;</span></span><br><span class="line"><span class="regexp">		my ( $start, $end ) = @cols[3, 4];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;exon&#125;-&gt;U("$start-$end");</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">print "done\n";</span></span><br><span class="line"><span class="regexp">print "Extract introns from $ref\t";</span></span><br><span class="line"><span class="regexp"># get the exon sequence</span></span><br><span class="line"><span class="regexp">foreach my $gene_id (sort keys %hash) &#123;</span></span><br><span class="line"><span class="regexp">	my $chr = $hash&#123;$gene_id&#125;&#123;chr&#125;;</span></span><br><span class="line"><span class="regexp">	my $strand = $hash&#123;$gene_id&#125;&#123;strand&#125;;</span></span><br><span class="line"><span class="regexp">	my $start = $hash&#123;$gene_id&#125;&#123;start&#125;;</span></span><br><span class="line"><span class="regexp">	my $end   = $hash&#123;$gene_id&#125;&#123;end&#125;;</span></span><br><span class="line"><span class="regexp">	my $pep_id = $hash&#123;$gene_id&#125;&#123;pep_id&#125;;</span></span><br><span class="line"><span class="regexp">	my $trans_id = $hash&#123;$gene_id&#125;&#123;trans_id&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	my $all_set = new Set::IntSpan "$start-$end";</span></span><br><span class="line"><span class="regexp">	my $exon_set = $hash&#123;$gene_id&#125;&#123;exon&#125;;</span></span><br><span class="line"><span class="regexp">	my $intron_set = diff $all_set $exon_set;</span></span><br><span class="line"><span class="regexp">	my @array_intron = sets $intron_set;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	my $seq;</span></span><br><span class="line"><span class="regexp">	# upstream and downstream, 0 bp</span></span><br><span class="line"><span class="regexp">#	my $min = min $set;</span></span><br><span class="line"><span class="regexp">#	$min = $min - 1;</span></span><br><span class="line"><span class="regexp">#	my $s_min = 1 + $min - 0;</span></span><br><span class="line"><span class="regexp">#	my $max = max $set;</span></span><br><span class="line"><span class="regexp">#	$max = $max + 1;</span></span><br><span class="line"><span class="regexp">#	my $e_max = $max - 1 + 0;</span></span><br><span class="line"><span class="regexp">#	my $upstream = $ref_db-&gt;seq($chr, $s_min =&gt; $min);</span></span><br><span class="line"><span class="regexp">#	my $downstream = $ref_db-&gt;seq($chr, $max =&gt; $e_max);</span></span><br><span class="line"><span class="regexp">#	$downstream = $upstream = "";</span></span><br><span class="line"><span class="regexp">#   $seq = "$upstream";</span></span><br><span class="line"><span class="regexp">	# exon region</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	@array_intron = reverse @array_intron if $strand eq '-';</span></span><br><span class="line"><span class="regexp">	foreach my $intron (@array_intron) &#123;</span></span><br><span class="line"><span class="regexp">		my ($start, $end) = (split /</span>\-<span class="regexp">/, $intron);</span></span><br><span class="line"><span class="regexp">		$end = $start unless defined $end;</span></span><br><span class="line"><span class="regexp">		my $seq = $ref_db-&gt;seq($chr, $start =&gt; $end);</span></span><br><span class="line"><span class="regexp">		$seq = reverse_complement($seq) if $strand eq '-';</span></span><br><span class="line"><span class="regexp">		my $new_strand;</span></span><br><span class="line"><span class="regexp">		if ($strand eq '-') &#123;</span></span><br><span class="line"><span class="regexp">			$new_strand = "minus_strand";</span></span><br><span class="line"><span class="regexp">		&#125;</span></span><br><span class="line"><span class="regexp">		elsif ($strand eq '+') &#123;</span></span><br><span class="line"><span class="regexp">			$new_strand = "positive_strand";</span></span><br><span class="line"><span class="regexp">		&#125;</span></span><br><span class="line"><span class="regexp">		else &#123;</span></span><br><span class="line"><span class="regexp">			print "Warning $gene_id $strand not defined\n";</span></span><br><span class="line"><span class="regexp">		&#125;</span></span><br><span class="line"><span class="regexp">		print OUT "&gt;Gene_ID:$gene_id#Transcript_ID:$trans_id#Protein_ID:$pep_id#intron#$new_strand#$chr\:$start-$end\n$seq\n";</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">close OUT;</span></span><br><span class="line"><span class="regexp">print "done\n";</span></span><br><span class="line"><span class="regexp">### sub routines ###</span></span><br><span class="line"><span class="regexp">sub reverse_complement &#123;</span></span><br><span class="line"><span class="regexp">        my $dna = shift;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	# reverse the DNA sequence</span></span><br><span class="line"><span class="regexp">        my $revcomp = reverse($dna);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	# complement the reversed DNA sequence</span></span><br><span class="line"><span class="regexp">        $revcomp =~ tr/</span>ACGTacgt/TGCAtgca/;</span><br><span class="line">        <span class="keyword">return</span> $revcomp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>cds也就比较好提了。毕竟各个id都有了</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2020/05/25/wget_Ensembl/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2020/05/22/详细注释的OrthoFinder/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-05-25 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2020 Shy
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
