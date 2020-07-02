@@ -143,11 +143,11 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/05/28/wget_giga/" >下载鸟类的基因组2) giga</a>
+			<a href="/2020/06/22/KaKs_calculator/" >KaKs 计算进化速率_update</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2020-05-28  </div>
+		<div class="date">post @ 2020-06-22  </div>
 		</div>
 	</div>
 	
@@ -157,22 +157,236 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<p>###1. 首先是张郭杰老师他们的48个鸟类基因组，他们全都放在一个project文件夹下了 十分方便</p>
-<p><a href="http://gigadb.org/dataset/101000" target="_blank" rel="noopener">project 地址</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/cds/*.cds.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/assembly/*.fa.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/gff/*gff.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/pep/*pep.gz</span><br></pre></td></tr></table></figure>
+		<h3 id="首先我们还是需要用蛋白的比对文件，去匹配cds的比对文件"><a href="#首先我们还是需要用蛋白的比对文件，去匹配cds的比对文件" class="headerlink" title="首先我们还是需要用蛋白的比对文件，去匹配cds的比对文件"></a>首先我们还是需要用蛋白的比对文件，去匹配cds的比对文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># rename.6merge.ms.pep 为蛋白全长的比对文件,在使用kaks的时候需要nogap命令，不然还是会报错</span><br><span class="line">perl ~/Downloads/softwares/pal2nal.v14/pal2nal.pl rename.6merge.ms.pep rename.6merge.cds -nogap &gt; rename.6merge.ms.pal2nal.clu</span><br><span class="line"></span><br><span class="line"># 然后转换为成对的基因对的格式</span><br><span class="line">AXTConvertor rename.6merge.ms.pal2nal.clu rename.6merge.ms.pal2nal.AXT</span><br><span class="line"></span><br><span class="line"># 然后再是用kaks calculator对 axt格式的文件 输出其kaks等信息 ，-m选择model为YN，如果选择model为MA的话大概需要花费20行个小时， 但是如果使用YN的话只需要十几秒，暂时没有找到有什么具体的差异，算出来的方式有一点差异。MA的话是如果 有三种异常值，一个是50</span><br><span class="line">一个是NA 一个是 0.0001，具体解释如下：如果只有一个非同一突变的位点那就是0.0001，如果只有一个同义突变的位点 那就是50，如果啥都没有，完全一样那就是NA。当模型选为YN的话，有两种异常值 -0。和 就不再计算NA或者50的位点。。同时有许多对基因</span><br><span class="line"># 发现不同的模型之间差距还是蛮大的。有可能有两倍的差距</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">KaKs_Calculator -i rename.6merge.ms.pal2nal.AXT -o rename.6merge.ms.pal2nal.kaks -m YN -c 11</span><br><span class="line">awk -F &apos;\t&apos; -v OFS=&apos;\t&apos; &apos;&#123;print $1,$5&#125;&apos; rename.6merge.ms.pal2nal.kaks  | awk -F &apos;\&amp;&apos; -v OFS=&apos;\t&apos; &apos;&#123;print $1,$2&#125;&apos;</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-然后是有五个天堂鸟的基因组"><a href="#2-然后是有五个天堂鸟的基因组" class="headerlink" title="2. 然后是有五个天堂鸟的基因组"></a>2. 然后是有五个天堂鸟的基因组</h3><p>只需要根据最后网址提供的doi循环输出就好</p>
-<p><a href="http://gigadb.org/dataset/100521" target="_blank" rel="noopener">project 地址</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102157/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102158/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102159/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102160/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102161/*</span><br></pre></td></tr></table></figure>
+<p>Table 2. Methods Incorporated in KaKs_Calculator</p>
+<table>
+<thead>
+<tr>
+<th>Approximate method</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Method</td>
+<td>Mutation model<a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#tbl2fn1" target="_blank" rel="noopener">#1</a></td>
+<td>Reference</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Step 1</td>
+<td>Step 2</td>
+<td>Step 3</td>
+<td></td>
+</tr>
+<tr>
+<td>NG</td>
+<td>JC</td>
+<td>JC</td>
+<td>JC</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib26" target="_blank" rel="noopener"><em>26</em></a></td>
+</tr>
+<tr>
+<td>LWL</td>
+<td>JC</td>
+<td>K2P</td>
+<td>K2P</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib28" target="_blank" rel="noopener"><em>28</em></a></td>
+</tr>
+<tr>
+<td>MLWL</td>
+<td>K2P</td>
+<td>K2P</td>
+<td>K2P</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib30" target="_blank" rel="noopener"><em>30</em></a></td>
+</tr>
+<tr>
+<td>LPB</td>
+<td>—<a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#tbl2fn3" target="_blank" rel="noopener">*</a></td>
+<td>—<a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#tbl2fn3" target="_blank" rel="noopener">*</a></td>
+<td>K2P</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib25" target="_blank" rel="noopener">25.</a>, <a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib29" target="_blank" rel="noopener">29.</a></td>
+</tr>
+<tr>
+<td>MLPB</td>
+<td>—<a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#tbl2fn3" target="_blank" rel="noopener">*</a></td>
+<td>—<a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#tbl2fn3" target="_blank" rel="noopener">*</a></td>
+<td>K2P</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib30" target="_blank" rel="noopener"><em>30</em></a></td>
+</tr>
+<tr>
+<td>YN</td>
+<td>HKY</td>
+<td>HKY</td>
+<td>HKY</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib27" target="_blank" rel="noopener"><em>27</em></a></td>
+</tr>
+<tr>
+<td>MYN</td>
+<td>TN</td>
+<td>TN</td>
+<td>TN</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib31" target="_blank" rel="noopener"><em>31</em></a></td>
+</tr>
+<tr>
+<td>Maximum likelihood method</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Method</td>
+<td>Mutation model<a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#tbl2fn2" target="_blank" rel="noopener">#2</a></td>
+<td>Reference</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>GY</td>
+<td>HKY</td>
+<td><a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib19" target="_blank" rel="noopener">19.</a>, <a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib20" target="_blank" rel="noopener">20.</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MS</td>
+<td>a model that has the smallest AICC among 14 candidate models</td>
+<td>Model-selected method proposed in this study</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MA</td>
+<td>a model that averages parameters across 14 candidate models</td>
+<td>Model-averaged method proposed in this study</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>#1. The approximate method involves three basic steps: Step 1: counting the numbers of synonymous and nonsynonymous sites; Step 2: calculating the numbers of synonymous and nonsynonymous substitutions; Step 3: correcting for multiple substitutions.</p>
+<p>#2. The maximum likelihood method uses the probability theory to finish the three steps in one go <a href="https://www.sciencedirect.com/science/article/pii/S1672022907600072?via%3Dihub#bib4" target="_blank" rel="noopener">(<em>4</em>)</a>.</p>
+<p>*No specific definition of synonymous and nonsynonymous sites or substitutions.</p>
+<h4 id="有个想法-计算每个物种对之间的kaks比值"><a href="#有个想法-计算每个物种对之间的kaks比值" class="headerlink" title="有个想法    计算每个物种对之间的kaks比值"></a>有个想法    计算每个物种对之间的kaks比值</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">less Ipomoea.id | while read line</span><br><span class="line">do</span><br><span class="line">echo &quot;python get_target_kaks.py -r rename.6merge.ms.pal2nal.clu -1 At -2 &quot;$&#123;line&#125;&quot; &gt; At&quot;$&#123;line&#125;&quot;.clu&quot;</span><br><span class="line">done    </span><br><span class="line"></span><br><span class="line">python get_target_kaks.py -r rename.6merge.ms.pal2nal.clu -1 Ib -2 Sly &gt; IbSly.clu</span><br><span class="line">python get_target_kaks.py -r rename.6merge.ms.pal2nal.clu -1 Ib -2 Inil &gt; IbInil.clu</span><br><span class="line">python get_target_kaks.py -r rename.6merge.ms.pal2nal.clu -1 Ib -2 Itb &gt; IbItb.clu</span><br><span class="line">python get_target_kaks.py -r rename.6merge.ms.pal2nal.clu -1 Ib -2 Itf &gt; IbItf.clu</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#计算所有甘薯属和番茄的关系，计算所有番薯属和拟南芥的关系</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 给他们加上clustal的标识head</span><br><span class="line">ls S*clu | while read line                      </span><br><span class="line">do</span><br><span class="line">cat head $&#123;line&#125; &gt; $&#123;line&#125;.ok</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 转换为AXT格式</span><br><span class="line">ls *clu.ok  | sed &apos;s/.clu.ok//g&apos; |while read line</span><br><span class="line">do</span><br><span class="line">AXTConvertor $&#123;line&#125;.clu.ok $&#123;line&#125;.axt</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># 生成kaks文件</span><br><span class="line">ls *axt| sed &apos;s/.axt//g&apos;  | while read line; do  echo &quot;KaKs_Calculator -i &quot;$&#123;line&#125;&quot;.axt -o &quot;$&#123;line&#125;&quot;.kaks -m MA -c 11 &amp;&quot;; done</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-然后是19个企鹅的基因组"><a href="#3-然后是19个企鹅的基因组" class="headerlink" title="3. 然后是19个企鹅的基因组"></a>3. 然后是19个企鹅的基因组</h3><p><a href="http://gigadb.org/dataset/100649" target="_blank" rel="noopener">project地址</a></p>
-<p>同样只需要修改doi</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102164/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102165/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102166/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102167/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102168/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102169/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102170/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102171/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102172/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102173/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102174/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102175/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102176/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102177/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102178/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102179/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102180/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102181/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102182/*</span><br></pre></td></tr></table></figure>
 
-<h4 id="所有giga的项目都支持md5sum十分方便"><a href="#所有giga的项目都支持md5sum十分方便" class="headerlink" title="所有giga的项目都支持md5sum十分方便"></a>所有giga的项目都支持md5sum十分方便</h4>
 	
 	</div>
-  <a type="button" href="/2020/05/28/wget_giga/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2020/06/22/KaKs_calculator/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/06/16/WGCNA/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-06-16  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>##RSEM</p>
+<h3 id="1-Get-matrix-of-gene-expression-FPKM-or-TPM-or-reads-count"><a href="#1-Get-matrix-of-gene-expression-FPKM-or-TPM-or-reads-count" class="headerlink" title="1. Get matrix of gene expression (FPKM or TPM),or reads count"></a>1. Get matrix of gene expression (FPKM or TPM),or reads count</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="meta"> #</span><span class="bash">  rsem-generate-data-matrix is a perl script, be sure of the prameter inside is <span class="built_in">set</span> as getting counts or FPKM or TPM</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> vim pl file to make target col as 6 <span class="keyword">for</span> FPKM</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> vim pl file to make target col as 5 <span class="keyword">for</span> TPM</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> vim pl file to make target col as 4 <span class="keyword">for</span> counts</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"><span class="comment"># rsem-generate-data-matrix PATH</span></span></span><br><span class="line"> rsem-generate-data-matrix results_file/S*gene* &gt; 30.counts.matrix</span><br><span class="line"> </span><br><span class="line"><span class="meta"> #</span><span class="bash"><span class="comment"># remove reduant information</span></span></span><br><span class="line"> sed -i 's/results_file\///g' 30.counts.matrix </span><br><span class="line"> sed -i 's/.genes.results//g' 30.counts.matrix</span><br><span class="line"> sed -i 's/"//g' 30.counts.matrix </span><br><span class="line"> awk '&#123;if( $0 !~"^L")print $0&#125;' 30.counts.matrix &gt; 30.count.matrix </span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="meta"> #</span><span class="bash"><span class="comment"># vim rsem-generate-data-matrix to get </span></span></span><br><span class="line"> vim ~/software/RSEM-1.3.2/rsem-generate-data-matrix</span><br><span class="line"> rsem-generate-data-matrix S*gene* &gt; 39.FPKM.matrix</span><br><span class="line"> awk '&#123;if( $0 !~"^L")print $0&#125;' 30.FPKM.matrix &gt; 30.count.matrix</span><br></pre></td></tr></table></figure>
+
+<p>###2. Primary filter</p>
+<p>#####filter condition: counts &gt; 10 in 90 percent samples </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filter by counts &gt;10 in 90 percent samples</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">ab = &#123;&#125;</span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> count_matrix:</span><br><span class="line">    head_include = count_matrix.readline().split(<span class="string">'\t'</span>)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> count_matrix:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        m = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(lst1)<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> float(lst1[i+<span class="number">1</span>].strip()) &gt; <span class="number">10.0</span>:</span><br><span class="line">                m += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> m &gt; int(<span class="number">0.9</span>*len(head_include)):</span><br><span class="line">            ab[lst1[<span class="number">0</span>]] = <span class="string">"yes"</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ab[lst1[<span class="number">0</span>]] = <span class="string">"bad"</span></span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">2</span>]) <span class="keyword">as</span> fpkm_matrix:</span><br><span class="line">    print(fpkm_matrix.readline().rstrip())</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> fpkm_matrix:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        <span class="keyword">if</span> ab[lst1[<span class="number">0</span>]] == <span class="string">"yes"</span>:</span><br><span class="line">            print(row.strip())</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> use reads counts filter FPKM matrix</span></span><br><span class="line">python f.py  30.counts.matrix 30.FPKM.noLG.matrix  &gt; 30.FPKM.noLG.filtered.matrix</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-trinity"><a href="#3-trinity" class="headerlink" title="3.trinity"></a>3.trinity</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/software/trinityrnaseq-v2.9.1/Analysis/DifferentialExpression/PtR --matrix 32.filter.noLG.FPKM.matrix --samples 32samples.txt --log2 --min_rowSums 10 --compare_replicates</span><br><span class="line">~/software/trinityrnaseq-v2.9.1/Analysis/DifferentialExpression/PtR --matrix  32.filter.noLG.FPKM.matrix --min_rowSums 10 -s 32samples.txt --log2 --CPM --sample_cor_matrix</span><br><span class="line">~/software/trinityrnaseq-v2.9.1/Analysis/DifferentialExpression/PtR --matrix  32.filter.noLG.FPKM.matrix -s 32samples.txt --min_rowSums 10 --log2 --CPM --center_rows   --prin_comp 8</span><br></pre></td></tr></table></figure>
+
+<p>##WGCNA</p>
+<h3 id="How-many-samples-does-WGCNA-need"><a href="#How-many-samples-does-WGCNA-need" class="headerlink" title="How many samples does WGCNA need ?"></a>How many samples does WGCNA need ?</h3><p>20 samples</p>
+<p>If at all possible, one should <strong>have</strong> at least 20 <strong>samples</strong>; as with <strong>any</strong> analysis methods, more <strong>samples</strong> usually lead to more robust and refined results</p>
+<h3 id="If-replicated-samples-could-use-as-individuals"><a href="#If-replicated-samples-could-use-as-individuals" class="headerlink" title="If replicated samples could use as individuals?"></a>If replicated samples could use as individuals?</h3><p>There is a biostar question about that</p>
+<blockquote>
+<p>Q: Hi, in WGCNA manual I learn that the minimum sample size for WGCNA is 15. If I have 10 different treatment, each treatment has three replicates, do I have 30 samples or just 10 samples?</p>
+<p>A: The value of 15 seems arbitrary to me - I am not sure that it is a hard threshold. If the developer of WGCNA went by the Aztec system of numbers, maybe he would have said that 20 is the minimum (Aztecs had 20-base system of numbers).</p>
+</blockquote>
+<p>This answer get 3 stars include me :)</p>
+<blockquote>
+<p><a href="https://www.biostars.org/p/342696/" target="_blank" rel="noopener">https://www.biostars.org/p/342696/</a></p>
+</blockquote>
+<p>###Does gene set need normalized?</p>
+<p>Dec 24, 2017 - These <em>normalization</em> methods make a big difference if one wants to compare expression of gene A to expression of gene B; but <em>WGCNA</em> calculates correlations for which gene-wise scaling factors make no difference. (Sample-wise scaling factors of course do, so samples do <em>need</em> to be <em>normalized</em>.)</p>
+<h3 id="Whether-should-I-filter-gene-sets"><a href="#Whether-should-I-filter-gene-sets" class="headerlink" title="Whether  should I filter gene sets"></a>Whether  should I filter gene sets</h3><blockquote>
+<p>offical:</p>
+<p>We <strong>do</strong> not recommend <strong>filtering genes</strong> by differential expression. <strong>WGCNA</strong> is designed to be an unsupervised analysis method that clusters <strong>genes</strong> based on their expression profiles.</p>
+</blockquote>
+<p>But it really need a lot memory, 16G PC is not available for gene sets large than 50k</p>
+<h3 id="Answear-two-forementioned-question"><a href="#Answear-two-forementioned-question" class="headerlink" title="Answear two forementioned question :"></a>Answear two forementioned question :</h3><p>Can WGCNA be used to analyze RNA-Seq data?</p>
+<p>Yes. As far as WGCNA is concerned, working with (properly normalized) RNA-seq data isn’t really any different from working with (properly normalized) microarray data.</p>
+<p><strong>We suggest removing features whose counts are consistently low</strong> (for example, removing all features that have a count of less than say 10 in more than 90% of the samples) because such low-expressed features tend to reflect noise and correlations based on counts that are mostly zero aren’t really meaningful. The actual thresholds should be based on experimental design, sequencing depth and sample counts.</p>
+<p><strong>We then recommend a variance-stabilizing transformation. For example,</strong> <strong>package DESeq2 implements the function</strong> <strong>varianceStabilizingTransformation which we have found useful, but one</strong> <strong>could also start with normalized counts (or RPKM/FPKM data) and</strong> <strong>log-transform them using log2(x+1).</strong> For highly expressed features, the differences between full variance stabilization and a simple log transformation are small.</p>
+<p><strong>Whether one uses RPKM, FPKM, or simply normalized counts doesn’t make</strong> <strong>a whole lot of difference for WGCNA analysis as long as all samples</strong> <strong>were processed the same way.</strong> These normalization methods make a big difference if one wants to compare expression of gene A to expression of gene B; but WGCNA calculates correlations for which gene-wise scaling factors make no difference. (Sample-wise scaling factors of course do, so samples do need to be normalized.)</p>
+<p>If data come from different batches, we recommend to check for batch effects and, if needed, adjust for them. We use ComBat for batch effect removal but other methods should also work.</p>
+<p>Finally, we usually check quantile scatterplots to make sure there are no systematic shifts between samples; if sample quantiles show correlations (which they usually do), quantile normalization can be used to remove this effect.</p>
+<blockquote>
+<p><a href="https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/faq.html" target="_blank" rel="noopener">OFFICIAL FAQ</a></p>
+</blockquote>
+<h5 id="Final-I-decided"><a href="#Final-I-decided" class="headerlink" title="Final I decided:"></a>Final I decided:</h5><p>The authors do recommend to remove the “noisier” genes, either by mean expression or variance, but they also recommmend to not filter by differential expression.</p>
+<ol>
+<li>Use reads count to filter: if reads count of one gene in 90% samples is less than <strong><em>10</em></strong> , remove it (i got 20902 genes,15 SPL genes included finally)    </li>
+</ol>
+<h2 id="WGCNA-Process"><a href="#WGCNA-Process" class="headerlink" title="WGCNA Process"></a>WGCNA Process</h2><h4 id="Samples-30-samples-during-5-period-of-batatas-devolopment"><a href="#Samples-30-samples-during-5-period-of-batatas-devolopment" class="headerlink" title="Samples: 30 samples during 5 period of batatas devolopment"></a>Samples: 30 samples during 5 period of batatas devolopment</h4><p>10TR 20TR 30FR 30SR 40FR 40SR 50FR 50SR</p>
+<p>Only after 30 days, we could recognize SR based on the diameter &gt; 2.5mm (and DAT10TR DAT20TR is FR).</p>
+<p>each period has 4 rep</p>
+<p>go</p>
+<h4 id="Target-Use-WGCNA-distinguishes-which-genes-have-the-same-express-pattern-and-find-the-gene-most-correlated-to-SPL-genes-in-the-same-module"><a href="#Target-Use-WGCNA-distinguishes-which-genes-have-the-same-express-pattern-and-find-the-gene-most-correlated-to-SPL-genes-in-the-same-module" class="headerlink" title="Target: Use WGCNA distinguishes which genes have the same express pattern and find the gene most correlated to SPL genes in the same module"></a>Target: Use WGCNA distinguishes which genes have the same express pattern and find the gene most correlated to <em>SPL</em> genes in the same module</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(WGCNA)</span><br><span class="line">allowWGCNAThreads(<span class="number">12</span>)</span><br><span class="line">options(stringsAsFactors = <span class="literal">FALSE</span>)</span><br><span class="line">setwd(<span class="string">"~/DATA/WGCNA/"</span>)</span><br><span class="line">expro=read.table(<span class="string">'rename.30.FPKM.noLG.filtered.matrix'</span>,row.names = <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># filter most 25% variant genes</span></span><br><span class="line"><span class="comment">#m.vars=apply(expro,1,var)</span></span><br><span class="line"><span class="comment">#expro.upper=expro[which(m.vars&gt;quantile(m.vars, probs = seq(0, 1, 0.25))[4]),]</span></span><br><span class="line"><span class="comment">#dim(expro.upper)</span></span><br><span class="line"><span class="comment">#datExpr=as.data.frame(t(expro.upper));</span></span><br><span class="line"><span class="comment">#nGenes = ncol(datExpr)</span></span><br><span class="line"><span class="comment">#nSamples = nrow(datExpr)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># do not perform filter</span></span><br><span class="line">datExpr=as.data.frame(t(expro));</span><br><span class="line">nGenes = ncol(datExpr)</span><br><span class="line">nSamples = nrow(datExpr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## check outlier</span></span><br><span class="line">gsg = goodSamplesGenes(datExpr, verbose = <span class="number">3</span>);</span><br><span class="line">gsg$allOK</span><br><span class="line">sampleTree = hclust(dist(datExpr), method = <span class="string">"average"</span>)</span><br><span class="line">plot(sampleTree, main = <span class="string">"Sample clustering to detect outliers"</span></span><br><span class="line">     , sub=<span class="string">""</span>, xlab=<span class="string">""</span>)</span><br><span class="line"><span class="comment"># save(datExpr, file = "FPKM-01-dataInput.RData")</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## if outlier exsit, then remove gsg False genes using this function </span></span><br><span class="line"><span class="comment">#if (!gsg$allOK)&#123;</span></span><br><span class="line"><span class="comment">## Optionally, print the gene and sample names that were removed:</span></span><br><span class="line"><span class="comment">#if (sum(!gsg$goodGenes)&gt;0) </span></span><br><span class="line"><span class="comment"># printFlush(paste("Removing genes:", </span></span><br><span class="line"><span class="comment"># paste(names(datExpr)[!gsg$goodGenes], collapse = ",")));</span></span><br><span class="line"><span class="comment">#if (sum(!gsg$goodSamples)&gt;0) </span></span><br><span class="line"><span class="comment"># printFlush(paste("Removing samples:", </span></span><br><span class="line"><span class="comment"># paste(rownames(datExpr)[!gsg$goodSamples], collapse = ",")));</span></span><br><span class="line"><span class="comment"># Remove the offending genes and samples from the data:</span></span><br><span class="line"><span class="comment">#datExpr = datExpr[gsg$goodSamples, gsg$goodGenes]</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Log2 fold change</span></span><br><span class="line"><span class="comment">#datExpr = log2(datExpr+1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## try different soft threshold,from 1 to 25</span></span><br><span class="line">powers = c(seq(<span class="number">1</span>,<span class="number">25</span>,by = <span class="number">1</span>))</span><br><span class="line">sft = pickSoftThreshold(datExpr, powerVector = powers, verbose = <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">## plot the 25 value</span></span><br><span class="line">par(mfrow = c(<span class="number">1</span>,<span class="number">2</span>));</span><br><span class="line">cex1 = <span class="number">0.8</span>;</span><br><span class="line">plot(sft$fitIndices[,<span class="number">1</span>], -sign(sft$fitIndices[,<span class="number">3</span>])*sft$fitIndices[,<span class="number">2</span>],</span><br><span class="line">     xlab=<span class="string">"Soft Threshold (power)"</span>,ylab=<span class="string">"Scale Free Topology Model Fit,signed R^2"</span>,type=<span class="string">"n"</span>,</span><br><span class="line">     main = paste(<span class="string">"Scale independence"</span>));</span><br><span class="line">text(sft$fitIndices[,<span class="number">1</span>], -sign(sft$fitIndices[,<span class="number">3</span>])*sft$fitIndices[,<span class="number">2</span>],</span><br><span class="line">     labels=powers,cex=cex1,col=<span class="string">"red"</span>);</span><br><span class="line">abline(h=<span class="number">0.80</span>,col=<span class="string">"red"</span>)</span><br><span class="line">plot(sft$fitIndices[,<span class="number">1</span>], sft$fitIndices[,<span class="number">5</span>],</span><br><span class="line">     xlab=<span class="string">"Soft Threshold (power)"</span>,ylab=<span class="string">"Mean Connectivity"</span>, type=<span class="string">"n"</span>,</span><br><span class="line">     main = paste(<span class="string">"Mean connectivity"</span>))</span><br><span class="line">text(sft$fitIndices[,<span class="number">1</span>], sft$fitIndices[,<span class="number">5</span>], labels=powers, cex=cex1,col=<span class="string">"red"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#### get an estimate power value(Closest to 0.9)</span></span><br><span class="line">sft$powerEstimate</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## One-step network construction and module detection##</span></span><br><span class="line">cor = WGCNA::cor</span><br><span class="line">net = blockwiseModules(</span><br><span class="line">  <span class="comment"># input data</span></span><br><span class="line">  datExpr, </span><br><span class="line">  <span class="comment"># calculate correlation coefficient</span></span><br><span class="line">  power = sft$powerEstimate, </span><br><span class="line">  corType = <span class="string">"pearson"</span>,</span><br><span class="line">  networkType = <span class="string">"unsigned"</span>,</span><br><span class="line">  maxBlockSize = <span class="number">6000</span>,</span><br><span class="line">  TOMType = <span class="string">"unsigned"</span>,</span><br><span class="line">  deepSplit = <span class="number">2</span>,</span><br><span class="line">  minModuleSize = <span class="number">30</span>,</span><br><span class="line">  reassignThreshold = <span class="number">0</span>,</span><br><span class="line">  <span class="comment"># distance among modules less than 0.15, otherwise correlation among module more than 0.85 will be merged</span></span><br><span class="line">  mergeCutHeight = <span class="number">0.15</span>,</span><br><span class="line">  numericLabels = <span class="literal">TRUE</span>, </span><br><span class="line">  pamRespectsDendro = <span class="literal">FALSE</span>,)</span><br><span class="line"><span class="comment">## show how many modules identified</span></span><br><span class="line">table(net$colors)</span><br><span class="line"><span class="comment">## plot results</span></span><br><span class="line"><span class="comment">## Convert labels to colors for plotting</span></span><br><span class="line">mergedColors = labels2colors(net$colors)</span><br><span class="line"><span class="comment">## Plot the dendrogram and the module colors underneath</span></span><br><span class="line">plotDendroAndColors(net$dendrograms[[<span class="number">1</span>]], mergedColors[net$blockGenes[[<span class="number">1</span>]]],<span class="string">"Module colors"</span>,</span><br><span class="line">                    dendroLabels = <span class="literal">FALSE</span>, hang = <span class="number">0.03</span>,</span><br><span class="line">                    addGuide = <span class="literal">TRUE</span>, guideHang = <span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## get all edge file and node file</span></span><br><span class="line"></span><br><span class="line">moduleLabels = net$colors</span><br><span class="line">moduleColors = labels2colors(net$colors)</span><br><span class="line">modProbes = names(datExpr)</span><br><span class="line">modules = <span class="string">"all_without_normalize"</span></span><br><span class="line">TOM = TOMsimilarityFromExpr(datExpr, power = sft$powerEstimate);</span><br><span class="line">cyt = exportNetworkToCytoscape(TOM,</span><br><span class="line">                               edgeFile = paste(<span class="string">"CytoscapeInput-edges-"</span>, paste(modules, collapse=<span class="string">"-"</span>), <span class="string">".txt"</span>, sep=<span class="string">""</span>),</span><br><span class="line">                               nodeFile = paste(<span class="string">"CytoscapeInput-nodes-"</span>, paste(modules, collapse=<span class="string">"-"</span>), <span class="string">".txt"</span>, sep=<span class="string">""</span>),</span><br><span class="line">                               weighted = <span class="literal">TRUE</span>,</span><br><span class="line">                               threshold = <span class="number">0.02</span>,</span><br><span class="line">                               nodeNames = modProbes,</span><br><span class="line">                               nodeAttr = moduleColors)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Or retrieve specific module edges</span></span><br><span class="line">modules = c(<span class="string">"turquoise"</span>)</span><br><span class="line"><span class="comment"># 要可视化的基因</span></span><br><span class="line">probes = colnames(datExpr)</span><br><span class="line">inModule = is.finite(match(moduleColors, modules));</span><br><span class="line">modProbes = probes[inModule]</span><br><span class="line"><span class="comment"># 候选基因的 TOM</span></span><br><span class="line">modTOM = TOM[inModule, inModule]</span><br><span class="line"></span><br><span class="line">dimnames(modTOM) = list(modProbes, modProbes)</span><br><span class="line"><span class="comment"># Export the network into edge and node list files Cytoscape can read</span></span><br><span class="line">cyt = exportNetworkToCytoscape(modTOM,</span><br><span class="line">                               edgeFile = paste(<span class="string">"CytoscapeInput-edges-"</span>, paste(modules, collapse=<span class="string">"-"</span>), <span class="string">".txt"</span>, sep=<span class="string">""</span>),</span><br><span class="line">                               nodeFile = paste(<span class="string">"CytoscapeInput-nodes-"</span>, paste(modules, collapse=<span class="string">"-"</span>), <span class="string">".txt"</span>, sep=<span class="string">""</span>),</span><br><span class="line">                               weighted = <span class="literal">TRUE</span>,</span><br><span class="line">                               threshold = <span class="number">0.02</span>,</span><br><span class="line">                               nodeNames = modProbes,</span><br><span class="line">                               nodeAttr = moduleColors[inModule])</span><br><span class="line"><span class="comment">########</span></span><br><span class="line"><span class="comment"># If our target genes are not clustered in one module as expected</span></span><br><span class="line"><span class="comment"># may be reconstruct net in more sensitive parameter</span></span><br><span class="line"><span class="comment">#######</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># get module</span></span><br><span class="line">MEs0 = moduleEigengenes(datExpr, moduleColors)$eigengenes</span><br><span class="line">MEs = orderMEs(MEs0)</span><br><span class="line">modNames = substring(names(MEs), <span class="number">3</span>)</span><br><span class="line">geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = <span class="string">"p"</span>))</span><br><span class="line">MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), </span><br><span class="line">                                          nSamples))</span><br><span class="line">names(geneModuleMembership) = paste(<span class="string">"MM"</span>, modNames, sep=<span class="string">""</span>)</span><br><span class="line">names(MMPvalue) = paste(<span class="string">"p.MM"</span>, modNames, sep=<span class="string">""</span>)</span><br><span class="line"></span><br><span class="line">write.csv(MMPvalue,file = <span class="string">"MMPvalue.csv"</span>,quote=<span class="literal">F</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HubGenes &lt;- chooseTopHubInEachModule(datExpr,modules)</span><br><span class="line">write.table (HubGenes,file = <span class="string">"HubGenes_of_turquoise_module.txt"</span>,quote=<span class="literal">F</span>,sep=<span class="string">'\t'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="SPL-gene-analysis"><a href="#SPL-gene-analysis" class="headerlink" title="SPL gene analysis"></a>SPL gene analysis</h3><h4 id="get-target-gene-color-and-id"><a href="#get-target-gene-color-and-id" class="headerlink" title="get target gene color and id"></a>get target gene color and id</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">get top gene based on weight</span></span><br><span class="line">less  spl.ori.id | while read line; do grep -w $&#123;line&#125;  CytoscapeInput-nodes-all_without_normalize.txt; done &gt; spl.color</span><br><span class="line">mkdir result</span><br><span class="line">awk '&#123;print "grep -w \""$1"\" 0.05.CytoscapeInput-edges-all.txt &gt; result/"$1"."$3".result"&#125;' spl.color &gt; go</span><br><span class="line">sh go</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> direction among genes <span class="keyword">in</span> sample color are lacking of direction, cuz we constrcut net use <span class="string">"unsigned"</span> method</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> therefore we could sort the edge file by 3rd column</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> either we should filter those replicated genes <span class="keyword">in</span> 1st 2nd column </span></span><br><span class="line">ls *result.2 | sed 's/.result.2//g' | while read line;do python sort.py $&#123;line&#125;.result &gt; $&#123;line&#125;.id.2;done</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## sort.py </span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line">lst3 = []</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sort_list</span><span class="params">(one_list)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> list(set(one_list))</span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_data:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_data:</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">file_len = i</span><br><span class="line">sort_file = <span class="string">''</span>.join(sorted(open(sys.argv[<span class="number">1</span>]), key=<span class="keyword">lambda</span> s: s.split()[<span class="number">2</span>],reverse=<span class="number">1</span>))</span><br><span class="line">lst1 = sort_file.strip().split(<span class="string">'\n'</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(int(file_len*<span class="number">0.1</span>)):</span><br><span class="line">    lst2 = lst1[i].split(<span class="string">'\t'</span>)</span><br><span class="line">    lst3.append(lst2[<span class="number">0</span>])</span><br><span class="line">    lst3.append(lst2[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(sort_list(lst3))):</span><br><span class="line">    print(sort_list(lst3)[i<span class="number">-1</span>])</span><br></pre></td></tr></table></figure>
+
+<h4 id="get-gene-based-on-FPKM-cor"><a href="#get-gene-based-on-FPKM-cor" class="headerlink" title="get gene based on FPKM cor"></a>get gene based on FPKM cor</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> only analyze gene <span class="keyword">in</span> turquoise</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> get gene based on FPKM cor</span></span><br><span class="line">less  turquoise.gene.id | while read line  </span><br><span class="line">do</span><br><span class="line">grep -w $&#123;line&#125; ../../9_RSEM/88/88.FPKM.noLGfiltered.matrix</span><br><span class="line">done &gt; turquoise.gene.FPKM.matrix</span><br></pre></td></tr></table></figure>
+
+<h4 id="get-correlation-ship-between-spl-gene-and-turquoise-gene"><a href="#get-correlation-ship-between-spl-gene-and-turquoise-gene" class="headerlink" title="get correlation ship between spl gene and turquoise gene"></a>get correlation ship between spl gene and turquoise gene</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(circlize)</span><br><span class="line"><span class="keyword">library</span>(corrplot)</span><br><span class="line"><span class="keyword">library</span>(pheatmap)</span><br><span class="line">setwd(<span class="string">"~/data/gene_family/downstream/10_GO_KEGG"</span>)</span><br><span class="line"></span><br><span class="line">gene &lt;- read.delim(<span class="string">'hubgene/turquoise.gene.FPKM.matrix'</span>, row.names = <span class="number">1</span>,header = <span class="literal">T</span>, sep = <span class="string">'\t'</span>)</span><br><span class="line">gene &lt;- t(gene) </span><br><span class="line">gene &lt;- log2(gene+<span class="number">1</span>) </span><br><span class="line">gene_cor &lt;- cor(gene, method = <span class="string">'pearson'</span>)</span><br><span class="line">df &lt;- as.data.frame(gene_cor)</span><br><span class="line"></span><br><span class="line">spl_turquoise &lt;- df[,which(names(df)%<span class="keyword">in</span>%c(<span class="string">"g34536"</span>,<span class="string">"g46868"</span>,<span class="string">"g54228"</span>,<span class="string">"g31999"</span>,<span class="string">"g44906"</span>))]</span><br><span class="line">gene_cor &lt;- as.matrix(spl_turquoise)</span><br><span class="line"></span><br><span class="line">col &lt;- colorRampPalette(c(<span class="string">"#BB4444"</span>, <span class="string">"#EE9988"</span>, <span class="string">"#FFFFFF"</span>, <span class="string">"#77AADD"</span>, <span class="string">"#4477AA"</span>))</span><br><span class="line">pheatmap(spl_turquoise,</span><br><span class="line">         labels_row = <span class="literal">NULL</span>,</span><br><span class="line">         angle_col = <span class="string">"45"</span>,</span><br><span class="line">         cluster_row = <span class="literal">T</span>,</span><br><span class="line">         )</span><br><span class="line">  </span><br><span class="line">write.csv(spl_turquoise, file = <span class="string">"5spl_turquoise.gene.cor.matrix"</span>,quote = <span class="literal">F</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="eggNOG-mapper-and-ClusterProfile"><a href="#eggNOG-mapper-and-ClusterProfile" class="headerlink" title="eggNOG mapper and ClusterProfile"></a>eggNOG mapper and ClusterProfile</h2><p>we first submit our whole protome to <a href="http://eggnog-mapper.embl.de/" target="_blank" rel="noopener">eggNOG website</a>,  against 33090 database representing plants.</p>
+<p>Then we use R script to create a R package named </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> we should modify some cloumn name and necessary content both <span class="keyword">in</span> these two file</span></span><br><span class="line">query_seqs.fa.emapper.annotations</span><br><span class="line"></span><br><span class="line">nohup Rscript  makeOrgPackageFromEmapper.R 1&gt;make.log 2&gt;err.log</span><br></pre></td></tr></table></figure>
+
+<h4 id="makeOrgPackageFromEmapper-R"><a href="#makeOrgPackageFromEmapper-R" class="headerlink" title="makeOrgPackageFromEmapper.R"></a>makeOrgPackageFromEmapper.R</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(tidyverse)</span><br><span class="line"><span class="keyword">library</span>(stringr)</span><br><span class="line"><span class="keyword">library</span>(KEGGREST)</span><br><span class="line"><span class="keyword">library</span>(AnnotationForge)</span><br><span class="line"></span><br><span class="line"><span class="comment">#' Title</span></span><br><span class="line"><span class="comment">#'</span></span><br><span class="line"><span class="comment">#' @param f_emapper_anno eggnog-mapper annotation result</span></span><br><span class="line"><span class="comment">#' @param author Who is the creator of this package? like "xxx &lt;xxx@xxx.xx&gt;"</span></span><br><span class="line"><span class="comment">#' @param tax_id The Taxonomy ID that represents your organism. (NCBI has a nice online browser for finding the one you need)</span></span><br><span class="line"><span class="comment">#' @param genus Single string indicating the genus</span></span><br><span class="line"><span class="comment">#' @param species Single string indicating the species</span></span><br><span class="line"><span class="comment">#'</span></span><br><span class="line"><span class="comment">#' @return OrgDb name</span></span><br><span class="line"><span class="comment">#' @export</span></span><br><span class="line"><span class="comment">#'</span></span><br><span class="line"><span class="comment">#' @examples</span></span><br><span class="line">makeOrgPackageFromEmapper &lt;- <span class="keyword">function</span>(f_emapper_anno, </span><br><span class="line">                                      author, </span><br><span class="line">                                      tax_id = <span class="string">"0"</span>, </span><br><span class="line">                                      genus = <span class="string">"default"</span>, </span><br><span class="line">                                      species = <span class="string">"default"</span>) &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># f_emapper_anno = "input/sesame.emapper.annotations"</span></span><br><span class="line">  <span class="comment"># author = "zhangxudong &lt;zhangxudong@genek.tv&gt;"</span></span><br><span class="line">  <span class="comment"># tax_id = "4182"</span></span><br><span class="line">  <span class="comment"># genus = "Sesamum"</span></span><br><span class="line">  <span class="comment"># species = "indicum"</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment"># read emapper result</span></span><br><span class="line">  emapper &lt;- read_delim(f_emapper_anno,</span><br><span class="line">                        <span class="string">"\t"</span>, escape_double = <span class="literal">FALSE</span>, trim_ws = <span class="literal">TRUE</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># extract gene name from emapper</span></span><br><span class="line">  gene_info &lt;- emapper %&gt;%</span><br><span class="line">    dplyr::select(GID = query_name, GENENAME = `eggNOG annot`) %&gt;%</span><br><span class="line">    na.omit()</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># extract go annotation from emapper</span></span><br><span class="line">  gos &lt;- emapper %&gt;%</span><br><span class="line">    dplyr::select(query_name, GO_terms) %&gt;%</span><br><span class="line">    na.omit()</span><br><span class="line">  </span><br><span class="line">  gene2go = data.frame(GID = character(),</span><br><span class="line">                       GO = character(),</span><br><span class="line">                       EVIDENCE = character())</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">for</span> (row <span class="keyword">in</span> <span class="number">1</span>:nrow(gos)) &#123;</span><br><span class="line">    the_gid &lt;- gos[row, <span class="string">"query_name"</span>][[<span class="number">1</span>]]</span><br><span class="line">    the_gos &lt;- str_split(gos[row,<span class="string">"GO_terms"</span>], <span class="string">","</span>, simplify = <span class="literal">FALSE</span>)[[<span class="number">1</span>]]</span><br><span class="line">    </span><br><span class="line">    df_temp &lt;- data_frame(GID = rep(the_gid, length(the_gos)),</span><br><span class="line">                          GO = the_gos,</span><br><span class="line">                          EVIDENCE = rep(<span class="string">"IEA"</span>, length(the_gos)))</span><br><span class="line">    gene2go &lt;- rbind(gene2go, df_temp)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># extract kegg pathway annotation from emapper ----------------------------</span></span><br><span class="line">  kos &lt;- emapper %&gt;%</span><br><span class="line">    dplyr::select(query_name, KEGG_KOs) %&gt;%</span><br><span class="line">    na.omit()</span><br><span class="line">  </span><br><span class="line">  gene2ko = data.frame(GID = character(),</span><br><span class="line">                       Ko = character())</span><br><span class="line">  </span><br><span class="line">  df_temp &lt;- list()</span><br><span class="line">  <span class="keyword">for</span> (row <span class="keyword">in</span> <span class="number">1</span>:nrow(kos)) &#123;</span><br><span class="line">    the_gid &lt;- kos[row, <span class="string">"query_name"</span>][[<span class="number">1</span>]]</span><br><span class="line">    the_kos &lt;- str_split(kos[row,<span class="string">"KEGG_KOs"</span>], <span class="string">","</span>, simplify = <span class="literal">FALSE</span>)[[<span class="number">1</span>]]</span><br><span class="line">    </span><br><span class="line">    df_temp[[row]] &lt;- data_frame(GID = rep(the_gid, length(the_kos)),</span><br><span class="line">                                 Ko = the_kos)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  gene2ko &lt;- bind_rows(df_temp)</span><br><span class="line">  </span><br><span class="line">  load(file = <span class="string">"kegg_info.RData"</span>)</span><br><span class="line">  gene2pathway &lt;- gene2ko %&gt;% left_join(ko2pathway, by = <span class="string">"Ko"</span>) %&gt;%</span><br><span class="line">    left_join(pathway2name, by = <span class="string">"Pathway"</span>) %&gt;%</span><br><span class="line">    dplyr::select(GID, Ko, Pathway, Pathway_Name, Pathway_Class, Pathway_Subclass) %&gt;%</span><br><span class="line">    distinct() %&gt;%</span><br><span class="line">    na.omit()</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># extract COG annotation from emapper -------------------------------------</span></span><br><span class="line">  cog_info &lt;- read_delim(<span class="string">"cog_funclass.tab"</span>, </span><br><span class="line">                         <span class="string">"\t"</span>, escape_double = <span class="literal">FALSE</span>, trim_ws = <span class="literal">TRUE</span>)</span><br><span class="line">  </span><br><span class="line">  cogs &lt;- emapper %&gt;%</span><br><span class="line">    dplyr::select(query_name, COG = `COG cat`) %&gt;%</span><br><span class="line">    na.omit()</span><br><span class="line">  </span><br><span class="line">  gene2cog = data.frame(GID = character(),</span><br><span class="line">                        COG = character())</span><br><span class="line">  </span><br><span class="line">  df_temp &lt;- list()</span><br><span class="line">  <span class="keyword">for</span> (row <span class="keyword">in</span> <span class="number">1</span>:nrow(cogs)) &#123;</span><br><span class="line">    the_gid &lt;- cogs[row, <span class="string">"query_name"</span>][[<span class="number">1</span>]]</span><br><span class="line">    the_cogs &lt;- str_trim(str_split(cogs[row,<span class="string">"COG"</span>], <span class="string">","</span>, simplify = <span class="literal">FALSE</span>)[[<span class="number">1</span>]])</span><br><span class="line">    </span><br><span class="line">    df_temp[[row]] &lt;- data_frame(GID = rep(the_gid, length(the_cogs)),</span><br><span class="line">                                 COG = the_cogs)</span><br><span class="line">  &#125;</span><br><span class="line">  gene2cog &lt;- bind_rows(df_temp)</span><br><span class="line">  </span><br><span class="line">  gene2cog &lt;- gene2cog %&gt;% left_join(cog_info, by = <span class="string">"COG"</span>)</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  <span class="comment"># make OrgDb</span></span><br><span class="line">  makeOrgPackage(gene_info=gene_info,</span><br><span class="line">                 go=gene2go,</span><br><span class="line">                 <span class="comment">#ko=gene2ko,</span></span><br><span class="line">                 pathway=gene2pathway,</span><br><span class="line">                 cog=gene2cog,</span><br><span class="line">                 version=<span class="string">"0.0.2"</span>,</span><br><span class="line">                 maintainer=author,</span><br><span class="line">                 author=author,</span><br><span class="line">                 outputDir = <span class="string">"."</span>,</span><br><span class="line">                 tax_id=tax_id,</span><br><span class="line">                 genus=genus,</span><br><span class="line">                 species=species,</span><br><span class="line">                 goTable=<span class="string">"go"</span>)</span><br><span class="line">  </span><br><span class="line">  my_orgdb &lt;- str_c(<span class="string">"org."</span>, str_to_upper(str_sub(genus, <span class="number">1</span>, <span class="number">1</span>)) , species, <span class="string">".eg.db"</span>, sep = <span class="string">""</span>)</span><br><span class="line">  <span class="keyword">return</span>(my_orgdb)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">my_orgdb &lt;- makeOrgPackageFromEmapper(<span class="string">"query_seqs.fa.emapper.annotations"</span>, </span><br><span class="line">                                      <span class="string">"shy &lt;2020180495@jsnu.edu.cn&gt;"</span>, </span><br><span class="line">                                      tax_id = <span class="string">"4120"</span>, </span><br><span class="line">                                      genus = <span class="string">"Ipomoea"</span>, </span><br><span class="line">                                      species = <span class="string">"batatas"</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="And-i-also-use-kobas-enrichment-methods-but-it-still-queued"><a href="#And-i-also-use-kobas-enrichment-methods-but-it-still-queued" class="headerlink" title="And i also use kobas enrichment methods, but it still queued"></a>And i also use kobas enrichment methods, but it still queued</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># ipomoea nil</span><br><span class="line">http://kobas.cbi.pku.edu.cn/kobas3/retrieve/?taskid=8ee9e38a368d4ce98ea359f629b0ca38</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># sl</span><br><span class="line"></span><br><span class="line">page:http://kobas.cbi.pku.edu.cn/kobas3/retrieve/?taskid=48bed844140b48a7a4e76e8aca4fa16a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># enrichment nil </span><br><span class="line"></span><br><span class="line">http://kobas.cbi.pku.edu.cn/kobas3/retrieve/?taskid=bd863ad74ea74fa9adc91b4bfe080520</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#enrichment sl</span><br></pre></td></tr></table></figure>
+
+<h4 id="There-is-a-very-funny-bug"><a href="#There-is-a-very-funny-bug" class="headerlink" title="There is a very funny bug"></a>There is a very funny bug</h4><p>when i first visit kobas webwites, I find they only have two species included in protein blast tags (human and mouse), after I pee back I found many items loaded…. So I could use Ipomoea nil as reference species…</p>
+<h4 id="GO-and-KEGG-annotate-by-ClusterProfile"><a href="#GO-and-KEGG-annotate-by-ClusterProfile" class="headerlink" title="GO and KEGG annotate by ClusterProfile"></a>GO and KEGG annotate by ClusterProfile</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(readr)</span><br><span class="line"><span class="keyword">library</span>(clusterProfiler)</span><br><span class="line"><span class="keyword">library</span>(DOSE)</span><br><span class="line"><span class="keyword">library</span>(purrr)</span><br><span class="line"><span class="keyword">library</span>(tidyverse)</span><br><span class="line"><span class="keyword">library</span>(org.Ibatatas.eg.db)</span><br><span class="line">setwd(<span class="string">"~/data/gene_family/downstream/10_GO_KEGG/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装构建的R包</span></span><br><span class="line">my_orgdb &lt;- <span class="string">"org.Ibatatas.eg.db/"</span></span><br><span class="line"><span class="keyword">if</span> (requireNamespace(my_orgdb, quietly = <span class="literal">TRUE</span>))</span><br><span class="line">  remove.packages(my_orgdb)</span><br><span class="line">install.packages(my_orgdb, repos = <span class="literal">NULL</span>, type = <span class="string">"source"</span>)</span><br><span class="line"><span class="keyword">library</span>(org.Ibatatas.eg.db)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">load(<span class="string">"kegg_info.RData"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">gene_list &lt;- read.table(<span class="string">"hubgene/CytoscapeInput-edges-turquoise.top10.id"</span>, header = <span class="literal">FALSE</span>)</span><br><span class="line">gene_list &lt;- as.character(gene_list$V1)</span><br><span class="line"><span class="comment">#gene_list2 &lt;- read.table("../39/30/gene_filter/final/top10_percent.g34536.brown.f", header = FALSE)</span></span><br><span class="line"><span class="comment">#gene_list2 &lt;- as.character(gene_list2$V1)</span></span><br><span class="line"></span><br><span class="line">ego &lt;- enrichGO(gene          = gene_list, <span class="comment">#差异基因 vector</span></span><br><span class="line">                keyType       = <span class="string">"GID"</span>,  <span class="comment">#差异基因的 ID 类型，需要是 OrgDb 支持的</span></span><br><span class="line">                OrgDb         = org.Ibatatas.eg.db, <span class="comment">#对应的OrgDb</span></span><br><span class="line">                ont           = <span class="string">"BP"</span>, <span class="comment">#GO 分类名称，CC BP MF </span></span><br><span class="line">                pvalueCutoff  = <span class="number">0.05</span>, <span class="comment">#Pvalue 阈值</span></span><br><span class="line">                qvalueCutoff  = <span class="number">0.05</span>, <span class="comment">#qvalue 阈值</span></span><br><span class="line">                pAdjustMethod = <span class="string">"BH"</span>, <span class="comment">#Pvalue 矫正方法 </span></span><br><span class="line">                readable      = <span class="literal">FALSE</span>) <span class="comment">#TRUE 则展示SYMBOL，FALSE 则展示原来的ID</span></span><br><span class="line"><span class="comment">#将 ego 对象转换为dataframe，新版本可以用as.data.frame(ego)</span></span><br><span class="line">ego_results&lt;-as.data.frame(ego)</span><br><span class="line">barplot(ego, showCategory=<span class="number">20</span>, x = <span class="string">"GeneRatio"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pathway2gene &lt;- AnnotationDbi::select(org.Ibatatas.eg.db, </span><br><span class="line">                                      keys = keys(org.Ibatatas.eg.db), </span><br><span class="line">                                      columns = c(<span class="string">"Pathway"</span>)) %&gt;%</span><br><span class="line">  na.omit() %&gt;%</span><br><span class="line">  dplyr::select(Pathway, GID)</span><br><span class="line"></span><br><span class="line">ekp &lt;- enricher(gene_list, </span><br><span class="line">                TERM2GENE = pathway2gene, </span><br><span class="line">                TERM2NAME = pathway2name, </span><br><span class="line">                pvalueCutoff = <span class="number">0.05</span>, </span><br><span class="line">                qvalueCutoff = <span class="number">0.2</span>,</span><br><span class="line">                pAdjustMethod = <span class="string">"BH"</span>,</span><br><span class="line">                minGSSize = <span class="number">1</span>)</span><br><span class="line">ekp_results &lt;- as.data.frame(ekp)</span><br><span class="line"></span><br><span class="line">barplot(ekp, showCategory=<span class="number">20</span>, x = <span class="string">"GeneRatio"</span>)</span><br><span class="line"></span><br><span class="line">dotplot(ekp)</span><br><span class="line"></span><br><span class="line">emapplot(ekp)</span><br></pre></td></tr></table></figure>
+
+<h3 id="use-CytoScape-construct-network-plot"><a href="#use-CytoScape-construct-network-plot" class="headerlink" title="use CytoScape construct network plot"></a>use CytoScape construct network plot</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="file:///Users/sunhaoyun/Library/Application%20Support/typora-user-images/image-20200620111509583.png?lastModify=1592810480" alt="image-20200620111509583"></p>
+<h3 id="Hub-based-analysis"><a href="#Hub-based-analysis" class="headerlink" title="Hub-based analysis"></a>Hub-based analysis</h3><blockquote>
+<p><a href="https://www.karger.com/Article/Fulltext/495205" target="_blank" rel="noopener">Weighted Gene Correlation Network Analysis (WGCNA) Detected Loss of MAGI2 Promotes Chronic Kidney Disease (CKD) by Podocyte Damage</a></p>
+</blockquote>
+<p>Highly connected hub nodes are central to the network’s architecture [<a href="https://www.karger.com/Article/Fulltext/495205#ref6" target="_blank" rel="noopener">6</a>] and studies suggested that genes more centralized in the network are more likely to be key drivers to respective cellular functions compared with peripheral genes [<a href="https://www.karger.com/Article/Fulltext/495205#ref26" target="_blank" rel="noopener">26</a>]. Therefore, more important nodes can be obtained by identifying hub nodes. In this study, the top 5% of nodes with highest connectivity were defined as hub genes in each module [<a href="https://www.karger.com/Article/Fulltext/495205#ref27" target="_blank" rel="noopener">27</a>]. Fig. <a href="https://www.karger.com/Article/Fulltext/495205#f03" target="_blank" rel="noopener">3</a>A-D are the networks of hub genes in the brown, yellow, green and red modules, only displaying connections with weight (w) above threshold values of 0.3, 0.15, 0.05, and 0.05, respectively. Clearly, hub genes (red nodes) exhibited high connectivity with neighboring genes whose functions are consistent with GO and KEGG findings. Taking the brown module as an example, which showed functional enrichment in metabolic and oxidation-reduction processes, some hub genes have been also reported to participate in similar processes, e.g. the SLC13 Family (SLC13A3) [<a href="https://www.karger.com/Article/Fulltext/495205#ref28" target="_blank" rel="noopener">28</a>, <a href="https://www.karger.com/Article/Fulltext/495205#ref29" target="_blank" rel="noopener">29</a>], SLC22 Family (SLC22A6) [<a href="https://www.karger.com/Article/Fulltext/495205#ref30" target="_blank" rel="noopener">30</a>] or MSRA that plays a protective role in the progression of UUO-induced kidney fibrosis via suppression of fibrotic responses caused by oxidative stress [<a href="https://www.karger.com/Article/Fulltext/495205#ref31" target="_blank" rel="noopener">31</a>]. Similarly, some hub genes in the yellow module have been identified as pro-inflammatory factors in a variety of human diseases, including CTSS and ITGB2 [<a href="https://www.karger.com/Article/Fulltext/495205#ref32" target="_blank" rel="noopener">32</a>], consistent with the BP term or KEGG pathway enriched in the yellow module. Meanwhile, some well-known inflammatory factors also had high connectivity to these hub genes, e.g. IL1B, CXCR4 and CASP1. These observations further supported the notion that proposed roles for hub genes of unknown functions may be inferred from clusters of genes similarly expressed across many biological conditions.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk &apos;&#123;if ($1 ~ &quot;^g&quot;)print $1&quot;.t1&quot;&#125;&apos; 0.1.CytoscapeInput-nodes-turquoise.txt  &gt; 0.1.gene.id</span><br><span class="line">awk &apos;&#123;if ($1 ~ &quot;^g&quot;)print $1&quot;.t1&quot;&#125;&apos; 0.05.CytoscapeInput-nodes-turquoise.txt  &gt; 0.05.gene.id</span><br><span class="line">awk &apos;&#123;if ($1 ~ &quot;^g&quot;)print $1&quot;.t1&quot;&#125;&apos; 0.02.CytoscapeInput-nodes-turquoise.txt  &gt; 0.02.gene.id</span><br></pre></td></tr></table></figure>
+
+<p>![image-20200701084031314](/Users/sunhaoyun/Library/Application Support/typora-user-images/image-20200701084031314.png)</p>
+<p>![image-20200701085601228](/Users/sunhaoyun/Library/Application Support/typora-user-images/image-20200701085601228.png)</p>
+<p>To identify the key modules co-expressed with FT, we calculated themodule-trait association and ranked genes by their correlation with the FPKM value of PmFT.Finally,top 50 candidate genes (R2 &gt; 0.6) co-expressed with PmFTand 11 putative FTinteracting factors inArabidopsisflowering pathway </p>
+<p>by “WGCNA” R package (version 1.4.9) [<a href="https://bmcplantbiol.biomedcentral.com/articles/10.1186/s12870-018-1526-8#ref-CR55" target="_blank" rel="noopener">55</a>], the parameters were set as follows: The power was 9; the minModuleSize was 30 and the cutHeight was 0.25. Finally, we visualized the sub-network using Cytoscape (version 3.4.0) program [<a href="https://bmcplantbiol.biomedcentral.com/articles/10.1186/s12870-018-1526-8#ref-CR56" target="_blank" rel="noopener">56</a>]. An additional investigation of the putative functions of <em>GhSK</em> genes and their co-expression genes was based on Gene Ontology (GO) and Kyoto Encyclopedia of Genes and Genomes (KEGG) enrichment analyses.</p>
+
+	
+	</div>
+  <a type="button" href="/2020/06/16/WGCNA/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -237,6 +451,80 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/28/wget_giga/" >下载鸟类的基因组2) giga</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>###1. 首先是张郭杰老师他们的48个鸟类基因组，他们全都放在一个project文件夹下了 十分方便</p>
+<p><a href="http://gigadb.org/dataset/101000" target="_blank" rel="noopener">project 地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/cds/*.cds.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/assembly/*.fa.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/gff/*gff.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/pep/*pep.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-然后是有五个天堂鸟的基因组"><a href="#2-然后是有五个天堂鸟的基因组" class="headerlink" title="2. 然后是有五个天堂鸟的基因组"></a>2. 然后是有五个天堂鸟的基因组</h3><p>只需要根据最后网址提供的doi循环输出就好</p>
+<p><a href="http://gigadb.org/dataset/100521" target="_blank" rel="noopener">project 地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102157/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102158/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102159/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102160/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102161/*</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-然后是19个企鹅的基因组"><a href="#3-然后是19个企鹅的基因组" class="headerlink" title="3. 然后是19个企鹅的基因组"></a>3. 然后是19个企鹅的基因组</h3><p><a href="http://gigadb.org/dataset/100649" target="_blank" rel="noopener">project地址</a></p>
+<p>同样只需要修改doi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102164/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102165/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102166/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102167/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102168/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102169/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102170/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102171/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102172/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102173/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102174/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102175/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102176/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102177/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102178/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102179/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102180/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102181/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102182/*</span><br></pre></td></tr></table></figure>
+
+<h4 id="所有giga的项目都支持md5sum十分方便"><a href="#所有giga的项目都支持md5sum十分方便" class="headerlink" title="所有giga的项目都支持md5sum十分方便"></a>所有giga的项目都支持md5sum十分方便</h4>
+	
+	</div>
+  <a type="button" href="/2020/05/28/wget_giga/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/05/25/wget_Ensembl/" >下载鸟类的基因组1) Ensembl</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件"><a href="#如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件" class="headerlink" title="如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件"></a>如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件</h1><p>去年下过一次 但是当时没有存下过程<br>首先进入Ensmbl数据库下载 all Species list (首页给出的Sp list 只有动物的)<br>然后根据图片和common name挑选出哪些是鸟类，并把前两列存在一个新的txt文件中</p>
+<p>38bird.ensembl.list.txt</p>
+<p>然后观察ftp网址发现，只需要有scientific name就可以下载，但是所有字母都为小写，且string之间有下划线</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;&apos; &apos;s/ /_/g&apos; 38bird.ensembl.list.txt</span><br><span class="line">awk &apos;&#123;print $2&#125;&apos; 38bird.ensembl.list.txt &gt; specific_name.list</span><br><span class="line">cat scientific_name.list | tr  &apos;[A-Z]&apos; &apos;[a-z]&apos; &gt; xiaoxie.scientific.list</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以根据 xiaoxie.scientific.list 循环输出wget下载命令,用wget -c 可以续传，因为下载速度实在太慢了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/cds/*.cds.all.fa.gz&apos;</span><br><span class="line">done &gt; download_cds.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/gff3/&apos;$&#123;line&#125;&apos;/*.100.gff3.gz&apos;</span><br><span class="line">done &gt; download_gff3.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/pep/*.100.protein.gz&apos;</span><br><span class="line">done &gt; download_protein.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/dna/*.dna_sm.toplevel.fa.gz&apos;</span><br><span class="line">done &gt; download_genome.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nohup sh *.sh &gt; run_wget.log</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/05/25/wget_Ensembl/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/25/Ensembl_filter/" >过滤Ensembl中数据的冗余信息</a>
 		</h3>
 		</div>
@@ -287,41 +575,6 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2020/05/25/Ensembl_filter/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/05/25/wget_Ensembl/" >下载鸟类的基因组1) Ensembl</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-25  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件"><a href="#如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件" class="headerlink" title="如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件"></a>如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件</h1><p>去年下过一次 但是当时没有存下过程<br>首先进入Ensmbl数据库下载 all Species list (首页给出的Sp list 只有动物的)<br>然后根据图片和common name挑选出哪些是鸟类，并把前两列存在一个新的txt文件中</p>
-<p>38bird.ensembl.list.txt</p>
-<p>然后观察ftp网址发现，只需要有scientific name就可以下载，但是所有字母都为小写，且string之间有下划线</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;&apos; &apos;s/ /_/g&apos; 38bird.ensembl.list.txt</span><br><span class="line">awk &apos;&#123;print $2&#125;&apos; 38bird.ensembl.list.txt &gt; specific_name.list</span><br><span class="line">cat scientific_name.list | tr  &apos;[A-Z]&apos; &apos;[a-z]&apos; &gt; xiaoxie.scientific.list</span><br></pre></td></tr></table></figure>
-
-<p>然后就可以根据 xiaoxie.scientific.list 循环输出wget下载命令,用wget -c 可以续传，因为下载速度实在太慢了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/cds/*.cds.all.fa.gz&apos;</span><br><span class="line">done &gt; download_cds.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/gff3/&apos;$&#123;line&#125;&apos;/*.100.gff3.gz&apos;</span><br><span class="line">done &gt; download_gff3.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/pep/*.100.protein.gz&apos;</span><br><span class="line">done &gt; download_protein.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/dna/*.dna_sm.toplevel.fa.gz&apos;</span><br><span class="line">done &gt; download_genome.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nohup sh *.sh &gt; run_wget.log</span><br></pre></td></tr></table></figure>
-
-
-	
-	</div>
-  <a type="button" href="/2020/05/25/wget_Ensembl/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -409,6 +662,55 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
+<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
+<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
+<p>这一篇用branch sites model的</p>
+<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
+<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
+<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
+<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
+<p>####1.WGD</p>
+<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
+<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
+<p>####2.Tandem and Proximal</p>
+<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
+<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
+<p>####3.Dispersed</p>
+<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
+<p>####4.Transposed</p>
+<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
+<p>NOTE！</p>
+<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
+<p>NOTE！</p>
+<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
+
+	
+	</div>
+  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/15/OrthoFinde/" >OrthoFinder 寻找同源基因</a>
 		</h3>
 		</div>
@@ -459,120 +761,6 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
-<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
-<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
-<p>这一篇用branch sites model的</p>
-<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
-<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
-<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
-<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
-<p>####1.WGD</p>
-<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
-<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
-<p>####2.Tandem and Proximal</p>
-<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
-<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
-<p>####3.Dispersed</p>
-<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
-<p>####4.Transposed</p>
-<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
-<p>NOTE！</p>
-<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
-<p>NOTE！</p>
-<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
-
-	
-	</div>
-  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/05/15/KaKs_calculator/" >KaKs 计算进化速率</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>KaKs calculator</p>
-<h1 id="首先这里还需要再运行一次pal2nal-nogap版本的"><a href="#首先这里还需要再运行一次pal2nal-nogap版本的" class="headerlink" title="首先这里还需要再运行一次pal2nal nogap版本的"></a>首先这里还需要再运行一次pal2nal nogap版本的</h1><h1 id="因为paml内设-clean-data-会将序列里的gap去掉"><a href="#因为paml内设-clean-data-会将序列里的gap去掉" class="headerlink" title="因为paml内设 clean data  会将序列里的gap去掉"></a>因为paml内设 clean data  会将序列里的gap去掉</h1><h1 id="但是KaKS-calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错"><a href="#但是KaKS-calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错" class="headerlink" title="但是KaKS_calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错"></a>但是KaKS_calculator他在运行的时候，如果序列碱基不是三的倍数会报错，序列中有gap也会报错</h1><h1 id="所以"><a href="#所以" class="headerlink" title="所以"></a>所以</h1><p>perl ~/Downloads/softwares/pal2nal.v14/pal2nal.pl 4fanshu.spl.muscle.pep.fa  4fanshu.spl_id.wid70.cds.fa –nogap &gt; t1</p>
-<h1 id="将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C-2-5356对"><a href="#将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C-2-5356对" class="headerlink" title="将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C 2  5356对"></a>将clustal格式文件改为AXT格式，即将每一对序列pairwise输出，因为一共有104个序列所以结果就是C 2  5356对</h1><pre><code>104</code></pre><p>AXTConvertor t1 t2 </p>
-<h1 id="这里用的估算kaks的方法是平均法-Model-Averaging-on-a-set-of-candidate-models，在一篇frontiersin和BMC-genomics里发现都是这个方法，"><a href="#这里用的估算kaks的方法是平均法-Model-Averaging-on-a-set-of-candidate-models，在一篇frontiersin和BMC-genomics里发现都是这个方法，" class="headerlink" title="这里用的估算kaks的方法是平均法 Model Averaging on a set of candidate models，在一篇frontiersin和BMC genomics里发现都是这个方法，"></a>这里用的估算kaks的方法是平均法 Model Averaging on a set of candidate models，在一篇frontiersin和BMC genomics里发现都是这个方法，</h1><h1 id="但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对"><a href="#但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对" class="headerlink" title="但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对"></a>但是在苹果的那个里面他用的是ML的方法，ml方法速度很快很快，同时omega值比MA方法的更为发散，但是在这两种方法的结果当中，都没有找到正选择的基因对</h1><p>KaKS_calculator -i t2 -o t3 -m MA<br>#</p>
-<h1 id="整理过程-⬇️"><a href="#整理过程-⬇️" class="headerlink" title="整理过程 ⬇️"></a>整理过程 ⬇️</h1><h1 id="首先提取id-和-Ka-Ks"><a href="#首先提取id-和-Ka-Ks" class="headerlink" title="首先提取id 和 Ka/Ks"></a>首先提取id 和 Ka/Ks</h1><p>awk ‘{print $1,$5}’ t3  &gt; t3_filter</p>
-<h1 id="将id列中的两个id分为两列"><a href="#将id列中的两个id分为两列" class="headerlink" title="将id列中的两个id分为两列"></a>将id列中的两个id分为两列</h1><p>awk -v OFS=’\t’ -F ‘&amp;’ ‘{print $1,$2}’ t3_filter &gt; t3_fltered</p>
-<h1 id="用ggtree提取一下树文件中的-Tips-label-生成8个-tips-label文件"><a href="#用ggtree提取一下树文件中的-Tips-label-生成8个-tips-label文件" class="headerlink" title="用ggtree提取一下树文件中的 Tips label 生成8个 tips label文件"></a>用ggtree提取一下树文件中的 Tips label 生成8个 tips label文件</h1><pre><code>library(ggtree)
-tree &lt;- read.newick(&quot;4fanshu.spl.muscle.gb.pep.meg.nwk&quot;)
-tree_label &lt;- tree[[&quot;tip.label&quot;]]
-clade1 &lt;- tree_label[1:31]
-clade2 &lt;- tree_label[32:40]
-clade3 &lt;- tree_label[41:46]
-clade4 &lt;- tree_label[47:59]
-clade5 &lt;- tree_label[60:75]
-clade6 &lt;- tree_label[76:83]
-clade7 &lt;- tree_label[84:87]
-clade8 &lt;- tree_label[88:104]
-
-write.table(tree_label,file=&quot;t4.label&quot;,
-            quote = FALSE,row.names = FALSE,col.names = FALSE)
-
-for(i  in 1:8){
-  val_name = paste(&quot;clade&quot;,i,sep = &quot;&quot;)
-  output_name = paste(&quot;t4.&quot;,val_name,&quot;.label&quot;,sep = &quot;&quot;)
-  clade_id = eval(parse(text = paste(&quot;em &lt;- rbind(&quot;, val_name, &quot;)&quot;, sep = &quot;&quot;)))
-  write.table(clade_id,file=output_name,sep = &apos;\n&apos;,
-              quote = FALSE,row.names = FALSE,col.names = FALSE)
-}
-
-```R_script
-
-
-# 对每一个label文件 都把对应的ka ks文件中的基因对提取出来，并且是两个基因都在的
-ls *clade* | while read line
-do
-python sort_kaks.py  ${line} t3_filtered &gt; ${line}.t5
-done
-
-#对每一个clade生成对角矩阵</code></pre>
-	
-	</div>
-  <a type="button" href="/2020/05/15/KaKs_calculator/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2020/04/29/identify/" >Blast + Hmmsearch 鉴定一个基因家族</a>
 		</h3>
 		</div>
@@ -595,45 +783,6 @@ done
 	
 	</div>
   <a type="button" href="/2020/04/29/identify/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/04/22/Nature 配色风格pal_npg/" >ggsci自动生成适合学术期刊的配色</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-04-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>最近做了很多图被说不好看。想到ggsci可以自动给分组添加颜色，就想看看他可不可以把颜色的十六进制码输出出来，然后发现是有这个函数的。</p>
-<p>ggsci提供以下颜色</p>
-<blockquote>
-<p>Name    Scales    Palette Types    Palette Generator</p>
-<p>NPG    scale_color_npg() scale_fill_npg()    “nrc”    pal_npg()</p>
-<p>AAAS    scale_color_aaas() scale_fill_aaas()    “default”    pal_aaas()</p>
-<p>NEJM    scale_color_nejm() scale_fill_nejm()    “default”    pal_nejm()</p>
-<p>Lancet    scale_color_lancet() scale_fill_lancet()    “lanonc”    pal_lancet()</p>
-<p>JAMA    scale_color_jama() scale_fill_jama()    “default”    pal_jama()</p>
-<p>JCO    scale_color_jco() scale_fill_jco()    “default”    pal_jco()</p>
-<p>UCSCGB    scale_color_ucscgb() scale_fill_ucscgb()    “default”    pal_ucscgb()</p>
-<p>D3    scale_color_d3()</p>
-</blockquote>
-	
-	</div>
-  <a type="button" href="/2020/04/22/Nature 配色风格pal_npg/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -686,33 +835,33 @@ done
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
+			<li><a href="/tags/geome/">geome<span>1</span></a></li>
 		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+		
+			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
+		
+			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+		
+			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
+		
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
 			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
 		
 			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
 		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
 		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
 		
 			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
 			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/geome/">geome<span>1</span></a></li>
-		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -726,7 +875,11 @@ done
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2020/05/28/wget_giga/" ><i class="fa fa-file-o"></i>下载鸟类的基因组2) giga</a>
+        <a href="/2020/06/22/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率_update</a>
+      </li>
+    
+      <li>
+        <a href="/2020/06/16/WGCNA/" ><i class="fa fa-file-o"></i></a>
       </li>
     
       <li>
@@ -734,15 +887,11 @@ done
       </li>
     
       <li>
-        <a href="/2020/05/25/Ensembl_filter/" ><i class="fa fa-file-o"></i>过滤Ensembl中数据的冗余信息</a>
+        <a href="/2020/05/28/wget_giga/" ><i class="fa fa-file-o"></i>下载鸟类的基因组2) giga</a>
       </li>
     
       <li>
         <a href="/2020/05/25/wget_Ensembl/" ><i class="fa fa-file-o"></i>下载鸟类的基因组1) Ensembl</a>
-      </li>
-    
-      <li>
-        <a href="/2020/05/15/详细注释的OrthoFinder/" ><i class="fa fa-file-o"></i>详细一点的Orthofinder，与之前英文的没区别</a>
       </li>
     
   </ul>
