@@ -143,11 +143,49 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/12/08/NTFS硬盘挂载/" >挂载硬盘至服务器</a>
+			<a href="/2020/12/08/1K_genome/" >主要记录千人基因组数据分析</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
 		<div class="date">post @ 2020-12-08  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h4 id="数据下载"><a href="#数据下载" class="headerlink" title="数据下载"></a>数据下载</h4><blockquote>
+<p>感觉再做一些可以去迅雷入职了</p>
+</blockquote>
+<p>首先下载alignment的list   </p>
+<p>eg. igsr_Northern\ Han\ in\ China\ (HGDP)_undefined.tsv</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 0.提取第一列保存为1_ftp_sites</span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2.使用echo生成命令，并记录在3_run，方便以后查看哪里错了</span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i /Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh -Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3.下 载</span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4.对于下载完成的cram文件 执行call snp环节</span><br><span class="line"><span class="meta">#</span> 在所有操作之前，如果没有下载基因组的索引文件</span><br><span class="line"><span class="meta">#</span> 可以使用下面两个命令生成</span><br><span class="line">samtools index Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 然后还需要准备三个文件，第一个是bam文件的prefix，第二个是rs位点的染色体和位置，最后指定一下输出位置</span><br><span class="line"><span class="meta">#</span> 第三个是根据第二个文件生成的bed文件rs_id.bed</span><br><span class="line"><span class="meta">#</span> 格式如下  CHS.info eg.</span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span> rs_id eg.</span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> rs_id.bed用下面的命令生成</span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 5.cram格式转bam格式去call snp</span><br><span class="line">less CHS.info | while read line; do  samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 6.call snp and parse vcf file</span><br><span class="line"><span class="meta">#</span> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span> 所有结果会写在rs.genotype 和 rs.frequency中</span><br><span class="line"><span class="meta">#</span> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span><br><span class="line"><span class="meta">#</span> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar ~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC -A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample -A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest -A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest -A VariantType -l INFO --emitRefConfidence GVCF -rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR -R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam -o HG00597.merged.gatk.gvcf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bam2vcf.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-p"</span>, <span class="string">"--prefix"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"the list of prefix of all sample"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-rs"</span>, <span class="string">"--rsid"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"the postion of each rs id, eg. chr1:100-101"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (<span class="string">"Start : &#123;&#125;"</span> ).format(time.ctime()) </span><br><span class="line">bam_file = []</span><br><span class="line">rs_check = []</span><br><span class="line">rs_id = &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(args[<span class="string">'rsid'</span>]) <span class="keyword">as</span> rs:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> rs:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        good = <span class="string">'chr'</span>+str(lst1[<span class="number">1</span>])+<span class="string">'vs'</span>+str(lst1[<span class="number">2</span>].rstrip())</span><br><span class="line">        rs_check.append(good)</span><br><span class="line">        rs_id[good] = lst1[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(args[<span class="string">"prefix"</span>]) <span class="keyword">as</span> input_bam_file_prefix:</span><br><span class="line">    <span class="keyword">for</span> prefix <span class="keyword">in</span> input_bam_file_prefix:</span><br><span class="line">        prefix =prefix.rstrip()</span><br><span class="line">        new_dir = <span class="string">'mkdir &#123;&#125;'</span>.format(prefix)</span><br><span class="line">        subprocess.call(new_dir, shell = <span class="literal">True</span>)</span><br><span class="line">        merge_bam = <span class="string">'samtools merge -@ 16 &#123;&#125;/&#123;&#125;.merged.bam &#123;&#125;.*.bam'</span>.format(prefix,prefix,prefix)</span><br><span class="line">        subprocess.call(merge_bam, shell = <span class="literal">True</span>)</span><br><span class="line">        bam2vcf =  <span class="string">'bcftools mpileup -a AD,DP,SP &#123;&#125;/&#123;&#125;.merged.bam -f /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta | bcftools call -f GQ,GP -mO v -o &#123;&#125;/&#123;&#125;.merged.vcf'</span>.format(prefix,prefix,prefix,prefix)</span><br><span class="line">        subprocess.call(bam2vcf, shell = <span class="literal">True</span>)</span><br><span class="line">        f = open(<span class="string">'&#123;&#125;.filtered.vcf'</span>.format(prefix),<span class="string">'w'</span>)</span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">'&#123;&#125;/&#123;&#125;.merged.vcf'</span>.format(prefix,prefix)) <span class="keyword">as</span> current_vcf_file:</span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> current_vcf_file:</span><br><span class="line">                <span class="comment"># wrtie filtered vcf</span></span><br><span class="line">                <span class="keyword">if</span> row.startswith(<span class="string">'#'</span>):</span><br><span class="line">                    f.write(row)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">                    good = lst1[<span class="number">0</span>]+<span class="string">'vs'</span>+lst1[<span class="number">1</span>]</span><br><span class="line">                    <span class="keyword">if</span> good <span class="keyword">in</span> rs_check:</span><br><span class="line">                        lst1[<span class="number">2</span>] = rs_id[good]</span><br><span class="line">                        f.write(<span class="string">"\t"</span>.join(lst1))</span><br><span class="line">f.close()   </span><br><span class="line"><span class="keyword">print</span> (<span class="string">"END : &#123;&#125;"</span> ).format(time.ctime())</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第二种方式</span></span><br><span class="line"><span class="comment"># 直接根据一个bed格式的文件生成bam</span></span><br><span class="line"><span class="comment"># 然后重新排列 rs_id</span></span><br><span class="line">awk -v OFS=<span class="string">'\t'</span> <span class="string">'&#123;print "chr"$2,$3-1,$3+1,$1&#125;'</span> rs_id   &gt; rs_id.bed</span><br><span class="line"><span class="comment">#这个转化速度就非常快了 大概一分半一个</span></span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/12/08/1K_genome/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/12/06/NTFS硬盘挂载/" >挂载硬盘至服务器</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-12-06  </div>
 		</div>
 	</div>
 	
@@ -170,36 +208,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2020/12/08/NTFS硬盘挂载/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/11/13/DEG/" ></a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-11-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">➜  15_DEG grep &apos;g34536&apos; SPL17_vs_CK_SHY.DEG_list.txt</span><br><span class="line">g34536	NA	-5.21329	1	-5.33877	383.606	11.8793	Up	LG9	3292856	3293201</span><br><span class="line">➜  15_DEG less SPL17.Up.DEG.gene.list| wc -l</span><br><span class="line">    3487</span><br><span class="line">➜  15_DEG less SPL17.Down.DEG.gene.list| wc -l</span><br><span class="line">    5046</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">➜  15_DEG grep &apos;g46868&apos; SPL21_vs_CK_SHY.DEG_list.txt</span><br><span class="line">g46868	NA	-1.2702	1	-1.34848	20.8799	9.23892	Up	LG11	40115161	40115990</span><br><span class="line">➜  15_DEG less SPL21.Up.DEG.gene.list | wc -l</span><br><span class="line">    1363</span><br><span class="line">➜  15_DEG less SPL21.Down.DEG.gene.list| wc -l</span><br><span class="line">    1444</span><br></pre></td></tr></table></figure>
-
-
-	
-	</div>
-  <a type="button" href="/2020/11/13/DEG/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2020/12/06/NTFS硬盘挂载/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -250,55 +259,6 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2020/08/13/panplot/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/07/07/Anas_platyrhynchos/" ></a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-07-07  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Anas_platyrhynchos</p>
-<p>Calypte_anna</p>
-<p>Lonchura_striata_domestica</p>
-<p>Manacus_vitellinus</p>
-<p>Melopsittacus_undulatus</p>
-<p>Serinus_canaria</p>
-<p>Taeniopygia_guttata</p>
-<p>1.rename GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5 Anas_platyrhynchos GCF_003850225.1_IASCAAS_PekingDuck_PBH1.5*</p>
-<p>2.rename GCF_000355885.1_BGI_duck_1.0 Anas_platyrhynchos GCF_000355885.1_BGI_duck_1.0*</p>
-<p>1.rename GCF_003957555.1_bCalAnn1_v1.p Calypte_anna GCF_003957555.1_bCalAnn1_v1.p*</p>
-<p>2.rename GCF_000699085.1_ASM69908v1 Calypte_anna GCF_000699085.1_ASM69908v1*</p>
-<p>1.rename GCF_005870125.1_lonStrDom2 Lonchura_striata_domestica GCF_005870125.1_lonStrDom2*</p>
-<p>2.rename GCF_002197715.1_LonStrDom1 Lonchura_striata_domestica GCF_002197715.1_LonStrDom1*</p>
-<p>1.rename GCF_001715985.3_ASM171598v3 Manacus_vitellinus GCF_001715985.3_ASM171598v3*</p>
-<p>2.rename GCF_000692015.1_ASM69201v2 Manacus_vitellinus GCF_000692015.1_ASM69201v2*</p>
-<p>1.rename GCF_012275295.1_bMelUnd1.mat.Z Melopsittacus_undulatus GCF_012275295.1_bMelUnd1.mat.Z*</p>
-<p>2.rename GCF_000238935.1_Melopsittacus_undulatus_6.3 Melopsittacus_undulatus GCF_000238935.1_Melopsittacus_undulatus_6.3*</p>
-<p>1.rename GCF_007115625.1_cibio_Scana_2019 Serinus_canaria GCF_007115625.1_cibio_Scana_2019*</p>
-<p>2.rename GCF_000534875.1_SCA1 Serinus_canaria GCF_000534875.1_SCA1*</p>
-<p>1.rename GCF_008822105.2_bTaeGut2.pat.W.v2 Taeniopygia_guttata GCF_008822105.2_bTaeGut2.pat.W.v2*</p>
-<p>2.rename GCF_003957565.1_bTaeGut1_v1.p Taeniopygia_guttata GCF_003957565.1_bTaeGut1_v1.p*</p>
-<p>3.rename GCF_000151805.1_Taeniopygia_guttata-3.2.4 Taeniopygia_guttata GCF_000151805.1_Taeniopygia_guttata-3.2.4*</p>
-
-	
-	</div>
-  <a type="button" href="/2020/07/07/Anas_platyrhynchos/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -631,44 +591,6 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/05/28/1K_genome/" >主要记录千人基因组数据分析</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h4 id="数据下载"><a href="#数据下载" class="headerlink" title="数据下载"></a>数据下载</h4><blockquote>
-<p>感觉再做一些可以去迅雷入职了</p>
-</blockquote>
-<p>首先下载alignment的list   </p>
-<p>eg. igsr_Northern\ Han\ in\ China\ (HGDP)_undefined.tsv</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 0.提取第一列保存为1_ftp_sites</span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2.使用echo生成命令，并记录在3_run，方便以后查看哪里错了</span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i /Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh -Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3.下 载</span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4.对于下载完成的cram文件 执行call snp环节</span><br><span class="line"><span class="meta">#</span> 在所有操作之前，如果没有下载基因组的索引文件</span><br><span class="line"><span class="meta">#</span> 可以使用下面两个命令生成</span><br><span class="line">samtools index Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 然后还需要准备三个文件，第一个是bam文件的prefix，第二个是rs位点的染色体和位置，最后指定一下输出位置</span><br><span class="line"><span class="meta">#</span> 第三个是根据第二个文件生成的bed文件rs_id.bed</span><br><span class="line"><span class="meta">#</span> 格式如下  CHS.info eg.</span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span> rs_id eg.</span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> rs_id.bed用下面的命令生成</span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 5.cram格式转bam格式去call snp</span><br><span class="line">less CHS.info | while read line; do  samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 6.call snp and parse vcf file</span><br><span class="line"><span class="meta">#</span> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span> 所有结果会写在rs.genotype 和 rs.frequency中</span><br><span class="line"><span class="meta">#</span> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span><br><span class="line"><span class="meta">#</span> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar ~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC -A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample -A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest -A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest -A VariantType -l INFO --emitRefConfidence GVCF -rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR -R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam -o HG00597.merged.gatk.gvcf</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bam2vcf.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-p"</span>, <span class="string">"--prefix"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"the list of prefix of all sample"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-rs"</span>, <span class="string">"--rsid"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"the postion of each rs id, eg. chr1:100-101"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (<span class="string">"Start : &#123;&#125;"</span> ).format(time.ctime()) </span><br><span class="line">bam_file = []</span><br><span class="line">rs_check = []</span><br><span class="line">rs_id = &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(args[<span class="string">'rsid'</span>]) <span class="keyword">as</span> rs:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> rs:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        good = <span class="string">'chr'</span>+str(lst1[<span class="number">1</span>])+<span class="string">'vs'</span>+str(lst1[<span class="number">2</span>].rstrip())</span><br><span class="line">        rs_check.append(good)</span><br><span class="line">        rs_id[good] = lst1[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(args[<span class="string">"prefix"</span>]) <span class="keyword">as</span> input_bam_file_prefix:</span><br><span class="line">    <span class="keyword">for</span> prefix <span class="keyword">in</span> input_bam_file_prefix:</span><br><span class="line">        prefix =prefix.rstrip()</span><br><span class="line">        new_dir = <span class="string">'mkdir &#123;&#125;'</span>.format(prefix)</span><br><span class="line">        subprocess.call(new_dir, shell = <span class="literal">True</span>)</span><br><span class="line">        merge_bam = <span class="string">'samtools merge -@ 16 &#123;&#125;/&#123;&#125;.merged.bam &#123;&#125;.*.bam'</span>.format(prefix,prefix,prefix)</span><br><span class="line">        subprocess.call(merge_bam, shell = <span class="literal">True</span>)</span><br><span class="line">        bam2vcf =  <span class="string">'bcftools mpileup -a AD,DP,SP &#123;&#125;/&#123;&#125;.merged.bam -f /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta | bcftools call -f GQ,GP -mO v -o &#123;&#125;/&#123;&#125;.merged.vcf'</span>.format(prefix,prefix,prefix,prefix)</span><br><span class="line">        subprocess.call(bam2vcf, shell = <span class="literal">True</span>)</span><br><span class="line">        f = open(<span class="string">'&#123;&#125;.filtered.vcf'</span>.format(prefix),<span class="string">'w'</span>)</span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">'&#123;&#125;/&#123;&#125;.merged.vcf'</span>.format(prefix,prefix)) <span class="keyword">as</span> current_vcf_file:</span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> current_vcf_file:</span><br><span class="line">                <span class="comment"># wrtie filtered vcf</span></span><br><span class="line">                <span class="keyword">if</span> row.startswith(<span class="string">'#'</span>):</span><br><span class="line">                    f.write(row)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">                    good = lst1[<span class="number">0</span>]+<span class="string">'vs'</span>+lst1[<span class="number">1</span>]</span><br><span class="line">                    <span class="keyword">if</span> good <span class="keyword">in</span> rs_check:</span><br><span class="line">                        lst1[<span class="number">2</span>] = rs_id[good]</span><br><span class="line">                        f.write(<span class="string">"\t"</span>.join(lst1))</span><br><span class="line">f.close()   </span><br><span class="line"><span class="keyword">print</span> (<span class="string">"END : &#123;&#125;"</span> ).format(time.ctime())</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第二种方式</span></span><br><span class="line"><span class="comment"># 直接根据一个bed格式的文件生成bam</span></span><br><span class="line"><span class="comment"># 然后重新排列 rs_id</span></span><br><span class="line">awk -v OFS=<span class="string">'\t'</span> <span class="string">'&#123;print "chr"$2,$3-1,$3+1,$1&#125;'</span> rs_id   &gt; rs_id.bed</span><br><span class="line"><span class="comment">#这个转化速度就非常快了 大概一分半一个</span></span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br></pre></td></tr></table></figure>
-
-
-	
-	</div>
-  <a type="button" href="/2020/05/28/1K_genome/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2020/05/28/wget_ncbi/" >下载鸟类的基因组2) ncbi</a>
 		</h3>
 		</div>
@@ -715,6 +637,100 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2020/05/28/wget_ncbi/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/05/25/Ensembl_filter/" >过滤Ensembl中数据的冗余信息</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2 id="Ensembl-格式介绍"><a href="#Ensembl-格式介绍" class="headerlink" title="Ensembl 格式介绍"></a>Ensembl 格式介绍</h2><p>u1s1 真的佩服Emsembl数据库的开发团队，十分想问候他们怎么做的这么详细的</p>
+<hr>
+<p>sudo killall coreaudiod</p>
+<p>Ensembl 数据库格式十分简洁明了，每一个基因都有对应的 gene id, 每一个转录本有对应的<br>trasncript id, 每一个蛋白有对应的 protein id, 而且这三个id之间。。没有规律</p>
+<p>比如 这是鸡中的一个蛋白序列的简化stable的信息</p>
+<blockquote>
+<p>ENSGALG00000009622    ENSGALT00000032268     ENSGALP00000031632<br>其实在真实的序列中，也不是上面的样子而是如下这样包含了stableeversion的</p>
+<blockquote>
+<p>ENSGALP00000073247.1 pep chromosome:GRCg6a:15:8238927:8239208:1<br>gene:ENSGALG00000049010.1 transcript:ENSGALT00000103863.1<br>gene_biotype:IG_V_gene transcript_biotype:IG_V_gene</p>
+</blockquote>
+</blockquote>
+<p>在biomart中 除了stable id 还有很多label .. awesome～</p>
+<h3 id="我想要得到蛋白序列中同一个gene-id中最长的蛋白序列"><a href="#我想要得到蛋白序列中同一个gene-id中最长的蛋白序列" class="headerlink" title="我想要得到蛋白序列中同一个gene id中最长的蛋白序列"></a>我想要得到蛋白序列中同一个gene id中最长的蛋白序列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$PATH:OrthoFinder/tools/primary_transcript.py</span><br></pre></td></tr></table></figure>
+
+<p>orthofinder 中已经给出了怎么提取最长转录本的python脚本。并且最长的转录本的id被替换为gene id输出</p>
+<p>提蛋白真的很方便，但是，老师还需要对应基因的intron序列<br>intron序列就需要gff文件中的exon信息和mRNA信息</p>
+<p>怎么通过带着gene id的最长转录本去过滤gff文件呢。</p>
+<blockquote>
+<p>经过一系列的测试。。比如带gene id的蛋白序列blastp回去找到transcript id。但是blast的算法导致 multi match的情况不好去除</p>
+</blockquote>
+<p>所以还是得写个脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"></span><br><span class="line">lst = []</span><br><span class="line">Sequence = &#123;&#125;</span><br><span class="line"></span><br><span class="line">transcript2gene = &#123;&#125;</span><br><span class="line">pep2gene = &#123;&#125;</span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_emsembl_fasta:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_emsembl_fasta:</span><br><span class="line">        <span class="keyword">if</span> row.startswith(<span class="string">'&gt;'</span>):</span><br><span class="line">            lst = row.split(<span class="string">" "</span>)</span><br><span class="line">            pep_id = lst[<span class="number">0</span>].replace(<span class="string">'&gt;'</span>,<span class="string">''</span>)</span><br><span class="line">            gene_id = lst[<span class="number">3</span>].replace(<span class="string">'gene:'</span>,<span class="string">''</span>)</span><br><span class="line">            transcript_id = lst[<span class="number">4</span>].replace(<span class="string">'transcript:'</span>,<span class="string">''</span>)</span><br><span class="line">            Sequence[transcript_id] = <span class="string">''</span></span><br><span class="line">            transcript2gene[transcript_id] = gene_id</span><br><span class="line">            pep2gene[transcript_id] = pep_id</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            Sequence[transcript_id] += row.strip()</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"t1.temp"</span>,<span class="string">'w'</span>) <span class="keyword">as</span> Out:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> Sequence.keys():</span><br><span class="line">        Out.write(i+<span class="string">"\t"</span>+str(len(Sequence[i]))+<span class="string">"\t"</span>+transcript2gene[i]+<span class="string">'\t'</span>+pep2gene[i]+<span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line">gene_id_len=open(<span class="string">"t1.temp"</span>,<span class="string">"r"</span>)</span><br><span class="line">table = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> gene_id_len:</span><br><span class="line">    col = line.strip().split(<span class="string">"\t"</span>)</span><br><span class="line">    col[<span class="number">0</span>] = str(col[<span class="number">0</span>])</span><br><span class="line">    col[<span class="number">1</span>] = int(col[<span class="number">1</span>])</span><br><span class="line">    col[<span class="number">2</span>] = str(col[<span class="number">2</span>])</span><br><span class="line">    col[<span class="number">3</span>] = str(col[<span class="number">3</span>])</span><br><span class="line">    table.append(col)</span><br><span class="line"><span class="comment">#print(table)</span></span><br><span class="line">table_sorted = sorted(table, key=itemgetter(<span class="number">2</span>, <span class="number">1</span>),reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#print(table_sorted)</span></span><br><span class="line">output_file = open(<span class="string">"t2.temp"</span>,<span class="string">"w"</span>)</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> table_sorted:</span><br><span class="line">    row = [str(x) <span class="keyword">for</span> x <span class="keyword">in</span> row]</span><br><span class="line">    output_file.write(<span class="string">"\t"</span>.join(row) + <span class="string">'\n'</span>)</span><br><span class="line">output_file.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">input_file=open(<span class="string">"t2.temp"</span>,<span class="string">"r"</span>)</span><br><span class="line">dict2=&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> input_file.readlines():</span><br><span class="line">    col = line.strip().split(<span class="string">"\t"</span>)</span><br><span class="line">    col[<span class="number">0</span>] = str(col[<span class="number">0</span>])</span><br><span class="line">    col[<span class="number">1</span>] = int(col[<span class="number">1</span>])</span><br><span class="line">    col[<span class="number">2</span>] = str(col[<span class="number">2</span>])</span><br><span class="line">    col[<span class="number">3</span>] = str(col[<span class="number">3</span>])</span><br><span class="line">    <span class="keyword">if</span> col[<span class="number">2</span>] <span class="keyword">not</span> <span class="keyword">in</span> dict2:</span><br><span class="line">        dict2[col[<span class="number">2</span>]]=col[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        dict2[col[<span class="number">2</span>]]+= <span class="string">'\t'</span>+col[<span class="number">0</span>]</span><br><span class="line"><span class="comment">#print(dict2)</span></span><br><span class="line"><span class="comment">#print(dict2.values())</span></span><br><span class="line">list_values=list(dict2.values())</span><br><span class="line"><span class="comment">#print(list_values)</span></span><br><span class="line">result_file = open(<span class="string">"final.fa"</span>,<span class="string">"w"</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> list_values:</span><br><span class="line">    col = line.strip().split(<span class="string">"\t"</span>)</span><br><span class="line">    col[<span class="number">0</span>] = str(col[<span class="number">0</span>])</span><br><span class="line">    <span class="comment">#print(col[0])</span></span><br><span class="line"></span><br><span class="line">    result_file.write(col[<span class="number">0</span>]+<span class="string">"\n"</span>)</span><br><span class="line">result_file.close()</span><br></pre></td></tr></table></figure>
+
+<p>专为Ensembl设计，结果会保存最长转录本的 transcript id， gene id， pep id</p>
+<p>然后再过滤gff</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line"></span><br><span class="line">ab = &#123;&#125;</span><br><span class="line">with open(sys.argv[1]) as  rename_file:</span><br><span class="line">    for row in rename_file:</span><br><span class="line">        lst1 = row.strip().split(&apos;\t&apos;)</span><br><span class="line">        ab[lst1[0]] = lst1[1]</span><br><span class="line"></span><br><span class="line">with open(sys.argv[2]) as gff_file:</span><br><span class="line">    for row in gff_file:</span><br><span class="line">	for key,value in ab.items():</span><br><span class="line">       	    if &quot;ID=gene:&quot;+key in row:</span><br><span class="line">                print(row.strip())</span><br><span class="line">            elif value in row:</span><br><span class="line">                print(row.strip())</span><br></pre></td></tr></table></figure>
+
+<p>这样就得到了只包含最长转录本的gff文件</p>
+<p>再用张老师的提取intron的脚本就可以得到intron文件</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl -w</span></span><br><span class="line"><span class="keyword">use</span> warnings;</span><br><span class="line"><span class="keyword">use</span> strict;</span><br><span class="line"><span class="keyword">use</span> Set::IntSpan;</span><br><span class="line"><span class="keyword">use</span> Bio::DB::Fasta;</span><br><span class="line"></span><br><span class="line"><span class="comment"># date, 2016-12-30, zhanglei</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">my</span> $ref       = $ARGV[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">my</span> $gene2pep  = $ARGV[<span class="number">1</span>];</span><br><span class="line"><span class="keyword">my</span> $gene2tran = $ARGV[<span class="number">2</span>];</span><br><span class="line"><span class="keyword">my</span> $gtf       = $ARGV[<span class="number">3</span>];</span><br><span class="line"><span class="keyword">my</span> $out       = $ARGV[<span class="number">4</span>];</span><br><span class="line"><span class="keyword">die</span> <span class="string">"Usage: $0 ref.fa gene2pep gene2transcript file.gff3 out.fa</span></span><br><span class="line"><span class="string">This script is used to extract intron from the gff3 file(NOT GTF file!)\n"</span> <span class="keyword">if</span> @ARGV &lt; <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Loading the ID file\t"</span>;</span><br><span class="line"><span class="keyword">my</span> %gene2peps;</span><br><span class="line"><span class="keyword">my</span> %trans2gene;</span><br><span class="line"><span class="keyword">open</span> IN, <span class="string">"&lt;$gene2pep"</span>;</span><br><span class="line"><span class="keyword">while</span> (&lt;IN&gt;) &#123;</span><br><span class="line">	<span class="keyword">chomp</span>;</span><br><span class="line">	<span class="keyword">my</span> @array = (<span class="keyword">split</span> <span class="regexp">/\s+/</span>);</span><br><span class="line">	$gene2peps&#123;$array[<span class="number">0</span>]&#125; = $array[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">close</span> IN;</span><br><span class="line"></span><br><span class="line"><span class="keyword">open</span> IN, <span class="string">"&lt;$gene2tran"</span>;</span><br><span class="line"><span class="keyword">while</span> (&lt;IN&gt;) &#123;</span><br><span class="line">	<span class="keyword">chomp</span>;</span><br><span class="line">	<span class="keyword">my</span> @array = (<span class="keyword">split</span> <span class="regexp">/\s+/</span>);</span><br><span class="line">	$trans2gene&#123;$array[<span class="number">1</span>]&#125; = $array[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">close</span> IN;</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"Extracting gff3 file\t"</span>;</span><br><span class="line"><span class="comment"># extract gtf</span></span><br><span class="line"><span class="keyword">open</span> IN, <span class="string">"&lt;$gtf"</span>;</span><br><span class="line"><span class="keyword">my</span> @lines;</span><br><span class="line"><span class="keyword">while</span> (&lt;IN&gt;) &#123;</span><br><span class="line">	<span class="keyword">my</span> @array = (<span class="keyword">split</span> <span class="regexp">/\s+/</span>, $_);</span><br><span class="line">	<span class="keyword">if</span> ($array[<span class="number">2</span>] eq <span class="string">'mRNA'</span> || $array[<span class="number">2</span>] eq <span class="string">'exon'</span>) &#123;</span><br><span class="line">		<span class="keyword">push</span> @lines, $_;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">close</span> IN;</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"done\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Formatdb $ref\t"</span>;</span><br><span class="line"><span class="comment"># sequence DB</span></span><br><span class="line"><span class="keyword">my</span> $ref_db = Bio::DB::Fasta -&gt; new($ref);</span><br><span class="line"><span class="keyword">print</span> <span class="string">"done\n"</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Get gene id from gff3\t"</span>;</span><br><span class="line"><span class="comment"># load the gff file</span></span><br><span class="line"><span class="keyword">open</span> OUT, <span class="string">"&gt;$out"</span>;</span><br><span class="line"><span class="keyword">my</span> %hash;</span><br><span class="line"><span class="keyword">foreach</span> (@lines) &#123;</span><br><span class="line">	<span class="keyword">chomp</span>;</span><br><span class="line">	<span class="keyword">next</span> <span class="keyword">if</span> /^<span class="comment">#/;</span></span><br><span class="line">	<span class="keyword">next</span> <span class="keyword">if</span> /^\<span class="keyword">s</span>+<span class="regexp">/;</span></span><br><span class="line"><span class="regexp">	my @cols = (split /</span>\<span class="keyword">s</span>+<span class="regexp">/, $_);</span></span><br><span class="line"><span class="regexp">	my $gene_id = my $trans_id = my $pep_id;</span></span><br><span class="line"><span class="regexp">	if ($cols[2] eq 'mRNA') &#123;</span></span><br><span class="line"><span class="regexp">		($gene_id) = (/</span>Parent\=gene\:(\w+);<span class="regexp">/);   #Parent=gene:ENSGALG00000053455</span></span><br><span class="line"><span class="regexp">		($trans_id) = (/</span>ID\=transcript\:(\w+);<span class="regexp">/);</span></span><br><span class="line"><span class="regexp">#		print "mRNA $gene_id $trans_id\n";</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">	elsif ($cols[2] eq 'exon') &#123;</span></span><br><span class="line"><span class="regexp">		($trans_id) = (/</span>Parent\=transcript\:(\w+);<span class="regexp">/);  #Parent=transcript:</span></span><br><span class="line"><span class="regexp">		$gene_id = $trans2gene&#123;$trans_id&#125;;</span></span><br><span class="line"><span class="regexp">#		print "exon $gene_id $trans_id\n";</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">	$pep_id = $gene2peps&#123;$gene_id&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	next unless $gene_id;</span></span><br><span class="line"><span class="regexp">	# chr, strand, gene start and end</span></span><br><span class="line"><span class="regexp">	# chr, strand, gene start and end</span></span><br><span class="line"><span class="regexp">	if ($cols[2] eq 'mRNA' ) &#123;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;chr&#125; = $cols[0];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;strand&#125; = $cols[6];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;start&#125; = $cols[3];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;end&#125; = $cols[4];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;ex_num&#125; = 0;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;pep_id&#125; = $pep_id;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;trans_id&#125; = $trans_id;</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;exon&#125; = new Set::IntSpan;</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">	# exon number</span></span><br><span class="line"><span class="regexp">	if ($cols[2] eq 'exon' &amp;&amp; exists $hash&#123;$gene_id&#125;) &#123;</span></span><br><span class="line"><span class="regexp">		my ( $start, $end ) = @cols[3, 4];</span></span><br><span class="line"><span class="regexp">		$hash&#123;$gene_id&#125;&#123;exon&#125;-&gt;U("$start-$end");</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">print "done\n";</span></span><br><span class="line"><span class="regexp">print "Extract introns from $ref\t";</span></span><br><span class="line"><span class="regexp"># get the exon sequence</span></span><br><span class="line"><span class="regexp">foreach my $gene_id (sort keys %hash) &#123;</span></span><br><span class="line"><span class="regexp">	my $chr = $hash&#123;$gene_id&#125;&#123;chr&#125;;</span></span><br><span class="line"><span class="regexp">	my $strand = $hash&#123;$gene_id&#125;&#123;strand&#125;;</span></span><br><span class="line"><span class="regexp">	my $start = $hash&#123;$gene_id&#125;&#123;start&#125;;</span></span><br><span class="line"><span class="regexp">	my $end   = $hash&#123;$gene_id&#125;&#123;end&#125;;</span></span><br><span class="line"><span class="regexp">	my $pep_id = $hash&#123;$gene_id&#125;&#123;pep_id&#125;;</span></span><br><span class="line"><span class="regexp">	my $trans_id = $hash&#123;$gene_id&#125;&#123;trans_id&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	my $all_set = new Set::IntSpan "$start-$end";</span></span><br><span class="line"><span class="regexp">	my $exon_set = $hash&#123;$gene_id&#125;&#123;exon&#125;;</span></span><br><span class="line"><span class="regexp">	my $intron_set = diff $all_set $exon_set;</span></span><br><span class="line"><span class="regexp">	my @array_intron = sets $intron_set;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	my $seq;</span></span><br><span class="line"><span class="regexp">	# upstream and downstream, 0 bp</span></span><br><span class="line"><span class="regexp">#	my $min = min $set;</span></span><br><span class="line"><span class="regexp">#	$min = $min - 1;</span></span><br><span class="line"><span class="regexp">#	my $s_min = 1 + $min - 0;</span></span><br><span class="line"><span class="regexp">#	my $max = max $set;</span></span><br><span class="line"><span class="regexp">#	$max = $max + 1;</span></span><br><span class="line"><span class="regexp">#	my $e_max = $max - 1 + 0;</span></span><br><span class="line"><span class="regexp">#	my $upstream = $ref_db-&gt;seq($chr, $s_min =&gt; $min);</span></span><br><span class="line"><span class="regexp">#	my $downstream = $ref_db-&gt;seq($chr, $max =&gt; $e_max);</span></span><br><span class="line"><span class="regexp">#	$downstream = $upstream = "";</span></span><br><span class="line"><span class="regexp">#   $seq = "$upstream";</span></span><br><span class="line"><span class="regexp">	# exon region</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	@array_intron = reverse @array_intron if $strand eq '-';</span></span><br><span class="line"><span class="regexp">	foreach my $intron (@array_intron) &#123;</span></span><br><span class="line"><span class="regexp">		my ($start, $end) = (split /</span>\-<span class="regexp">/, $intron);</span></span><br><span class="line"><span class="regexp">		$end = $start unless defined $end;</span></span><br><span class="line"><span class="regexp">		my $seq = $ref_db-&gt;seq($chr, $start =&gt; $end);</span></span><br><span class="line"><span class="regexp">		$seq = reverse_complement($seq) if $strand eq '-';</span></span><br><span class="line"><span class="regexp">		my $new_strand;</span></span><br><span class="line"><span class="regexp">		if ($strand eq '-') &#123;</span></span><br><span class="line"><span class="regexp">			$new_strand = "minus_strand";</span></span><br><span class="line"><span class="regexp">		&#125;</span></span><br><span class="line"><span class="regexp">		elsif ($strand eq '+') &#123;</span></span><br><span class="line"><span class="regexp">			$new_strand = "positive_strand";</span></span><br><span class="line"><span class="regexp">		&#125;</span></span><br><span class="line"><span class="regexp">		else &#123;</span></span><br><span class="line"><span class="regexp">			print "Warning $gene_id $strand not defined\n";</span></span><br><span class="line"><span class="regexp">		&#125;</span></span><br><span class="line"><span class="regexp">		print OUT "&gt;Gene_ID:$gene_id#Transcript_ID:$trans_id#Protein_ID:$pep_id#intron#$new_strand#$chr\:$start-$end\n$seq\n";</span></span><br><span class="line"><span class="regexp">	&#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">close OUT;</span></span><br><span class="line"><span class="regexp">print "done\n";</span></span><br><span class="line"><span class="regexp">### sub routines ###</span></span><br><span class="line"><span class="regexp">sub reverse_complement &#123;</span></span><br><span class="line"><span class="regexp">        my $dna = shift;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	# reverse the DNA sequence</span></span><br><span class="line"><span class="regexp">        my $revcomp = reverse($dna);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">	# complement the reversed DNA sequence</span></span><br><span class="line"><span class="regexp">        $revcomp =~ tr/</span>ACGTacgt/TGCAtgca/;</span><br><span class="line">        <span class="keyword">return</span> $revcomp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>cds也就比较好提了。毕竟各个id都有了</p>
+
+	
+	</div>
+  <a type="button" href="/2020/05/25/Ensembl_filter/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/05/25/wget_Ensembl/" >下载鸟类的基因组1) Ensembl</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件"><a href="#如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件" class="headerlink" title="如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件"></a>如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件</h1><p>去年下过一次 但是当时没有存下过程<br>首先进入Ensmbl数据库下载 all Species list (首页给出的Sp list 只有动物的)<br>然后根据图片和common name挑选出哪些是鸟类，并把前两列存在一个新的txt文件中</p>
+<p>38bird.ensembl.list.txt</p>
+<p>然后观察ftp网址发现，只需要有scientific name就可以下载，但是所有字母都为小写，且string之间有下划线</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;&apos; &apos;s/ /_/g&apos; 38bird.ensembl.list.txt</span><br><span class="line">awk &apos;&#123;print $2&#125;&apos; 38bird.ensembl.list.txt &gt; specific_name.list</span><br><span class="line">cat scientific_name.list | tr  &apos;[A-Z]&apos; &apos;[a-z]&apos; &gt; xiaoxie.scientific.list</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以根据 xiaoxie.scientific.list 循环输出wget下载命令,用wget -c 可以续传，因为下载速度实在太慢了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/cds/*.cds.all.fa.gz&apos;</span><br><span class="line">done &gt; download_cds.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/gff3/&apos;$&#123;line&#125;&apos;/*.100.gff3.gz&apos;</span><br><span class="line">done &gt; download_gff3.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/pep/*.100.protein.gz&apos;</span><br><span class="line">done &gt; download_protein.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/dna/*.dna_sm.toplevel.fa.gz&apos;</span><br><span class="line">done &gt; download_genome.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nohup sh *.sh &gt; run_wget.log</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/05/25/wget_Ensembl/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -769,33 +785,35 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
 		
+			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+		
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+		
+			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
+		
+			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
+		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+		
 			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
+		
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
 			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
 		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
 			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
 		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
-		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
-		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>2</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -809,11 +827,11 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2020/12/08/NTFS硬盘挂载/" ><i class="fa fa-file-o"></i>挂载硬盘至服务器</a>
+        <a href="/2020/12/08/1K_genome/" ><i class="fa fa-file-o"></i>主要记录千人基因组数据分析</a>
       </li>
     
       <li>
-        <a href="/2020/11/13/DEG/" ><i class="fa fa-file-o"></i></a>
+        <a href="/2020/12/06/NTFS硬盘挂载/" ><i class="fa fa-file-o"></i>挂载硬盘至服务器</a>
       </li>
     
       <li>
@@ -821,11 +839,11 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
-        <a href="/2020/07/07/Anas_platyrhynchos/" ><i class="fa fa-file-o"></i></a>
+        <a href="/2020/07/02/mscanX/" ><i class="fa fa-file-o"></i></a>
       </li>
     
       <li>
-        <a href="/2020/07/02/mscanX/" ><i class="fa fa-file-o"></i></a>
+        <a href="/2020/06/22/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率_update</a>
       </li>
     
   </ul>

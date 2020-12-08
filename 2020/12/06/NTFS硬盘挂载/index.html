@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>ncbi | Shy 的博客</title>
+  <title>挂载硬盘至服务器 | Shy 的博客</title>
   <meta name="author" content="Shy">
   
   <meta name="description" content="Shy 的博客">
@@ -14,7 +14,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="挂载硬盘至服务器">
   <meta property="og:site_name" content="Shy 的博客">
 
   
@@ -115,144 +115,111 @@ var _hmt = _hmt || [];
   	<div class="content">
     	 
 
-<!-- title -->
-<div class="page-header">
-  <h1 class="archive-title-tag"><i class="fa fa-archive"></i> ncbi</h1>
-</div>
 
-<div class="row page">
-  <!-- cols -->
-  
-  <div class="col-md-9">
 	
-
-	  <div id="top_search"></div>
-
-	  <div class="archive">
-		
-		
-		
-			
-			
-			<h4 class="archive-ul" data-toggle="collapse" data-target="#2020">2020<b class="caret"></b></h4>
-			<ul id="2020" class="collapse in">
-			
-		
-		<li class="listing-item">
-		<span class="date_class"> 2020-05-15 </span> &raquo;
-		
-		   <span class="title"><a href="/2020/05/15/查询以及下载ncbi基因组数据/" >一个可以下载ncbi中指定物种的基因组的脚本</a></span>
-		
-		</li>			
-		
-		</ul>
+		<div class="page-header">
+			<h1> 挂载硬盘至服务器</h1>
 		</div>
-
-</div> <!-- col-md-9/col-md-12 -->
-
-
-<div class="col-md-3">
-	<div id="sidebar">
 	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
 
 
-		
-			
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
-		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
-		
-			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
-		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
-		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
-		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-		 
-		</ul>
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>挂载的意思就是。硬盘本身插在接口上是有一个物理位置的。位于 /dev 文件夹内</p>
+<p>在dev文件夹中 sda sdb sdc 就代表了三个硬盘，/dev是不可以直接查看里面的内容的</p>
+<p>我们平常访问他们里面的东西需要把他从/dev中挂载到一个方便的目录中。</p>
+<p>比如windows系统里 /dev/sda1被挂载在C:     就是C盘</p>
+<p>在linux中通常习惯为挂载在/mnt目录中</p>
+<p>通常使用的硬盘格式有 NTFS exFAT   EXT？FAT..</p>
+<p>现在买回来的硬盘通常为NTFS</p>
+<p>但是linux自身并不支持NTFS格式的硬盘，但有相关工具ntfs-3g可以挂载ntfs</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount -t ntfs /dev/sdf /mnt/temp</span><br><span class="line">mount -t ntfs /dev/sdg /mnt/temp2</span><br></pre></td></tr></table></figure>
+
+	  
 	</div>
 
+	<div>
+  	<center>
+	<div class="pagination">
 
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
     
-      <li>
-        <a href="/2020/12/08/1K_genome/" ><i class="fa fa-file-o"></i>主要记录千人基因组数据分析</a>
-      </li>
     
-      <li>
-        <a href="/2020/12/06/NTFS硬盘挂载/" ><i class="fa fa-file-o"></i>挂载硬盘至服务器</a>
-      </li>
+    <a href="/2020/12/08/1K_genome/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
-      <li>
-        <a href="/2020/08/13/panplot/" ><i class="fa fa-file-o"></i></a>
-      </li>
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-      <li>
-        <a href="/2020/07/02/mscanX/" ><i class="fa fa-file-o"></i></a>
-      </li>
+    <a href="/2020/08/13/panplot/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
     
-      <li>
-        <a href="/2020/06/22/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率_update</a>
-      </li>
+
     
-  </ul>
 </div>
 
-		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
+    </center>
+	</div>
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/goodlucksun" title="All Github repository." target="_blank"]);">My github</a></li>
+	<!-- comment -->
 	
-	</ul>
-</div>
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
 
 
+	</div> <!-- col-md-9/col-md-12 -->
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
 
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-12-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
 

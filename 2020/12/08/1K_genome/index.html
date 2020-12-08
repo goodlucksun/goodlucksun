@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>主要记录千人基因组数据分析 | Shy 的博客</title>
+  <meta name="author" content="Shy">
+  
+  <meta name="description" content="Shy 的博客">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="主要记录千人基因组数据分析">
+  <meta property="og:site_name" content="Shy 的博客">
+
+  
+    <meta property="og:image" content>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Shy 的博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 主要记录千人基因组数据分析</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h4 id="数据下载"><a href="#数据下载" class="headerlink" title="数据下载"></a>数据下载</h4><blockquote>
+<p>感觉再做一些可以去迅雷入职了</p>
+</blockquote>
+<p>首先下载alignment的list   </p>
+<p>eg. igsr_Northern\ Han\ in\ China\ (HGDP)_undefined.tsv</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 0.提取第一列保存为1_ftp_sites</span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2.使用echo生成命令，并记录在3_run，方便以后查看哪里错了</span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i /Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh -Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3.下 载</span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4.对于下载完成的cram文件 执行call snp环节</span><br><span class="line"><span class="meta">#</span> 在所有操作之前，如果没有下载基因组的索引文件</span><br><span class="line"><span class="meta">#</span> 可以使用下面两个命令生成</span><br><span class="line">samtools index Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 然后还需要准备三个文件，第一个是bam文件的prefix，第二个是rs位点的染色体和位置，最后指定一下输出位置</span><br><span class="line"><span class="meta">#</span> 第三个是根据第二个文件生成的bed文件rs_id.bed</span><br><span class="line"><span class="meta">#</span> 格式如下  CHS.info eg.</span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span> rs_id eg.</span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> rs_id.bed用下面的命令生成</span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 5.cram格式转bam格式去call snp</span><br><span class="line">less CHS.info | while read line; do  samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 6.call snp and parse vcf file</span><br><span class="line"><span class="meta">#</span> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span> 所有结果会写在rs.genotype 和 rs.frequency中</span><br><span class="line"><span class="meta">#</span> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span><br><span class="line"><span class="meta">#</span> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar ~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC -A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample -A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest -A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest -A VariantType -l INFO --emitRefConfidence GVCF -rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR -R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam -o HG00597.merged.gatk.gvcf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bam2vcf.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-p"</span>, <span class="string">"--prefix"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"the list of prefix of all sample"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-rs"</span>, <span class="string">"--rsid"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"the postion of each rs id, eg. chr1:100-101"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (<span class="string">"Start : &#123;&#125;"</span> ).format(time.ctime()) </span><br><span class="line">bam_file = []</span><br><span class="line">rs_check = []</span><br><span class="line">rs_id = &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(args[<span class="string">'rsid'</span>]) <span class="keyword">as</span> rs:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> rs:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        good = <span class="string">'chr'</span>+str(lst1[<span class="number">1</span>])+<span class="string">'vs'</span>+str(lst1[<span class="number">2</span>].rstrip())</span><br><span class="line">        rs_check.append(good)</span><br><span class="line">        rs_id[good] = lst1[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(args[<span class="string">"prefix"</span>]) <span class="keyword">as</span> input_bam_file_prefix:</span><br><span class="line">    <span class="keyword">for</span> prefix <span class="keyword">in</span> input_bam_file_prefix:</span><br><span class="line">        prefix =prefix.rstrip()</span><br><span class="line">        new_dir = <span class="string">'mkdir &#123;&#125;'</span>.format(prefix)</span><br><span class="line">        subprocess.call(new_dir, shell = <span class="literal">True</span>)</span><br><span class="line">        merge_bam = <span class="string">'samtools merge -@ 16 &#123;&#125;/&#123;&#125;.merged.bam &#123;&#125;.*.bam'</span>.format(prefix,prefix,prefix)</span><br><span class="line">        subprocess.call(merge_bam, shell = <span class="literal">True</span>)</span><br><span class="line">        bam2vcf =  <span class="string">'bcftools mpileup -a AD,DP,SP &#123;&#125;/&#123;&#125;.merged.bam -f /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta | bcftools call -f GQ,GP -mO v -o &#123;&#125;/&#123;&#125;.merged.vcf'</span>.format(prefix,prefix,prefix,prefix)</span><br><span class="line">        subprocess.call(bam2vcf, shell = <span class="literal">True</span>)</span><br><span class="line">        f = open(<span class="string">'&#123;&#125;.filtered.vcf'</span>.format(prefix),<span class="string">'w'</span>)</span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">'&#123;&#125;/&#123;&#125;.merged.vcf'</span>.format(prefix,prefix)) <span class="keyword">as</span> current_vcf_file:</span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> current_vcf_file:</span><br><span class="line">                <span class="comment"># wrtie filtered vcf</span></span><br><span class="line">                <span class="keyword">if</span> row.startswith(<span class="string">'#'</span>):</span><br><span class="line">                    f.write(row)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">                    good = lst1[<span class="number">0</span>]+<span class="string">'vs'</span>+lst1[<span class="number">1</span>]</span><br><span class="line">                    <span class="keyword">if</span> good <span class="keyword">in</span> rs_check:</span><br><span class="line">                        lst1[<span class="number">2</span>] = rs_id[good]</span><br><span class="line">                        f.write(<span class="string">"\t"</span>.join(lst1))</span><br><span class="line">f.close()   </span><br><span class="line"><span class="keyword">print</span> (<span class="string">"END : &#123;&#125;"</span> ).format(time.ctime())</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第二种方式</span></span><br><span class="line"><span class="comment"># 直接根据一个bed格式的文件生成bam</span></span><br><span class="line"><span class="comment"># 然后重新排列 rs_id</span></span><br><span class="line">awk -v OFS=<span class="string">'\t'</span> <span class="string">'&#123;print "chr"$2,$3-1,$3+1,$1&#125;'</span> rs_id   &gt; rs_id.bed</span><br><span class="line"><span class="comment">#这个转化速度就非常快了 大概一分半一个</span></span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br></pre></td></tr></table></figure>
+
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2020/12/06/NTFS硬盘挂载/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-12-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2020 Shy
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>
