@@ -162,7 +162,7 @@ var _hmt = _hmt || [];
 </blockquote>
 <p>首先下载alignment的list   </p>
 <p>eg. igsr_Northern\ Han\ in\ China\ (HGDP)_undefined.tsv</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 0.提取第一列保存为1_ftp_sites</span></span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span></span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2.使用<span class="built_in">echo</span>生成命令，并记录在3_run，方便以后查看哪里错了</span></span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i /Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh -Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3.下 载</span></span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 4.对于下载完成的cram文件 执行call snp环节</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在所有操作之前，如果没有下载基因组的索引文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以使用下面两个命令生成</span></span><br><span class="line">samtools index Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 然后还需要准备三个文件，第一个是bam文件的prefix，第二个是rs位点的染色体和位置，最后指定一下输出位置</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 第三个是根据第二个文件生成的bed文件rs_id.bed</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 格式如下  CHS.info eg.</span></span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span><span class="bash"> rs_id eg.</span></span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> rs_id.bed用下面的命令生成</span></span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 5.cram格式转bam格式去call snp</span></span><br><span class="line">less CHS.info | while read line; do  </span><br><span class="line">samtools index $&#123;line&#125;.final.cram;</span><br><span class="line">samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 6.call snp and parse vcf file</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span></span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span><span class="bash"> 所有结果会写在rs.genotype 和 rs.frequency中</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar ~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC -A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample -A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest -A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest -A VariantType -l INFO --emitRefConfidence GVCF -rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR -R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam -o HG00597.merged.gatk.gvcf</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 0.提取第一列保存为1_ftp_sites</span></span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span></span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2.使用<span class="built_in">echo</span>生成命令，并记录在3_run，方便以后查看哪里错了</span></span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i \</span><br><span class="line">/Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh \</span><br><span class="line">-Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3.下 载</span></span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 4.对于下载完成的cram文件 执行call snp环节</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在所有操作之前，如果没有下载基因组的索引文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以使用下面两个命令生成</span></span><br><span class="line">samtools index Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 然后还需要准备三个文件，第一个是bam文件的prefix（CHS.info），第二个是rs位点的染色体和位置，</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 第三个是根据第二个文件生成的bed文件rs_id.bed</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 格式如下  CHS.info eg.</span></span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span><span class="bash"> rs_id eg.</span></span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> rs_id.bed用下面的命令生成</span></span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 5.cram格式转bam格式去call snp</span></span><br><span class="line">less CHS.info | while read line; do  </span><br><span class="line">samtools index $&#123;line&#125;.final.cram;</span><br><span class="line">samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 6.call snp and parse vcf file</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span></span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span><span class="bash"> 所有结果会写在rs.genotype 和 rs.frequency中</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar \</span></span><br><span class="line">~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A \</span><br><span class="line">AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC \</span><br><span class="line">-A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample\</span><br><span class="line">-A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest \</span><br><span class="line">-A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest \</span><br><span class="line">-A VariantType -l INFO --emitRefConfidence GVCF \</span><br><span class="line">-rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR \</span><br><span class="line">-R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam\</span><br><span class="line">-o HG00597.merged.gatk.gvcf</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2020/12/08/1K_genome/#more" class="btn btn-default more">Read More</a>
@@ -496,45 +496,6 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/05/28/wget_giga/" >下载鸟类的基因组2) giga</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>###1. 首先是张郭杰老师他们的48个鸟类基因组，他们全都放在一个project文件夹下了 十分方便</p>
-<p><a href="http://gigadb.org/dataset/101000" target="_blank" rel="noopener">project 地址</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/cds/*.cds.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/assembly/*.fa.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/gff/*gff.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/pep/*pep.gz</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-然后是有五个天堂鸟的基因组"><a href="#2-然后是有五个天堂鸟的基因组" class="headerlink" title="2. 然后是有五个天堂鸟的基因组"></a>2. 然后是有五个天堂鸟的基因组</h3><p>只需要根据最后网址提供的doi循环输出就好</p>
-<p><a href="http://gigadb.org/dataset/100521" target="_blank" rel="noopener">project 地址</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102157/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102158/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102159/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102160/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102161/*</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-然后是19个企鹅的基因组"><a href="#3-然后是19个企鹅的基因组" class="headerlink" title="3. 然后是19个企鹅的基因组"></a>3. 然后是19个企鹅的基因组</h3><p><a href="http://gigadb.org/dataset/100649" target="_blank" rel="noopener">project地址</a></p>
-<p>同样只需要修改doi</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102164/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102165/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102166/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102167/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102168/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102169/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102170/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102171/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102172/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102173/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102174/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102175/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102176/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102177/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102178/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102179/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102180/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102181/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102182/*</span><br></pre></td></tr></table></figure>
-
-<h4 id="所有giga的项目都支持md5sum十分方便"><a href="#所有giga的项目都支持md5sum十分方便" class="headerlink" title="所有giga的项目都支持md5sum十分方便"></a>所有giga的项目都支持md5sum十分方便</h4>
-	
-	</div>
-  <a type="button" href="/2020/05/28/wget_giga/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2020/05/28/wget_ncbi/" >下载鸟类的基因组2) ncbi</a>
 		</h3>
 		</div>
@@ -581,6 +542,45 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2020/05/28/wget_ncbi/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/05/28/wget_giga/" >下载鸟类的基因组2) giga</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>###1. 首先是张郭杰老师他们的48个鸟类基因组，他们全都放在一个project文件夹下了 十分方便</p>
+<p><a href="http://gigadb.org/dataset/101000" target="_blank" rel="noopener">project 地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/cds/*.cds.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/assembly/*.fa.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/gff/*gff.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/pep/*pep.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-然后是有五个天堂鸟的基因组"><a href="#2-然后是有五个天堂鸟的基因组" class="headerlink" title="2. 然后是有五个天堂鸟的基因组"></a>2. 然后是有五个天堂鸟的基因组</h3><p>只需要根据最后网址提供的doi循环输出就好</p>
+<p><a href="http://gigadb.org/dataset/100521" target="_blank" rel="noopener">project 地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102157/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102158/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102159/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102160/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102161/*</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-然后是19个企鹅的基因组"><a href="#3-然后是19个企鹅的基因组" class="headerlink" title="3. 然后是19个企鹅的基因组"></a>3. 然后是19个企鹅的基因组</h3><p><a href="http://gigadb.org/dataset/100649" target="_blank" rel="noopener">project地址</a></p>
+<p>同样只需要修改doi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102164/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102165/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102166/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102167/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102168/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102169/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102170/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102171/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102172/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102173/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102174/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102175/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102176/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102177/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102178/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102179/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102180/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102181/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102182/*</span><br></pre></td></tr></table></figure>
+
+<h4 id="所有giga的项目都支持md5sum十分方便"><a href="#所有giga的项目都支持md5sum十分方便" class="headerlink" title="所有giga的项目都支持md5sum十分方便"></a>所有giga的项目都支持md5sum十分方便</h4>
+	
+	</div>
+  <a type="button" href="/2020/05/28/wget_giga/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -759,35 +759,35 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
+			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
 		
 			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
 		
+			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
+		
 			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
 		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
+			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
 		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
-			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
 		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
 		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
-			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
+			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+		
+			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+		
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+		
+			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
+		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
 		 
 		</ul>
