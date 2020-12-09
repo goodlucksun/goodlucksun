@@ -334,9 +334,7 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">hmmsearch -o batatas.hmmsearch.log --tblout batatas.hmmsearch.tblout SBP.hmm  longest.renamehead.transcript.fasta.transdecoder.pep</span><br><span class="line"></span><br><span class="line">awk '&#123;if ($1!~/^#/)print $1&#125;' batatas.hmmsearch.tblout &gt; batatas.hmmsearch.seqid</span><br><span class="line"></span><br><span class="line">makeblastdb -in  longest.renamehead.transcript.fasta.transdecoder.pep -title batatas -dbtype prot -parse_seqids -out batatas</span><br><span class="line"></span><br><span class="line">blastp -db batatas -query atspl.pep.fa -evalue 1e-3 -outfmt 6 &gt; batatas.blastp</span><br><span class="line"></span><br><span class="line">awk '&#123;print $2&#125;' batatas.blastp | sort | uniq &gt; batatas.blastp.seqid</span><br><span class="line"></span><br><span class="line">cat batatas*seqid | sort | uniq &gt; batatas.spl.seqid</span><br><span class="line"></span><br><span class="line">perl extract.pl batatas.spl.seqid batatas.pep.fa &gt; batatas.spl.fa</span><br><span class="line"></span><br><span class="line">grep '&gt;' trifida.spl.long.fa &gt; trifida.spl.seqid</span><br><span class="line"></span><br><span class="line">cat batatas.smart.remove batatas.spl.seqid| sort | uniq -u &gt; batatas.smartSBP.seqid</span><br><span class="line"></span><br><span class="line">perl extract.pl batatas.smartSBP.seqid batatas.pep.fa &gt; batatas.spl.smart.fa</span><br><span class="line">	</span><br><span class="line">blastp -query batatas.spl.smart.fa -subject trifida.spl.smart.fa -outfmt 6 -max_target_seqs 1 &gt; b2t.log</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less batatas.spl.seqid | while read line; do grep $&#123;line&#125; transcript.fasta.transdecoder.gff3 | awk -v OFS="\t" '&#123; if ($3 == "mRNA") print $1, $4, $5 &#125;' &gt;&gt; blast_result.bed; done</span><br></pre></td></tr></table></figure>
+		<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hmmsearch -o trifida.hmmsearch.log --tblout trifida.hmmsearch.tblout MIP.hmm  longest.trifida.pep.fa</span><br><span class="line"></span><br><span class="line">awk '&#123;if ($1!~/^#/)print $1&#125;' trifida.hmmsearch.tblout &gt; trifida.hmmsearch.seqid</span><br><span class="line"></span><br><span class="line">makeblastdb -in longest.trifida.pep.fa   -title trifida -dbtype prot -parse_seqids -out trifida</span><br><span class="line"></span><br><span class="line">blastp -db trifida -query at.MIP.pep.fa -evalue 1e-3 -outfmt 6 &gt; trifida.blastp</span><br><span class="line"></span><br><span class="line">awk '&#123;print $2&#125;' trifida.blastp | sort | uniq &gt; trifida.blastp.seqid</span><br><span class="line"></span><br><span class="line">cat trifida.hmmsearch.seqid trifida.blastp.seqid | sort | uniq &gt; trifida.MIP.seqid</span><br></pre></td></tr></table></figure>
 
 
 	
@@ -655,37 +653,37 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
 			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
 		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
-		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
-		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
-		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
 			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
 		
 			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
 		
+			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
+		
 			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+		
+			<li><a href="/tags/Python/">Python<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+		
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+		
+			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+		
+			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
 		
 		 
 		</ul>
