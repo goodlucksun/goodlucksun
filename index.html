@@ -143,6 +143,48 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/12/14/vcf2PCA/" ></a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-12-14  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<ol>
+<li>合并单个vcf样本为merged vcd</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ls *vcf | while read line; do bgzip -c $&#123;line&#125; &gt; $&#123;line&#125;.gz; tabix $&#123;line&#125;.gz; done</span><br><span class="line"></span><br><span class="line">bcftools merge *gz -o 95.merged.vcf</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用beagle填补空缺的基因型</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx64g -jar ~/software/beagle.18May20.d20.jar gt=95.merged.vcf  out=95.merged.beagle.vcf impute=true</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用plink计算pca所需要的协方差矩阵</li>
+</ol>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(tidyverse)</span><br><span class="line"><span class="keyword">library</span>(ggsci)</span><br><span class="line"><span class="keyword">library</span>(ggplot2)</span><br><span class="line">pca &lt;- read_table2(<span class="string">"pca.eigenvec"</span>, col_names = <span class="literal">FALSE</span>)</span><br><span class="line">eigenval &lt;- scan(<span class="string">"pca.eigenval"</span>)</span><br><span class="line"><span class="comment"># remove nuisance column</span></span><br><span class="line">pca &lt;- pca[,-<span class="number">1</span>]</span><br><span class="line">names(pca)[<span class="number">1</span>] &lt;- <span class="string">"ind"</span></span><br><span class="line">names(pca)[<span class="number">2</span>:ncol(pca)] &lt;- paste0(<span class="string">"PC"</span>, <span class="number">1</span>:(ncol(pca)-<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">sample &lt;- rep(<span class="literal">NA</span>, length(pca$ind))</span><br><span class="line">sample[grep(<span class="string">"HGDP00"</span>, pca$ind)] &lt;- <span class="string">"Japanese"</span></span><br><span class="line">sample[grep(<span class="string">"HGDP01"</span>, pca$ind)] &lt;- <span class="string">"NorthernHan"</span></span><br><span class="line">sample[grep(<span class="string">"HG00"</span>, pca$ind)] &lt;- <span class="string">"SouthernHan"</span></span><br><span class="line"></span><br><span class="line">b &lt;- ggplot(pca, aes(PC1, PC2, col = sample)) + geom_point(size = <span class="number">3</span>)+</span><br><span class="line">    scale_color_npg()+</span><br><span class="line">    coord_equal() + </span><br><span class="line">    theme_light()+</span><br><span class="line">    xlab(paste0(<span class="string">"PC1 ("</span>, signif(pve$pve[<span class="number">1</span>], <span class="number">3</span>), <span class="string">"%)"</span>)) + </span><br><span class="line">    ylab(paste0(<span class="string">"PC2 ("</span>, signif(pve$pve[<span class="number">2</span>], <span class="number">3</span>), <span class="string">"%)"</span>)) +</span><br><span class="line">    theme(legend.title = element_text(colour=<span class="string">"black"</span>,size = <span class="number">16</span>))+</span><br><span class="line">    theme(legend.text  = element_text(colour=<span class="string">"black"</span>,size = <span class="number">12</span>))+</span><br><span class="line">  labs(fill = <span class="string">"Sample"</span>)</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/12/14/vcf2PCA/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/12/08/1K_genome/" >主要记录千人基因组数据分析</a>
 		</h3>
 		</div>
@@ -157,12 +199,18 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<h4 id="数据下载"><a href="#数据下载" class="headerlink" title="数据下载"></a>数据下载</h4><blockquote>
+		<h3 id="Part-1"><a href="#Part-1" class="headerlink" title="Part 1."></a>Part 1.</h3><h4 id="数据下载"><a href="#数据下载" class="headerlink" title="数据下载"></a>数据下载</h4><blockquote>
 <p>感觉再做一些可以去迅雷入职了</p>
 </blockquote>
 <p>首先下载alignment的list   </p>
 <p>eg. igsr_Northern\ Han\ in\ China\ (HGDP)_undefined.tsv</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 0.提取第一列保存为1_ftp_sites</span></span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span></span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2.使用<span class="built_in">echo</span>生成命令，并记录在3_run，方便以后查看哪里错了</span></span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i \</span><br><span class="line">/Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh \</span><br><span class="line">-Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3.下 载</span></span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 4.对于下载完成的cram文件 执行call snp环节</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在所有操作之前，如果没有下载基因组的索引文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以使用下面两个命令生成</span></span><br><span class="line">samtools index Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 然后还需要准备三个文件，第一个是bam文件的prefix（CHS.info），第二个是rs位点的染色体和位置，</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 第三个是根据第二个文件生成的bed文件rs_id.bed</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 格式如下  CHS.info eg.</span></span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span><span class="bash"> rs_id eg.</span></span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> rs_id.bed用下面的命令生成</span></span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 5.cram格式转bam格式去call snp</span></span><br><span class="line">less CHS.info | while read line; do  </span><br><span class="line">samtools index $&#123;line&#125;.final.cram;</span><br><span class="line">samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 6.call snp and parse vcf file</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span></span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span><span class="bash"> 所有结果会写在rs.genotype 和 rs.frequency中</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar \</span></span><br><span class="line">~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A \</span><br><span class="line">AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC \</span><br><span class="line">-A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample\</span><br><span class="line">-A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest \</span><br><span class="line">-A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest \</span><br><span class="line">-A VariantType -l INFO --emitRefConfidence GVCF \</span><br><span class="line">-rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR \</span><br><span class="line">-R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam\</span><br><span class="line">-o HG00597.merged.gatk.gvcf</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 0.提取第一列保存为1_ftp_sites</span><br><span class="line">awk '&#123;print $1&#125;' igsr_Northern\ Han\ in\ China\ \(HGDP\)_undefined.tsv.tsv</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 1.因为使用ascp下载 所以只需要数据在ebi数据库中的位置就可以，保存为2_temp_id</span><br><span class="line">awk -F 'uk/' '&#123;print $2&#125;' 1_ftp_sites &gt; 2_temp_id</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2.使用echo生成命令，并记录在3_run，方便以后查看哪里错了</span><br><span class="line">less 2_temp_id | while read line; </span><br><span class="line">do </span><br><span class="line">echo "ascp  -v -k 1 -l 200m -i \</span><br><span class="line">/Users/Yi-Liangwei/Applications/Aspera\ Connect.app/Contents/Resources/asperaweb_id_dsa.openssh \</span><br><span class="line">-Tr -Q -P33001 -L- fasp-g1k@fasp.1000genomes.ebi.ac.uk:"$&#123;line&#125; .; </span><br><span class="line">done &gt; 3_run </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3.下 载</span><br><span class="line">nohup sh 3_run</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4.对于下载完成的cram文件 执行call snp环节</span><br><span class="line"><span class="meta">#</span> 在所有操作之前，如果没有下载基因组的索引文件</span><br><span class="line"><span class="meta">#</span> 可以使用下面两个命令生成</span><br><span class="line">samtools faidx Homo_sapiens_assembly38.fasta </span><br><span class="line"></span><br><span class="line">java -Xmx2g -jar ~/software/picard.jar CreateSequenceDictionary R=Homo_sapiens_assembly38.fasta O=Homo_sapiens_assembly38.dict</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 然后还需要准备三个文件，第一个是bam文件的prefix（CHS.info），第二个是rs位点的染色体和位置，</span><br><span class="line"><span class="meta">#</span> 第三个是根据第二个文件生成的bed文件rs_id.bed</span><br><span class="line"><span class="meta">#</span> 格式如下  CHS.info eg.</span><br><span class="line">HG00597</span><br><span class="line">HG00591</span><br><span class="line">HG00609</span><br><span class="line"><span class="meta">#</span> rs_id eg.</span><br><span class="line">rs12044597      1       1708801</span><br><span class="line">rs11185092      1       107886278</span><br><span class="line">rs10923724      1       119546842</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> rs_id.bed用下面的命令生成</span><br><span class="line">awk -v OFS='\t' '&#123;print "chr"$2,$3-1,$3+1,$1&#125;' rs_id   &gt; rs_id.bed</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 5.cram格式转bam格式去call snp</span><br><span class="line">less CHS.info | while read line; do </span><br><span class="line">samtools view  -T /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta $&#123;line&#125;.final.cram  -L rs_id.bed -M -b -o $&#123;line&#125;.m.1.bam; done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 6.call snp and parse vcf file</span><br><span class="line"><span class="meta">#</span> 这时候还需要生成一个只包含rs编号的文件，两次的输入文件不一样的</span><br><span class="line">python bam2vcf.py -p CHS.info -rs rs_id</span><br><span class="line">python parse_vcf.py -p CHS.info -rs rs_number</span><br><span class="line"><span class="meta">#</span> 所有结果会写在rs.genotype 和 rs.frequency中</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 使用的call snp软件为bcftools，如果时间不紧的话可以用GATK，将bcftools那一行改成</span><br><span class="line"><span class="meta">#</span> java -XX:+UseParallelGC -XX:ParallelGCThreads=8 -Xmx10g -jar \</span><br><span class="line">~/software/GenomeAnalysisTK.jar -T HaplotypeCaller --genotyping_mode DISCOVERY -A \</span><br><span class="line">AlleleBalanceBySample -A DepthPerAlleleBySample -A DepthPerSampleHC \</span><br><span class="line">-A InbreedingCoeff -A MappingQualityZeroBySample -A StrandBiasBySample\</span><br><span class="line">-A Coverage -A FisherStrand -A HaplotypeScore -A MappingQualityRankSumTest \</span><br><span class="line">-A MappingQualityZero -A QualByDepth -A RMSMappingQuality -A ReadPosRankSumTest \</span><br><span class="line">-A VariantType -l INFO --emitRefConfidence GVCF \</span><br><span class="line">-rf BadCigar --variant_index_parameter 128000 --variant_index_type LINEAR \</span><br><span class="line">-R /data/gujiaqi/698_download/Homo_sapiens_assembly38.fasta -I HG00597.merged.bam\</span><br><span class="line">-o HG00597.merged.gatk.gvcf</span><br></pre></td></tr></table></figure>
+
+<h3 id="Part-2"><a href="#Part-2" class="headerlink" title="Part 2."></a>Part 2.</h3><h5 id="对vcf进行计算前还需要准备一下"><a href="#对vcf进行计算前还需要准备一下" class="headerlink" title="对vcf进行计算前还需要准备一下"></a>对vcf进行计算前还需要准备一下</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对filtered出来的vcf文件压缩并索引</span></span><br><span class="line">ls *vcf | <span class="keyword">while</span> read line; <span class="keyword">do</span> bgzip $&#123;line&#125; -@ <span class="number">8</span>;tabix $&#123;line&#125;.gz; done</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并为一个文件，这一步如果直接合并所有的话，顺序默认按照文件夹内从小到大的顺序</span></span><br><span class="line"><span class="comment"># 后续会再rehead，当然也可以一个Group一个Group的合并，然后再把合并的合并</span></span><br><span class="line">bcftools merge *gz -O z -o <span class="number">698</span>_HGDP.<span class="number">1185</span>.vcf.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看vcf是否包含1185个位点</span></span><br><span class="line">less <span class="number">698</span>_HGDP.<span class="number">1185</span>.vcf.gz | awk <span class="string">'&#123;if ($0 !~ "#")print&#125;'</span> | wc -l</span><br><span class="line"><span class="comment"># 或者可以直接用plink把rs号给提取出来，结果会保存在 -o 指定的 rs_check.snplist中</span></span><br><span class="line"><span class="comment"># 再根据rs_check.snplist 和之前的rs_id看一下就可以了</span></span><br><span class="line">plink --write-snplist -vcf <span class="number">698</span>_HGDP.<span class="number">1185</span>.vcf.gz -out rs_check</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用excel做一个all_sample.info 就把之前那些.info文件和在一起</span></span><br><span class="line"><span class="comment"># all_sample.info 内容如下</span></span><br><span class="line"><span class="comment"># HG00709	SouthernHan	698dataset	698dataset_SouthernHan_HG00709</span></span><br><span class="line"><span class="comment"># HGDP01296	NorthernHan	HGDP	HGDP_NorthernHan_HGDP01296</span></span><br><span class="line"><span class="comment"># HGDP00828	Japanese	HGDP	HGDP_Japanese_HGDP00828</span></span><br><span class="line"><span class="comment"># HGDP00774	Han in China	HGDP	HGDP_Han in China_HGDP00774</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为了下一步 reheader通过bcftools提取所有样本的id</span></span><br><span class="line">bcftools query -l <span class="number">698</span>_HGDP.<span class="number">1185</span>.vcf.gz ｜<span class="keyword">while</span> read line; <span class="keyword">do</span> grep $&#123;line&#125; all_sample.info ; done | awk -F <span class="string">'\t'</span> <span class="string">'&#123;print $4&#125;'</span> &gt; vcf.sample.reheader.list</span><br><span class="line">bcftools reheader <span class="number">698</span>_HGDP.<span class="number">1185</span>.vcf.gz -s vcf.sample.reheader.list -o <span class="number">698</span>_HGDP.<span class="number">1185</span>.reheader.vcf.gz</span><br></pre></td></tr></table></figure>
+
+<h5 id="统计vcf文件中的sample和sites"><a href="#统计vcf文件中的sample和sites" class="headerlink" title="统计vcf文件中的sample和sites"></a>统计vcf文件中的sample和sites</h5><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 统计vcf文件中的基本信息</span></span><br><span class="line"><span class="comment"># individual 的missing信息</span></span><br><span class="line">vcftools --gzvcf <span class="number">698</span>_HGDP.<span class="number">1185</span>.reheader.vcf.gz  --missing-indv  --out vcf_check</span><br><span class="line">vcftools --gzvcf <span class="number">698</span>_HGDP.<span class="number">1185</span>.reheader.vcf.gz  --missing-site --out vcf_check</span><br><span class="line">vcftools --gzvcf <span class="number">698</span>_HGDP.<span class="number">1185</span>.reheader.vcf.gz  --site-mean-depth  --out vcf_check</span><br><span class="line">vcftools --gzvcf <span class="number">698</span>_HGDP.<span class="number">1185</span>.reheader.vcf.gz  --site-quality --out vcf_check</span><br><span class="line">vcftools --gzvcf <span class="number">698</span>_HGDP.<span class="number">1185</span>.reheader.vcf.gz  --het --out vcf_check</span><br><span class="line"><span class="comment"># sites 的missing信息</span></span><br><span class="line"><span class="comment"># vcf_check.imiss vcf_check.lmiss vcf_check.ldepth.mean vcf_check.lqual  vcf_check.het</span></span><br><span class="line"><span class="comment"># 上面就是生成的结果</span></span><br><span class="line"><span class="comment"># awk '&#123;print $3&#125;' vcf_check.ldepth.mean | sort -g -r 可以看平均深度有位点depth的平均深度只有20左右</span></span><br><span class="line"><span class="comment"># awk -F '\t' '&#123;print $4&#125;'  vcf_check.imiss | sort | uniq -c 可以看多少样本有缺失位点，有30个样本都是有缺失的，但是最多也就只缺两个位点</span></span><br><span class="line"><span class="comment"># awk -F '\t' '&#123;print $5&#125;'  vcf_check.lmiss | sort | uniq -c 可以看每个位点有多少个缺失，有两个位点有10个样本以上的缺失</span></span><br><span class="line"><span class="comment"># 需要注意的是 vcf_check.lmiss 中会默认我们的物种是二倍体，所以Number of DATA的数量是sample*2 </span></span><br><span class="line"><span class="comment"># 同理在这个文件中的missing sites都会变为 2 倍</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="使用beagle填充缺失的基因型"><a href="#使用beagle填充缺失的基因型" class="headerlink" title="使用beagle填充缺失的基因型"></a>使用beagle填充缺失的基因型</h4>
 	
 	</div>
   <a type="button" href="/2020/12/08/1K_genome/#more" class="btn btn-default more">Read More</a>
@@ -496,6 +544,45 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/28/wget_giga/" >下载鸟类的基因组2) giga</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-28  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>###1. 首先是张郭杰老师他们的48个鸟类基因组，他们全都放在一个project文件夹下了 十分方便</p>
+<p><a href="http://gigadb.org/dataset/101000" target="_blank" rel="noopener">project 地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/cds/*.cds.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/assembly/*.fa.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/gff/*gff.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/pep/*pep.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-然后是有五个天堂鸟的基因组"><a href="#2-然后是有五个天堂鸟的基因组" class="headerlink" title="2. 然后是有五个天堂鸟的基因组"></a>2. 然后是有五个天堂鸟的基因组</h3><p>只需要根据最后网址提供的doi循环输出就好</p>
+<p><a href="http://gigadb.org/dataset/100521" target="_blank" rel="noopener">project 地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102157/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102158/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102159/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102160/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102161/*</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-然后是19个企鹅的基因组"><a href="#3-然后是19个企鹅的基因组" class="headerlink" title="3. 然后是19个企鹅的基因组"></a>3. 然后是19个企鹅的基因组</h3><p><a href="http://gigadb.org/dataset/100649" target="_blank" rel="noopener">project地址</a></p>
+<p>同样只需要修改doi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102164/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102165/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102166/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102167/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102168/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102169/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102170/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102171/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102172/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102173/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102174/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102175/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102176/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102177/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102178/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102179/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102180/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102181/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102182/*</span><br></pre></td></tr></table></figure>
+
+<h4 id="所有giga的项目都支持md5sum十分方便"><a href="#所有giga的项目都支持md5sum十分方便" class="headerlink" title="所有giga的项目都支持md5sum十分方便"></a>所有giga的项目都支持md5sum十分方便</h4>
+	
+	</div>
+  <a type="button" href="/2020/05/28/wget_giga/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/28/wget_ncbi/" >下载鸟类的基因组2) ncbi</a>
 		</h3>
 		</div>
@@ -542,45 +629,6 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2020/05/28/wget_ncbi/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/05/28/wget_giga/" >下载鸟类的基因组2) giga</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-28  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>###1. 首先是张郭杰老师他们的48个鸟类基因组，他们全都放在一个project文件夹下了 十分方便</p>
-<p><a href="http://gigadb.org/dataset/101000" target="_blank" rel="noopener">project 地址</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/cds/*.cds.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/assembly/*.fa.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/gff/*gff.gz</span><br><span class="line"></span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/101000/gene_and_repeat_annotation/coding_sequences/pep/*pep.gz</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-然后是有五个天堂鸟的基因组"><a href="#2-然后是有五个天堂鸟的基因组" class="headerlink" title="2. 然后是有五个天堂鸟的基因组"></a>2. 然后是有五个天堂鸟的基因组</h3><p>只需要根据最后网址提供的doi循环输出就好</p>
-<p><a href="http://gigadb.org/dataset/100521" target="_blank" rel="noopener">project 地址</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102157/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102158/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102159/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102160/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102161/*</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-然后是19个企鹅的基因组"><a href="#3-然后是19个企鹅的基因组" class="headerlink" title="3. 然后是19个企鹅的基因组"></a>3. 然后是19个企鹅的基因组</h3><p><a href="http://gigadb.org/dataset/100649" target="_blank" rel="noopener">project地址</a></p>
-<p>同样只需要修改doi</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102164/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102165/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102166/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102167/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102168/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102169/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102170/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102171/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102172/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102173/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102174/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102175/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102176/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102177/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102178/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102179/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102180/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102181/*</span><br><span class="line">wget -c ftp://parrot.genomics.cn/gigadb/pub/10.5524/102001_103000/102182/*</span><br></pre></td></tr></table></figure>
-
-<h4 id="所有giga的项目都支持md5sum十分方便"><a href="#所有giga的项目都支持md5sum十分方便" class="headerlink" title="所有giga的项目都支持md5sum十分方便"></a>所有giga的项目都支持md5sum十分方便</h4>
-	
-	</div>
-  <a type="button" href="/2020/05/28/wget_giga/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -678,36 +726,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/05/15/查询以及下载ncbi基因组数据/" >一个可以下载ncbi中指定物种的基因组的脚本</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>RT</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for  NCBI</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#@author:shy</span></span><br><span class="line"><span class="comment"># This script is used to get genome sequence and annotation file within the taxon you want </span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests, json</span><br><span class="line"><span class="keyword">import</span> urllib.request, urllib.error</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> xlwt</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-q"</span>, <span class="string">"--query"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"query Species/Genera/Family/Order/GCA/GCF"</span>)</span><br><span class="line"></span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">findMarginb = re.compile(<span class="string">r'math"&gt;(.*?)&lt;/h1&gt;'</span>)</span><br><span class="line">findNcbi_id = re.compile(<span class="string">r'/assembly/(.*?)" ref='</span>)</span><br><span class="line">findSample_id = re.compile(<span class="string">r'[1-9]\d*"&gt;(.*?)&lt;/a&gt;'</span>)</span><br><span class="line">findCov = re.compile(<span class="string">r'Genome coverage: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;&lt;dt&gt;'</span>)</span><br><span class="line">Seq_tech = re.compile(<span class="string">r'Sequencing technology: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">name_find = re.compile(<span class="string">r';unlock"&gt;(.*?)&lt;/a&gt;&lt;/dd&gt;&lt;dt&gt;'</span>)</span><br><span class="line">GCA_find = re.compile(<span class="string">r'GenBank assembly accession: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">GCF_find = re.compile(<span class="string">r'RefSeq assembly accession: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">Date_find = re.compile(<span class="string">r'Date: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">PRJN_find = re.compile(<span class="string">r'href="/bioproject/(.*?)/"&gt;'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    baseurl  = <span class="string">"https://www.ncbi.nlm.nih.gov/assembly/&#123;&#125;"</span>.format(args[<span class="string">"query"</span>])</span><br><span class="line">    getData(baseurl)</span><br><span class="line">    <span class="comment">#for row in NCBI_id:</span></span><br><span class="line">        <span class="comment">#new_url = "https://www.ncbi.nlm.nih.gov/assembly/&#123;&#125;/".format(row)</span></span><br><span class="line">        <span class="comment">#getSeq(new_url)</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getData</span><span class="params">(baseurl)</span>:</span></span><br><span class="line">    datalist = []</span><br><span class="line">    data =[]</span><br><span class="line">    html = askURL(baseurl)</span><br><span class="line">    soup = BeautifulSoup(html,<span class="string">"html.parser"</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">'div'</span>,class_=<span class="string">"col margin_r0 nine_col"</span>):</span><br><span class="line">        item = str(item)</span><br><span class="line">        data.append(item)<span class="comment"># save all info which class in item</span></span><br><span class="line">        <span class="comment">#print(item)</span></span><br><span class="line">        <span class="comment">#Ncbi_id = re.findall(findNcbi_id,item)[0]</span></span><br><span class="line">        <span class="comment">#Sample_id = re.findall(findSample_id,item)[0]</span></span><br><span class="line">        <span class="comment">#print(Ncbi_id)</span></span><br><span class="line">        Cov = re.findall(findCov,item)[<span class="number">0</span>]</span><br><span class="line">        tech = re.findall(Seq_tech,item)[<span class="number">0</span>]</span><br><span class="line">        name = re.findall(name_find,item)[<span class="number">0</span>]</span><br><span class="line">        GCA = re.findall(GCA_find,item)[<span class="number">0</span>]</span><br><span class="line">        GCF = re.findall(GCF_find,item)[<span class="number">0</span>]</span><br><span class="line">        Date = re.findall(Date_find,item)[<span class="number">0</span>]</span><br><span class="line">        PRJN = re.findall(PRJN_find,item)[<span class="number">0</span>]</span><br><span class="line">        Marginb = re.findall(findMarginb,item)[<span class="number">0</span>]</span><br><span class="line">        <span class="comment">#print(item)</span></span><br><span class="line">        print(name+<span class="string">'\t'</span>+PRJN+<span class="string">'\t'</span>+Marginb+<span class="string">'\t'</span>+Cov+<span class="string">'\t'</span>+tech+<span class="string">'\t'</span>+GCA+<span class="string">'\t'</span>+GCF+<span class="string">'\t'</span>+Date)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> datalist</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">askURL</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="comment"># simulate browser head info </span></span><br><span class="line">    head = &#123;</span><br><span class="line">        <span class="string">"User-Agent"</span>:<span class="string">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36"</span></span><br><span class="line">        &#125;</span><br><span class="line">    requset = urllib.request.Request(url,headers=head)</span><br><span class="line"></span><br><span class="line">    html = <span class="string">""</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = urllib.request.urlopen(requset)</span><br><span class="line">        html = response.read().decode(<span class="string">"utf-8"</span>)</span><br><span class="line">    <span class="keyword">except</span> urllib.error.HTTPError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">if</span> hasattr(e,<span class="string">"code"</span>):</span><br><span class="line">            print(e.code)</span><br><span class="line">        <span class="keyword">if</span> hasattr(e,<span class="string">"reason"</span>):</span><br><span class="line">            print(e.reason)</span><br><span class="line">    <span class="keyword">return</span> html</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-
-	
-	</div>
-  <a type="button" href="/2020/05/15/查询以及下载ncbi基因组数据/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -757,35 +775,35 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
-		
 			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
 			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
 		
-			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
 			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
 		
+			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
+		
+			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+		
 			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
+		
+			<li><a href="/tags/Python/">Python<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+		
+			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+		
+			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
 		
 			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
@@ -801,6 +819,10 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2020/12/14/vcf2PCA/" ><i class="fa fa-file-o"></i></a>
+      </li>
+    
+      <li>
         <a href="/2020/12/08/1K_genome/" ><i class="fa fa-file-o"></i>主要记录千人基因组数据分析</a>
       </li>
     
@@ -814,10 +836,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2020/06/22/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率_update</a>
-      </li>
-    
-      <li>
-        <a href="/2020/06/16/WGCNA/" ><i class="fa fa-file-o"></i></a>
       </li>
     
   </ul>

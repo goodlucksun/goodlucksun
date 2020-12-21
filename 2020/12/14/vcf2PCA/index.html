@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Blast + Hmmsearch 鉴定一个基因家族 | Shy 的博客</title>
+  <title>Shy 的博客</title>
   <meta name="author" content="Shy">
   
   <meta name="description" content="Shy 的博客">
@@ -14,7 +14,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Blast + Hmmsearch 鉴定一个基因家族">
+  
   <meta property="og:site_name" content="Shy 的博客">
 
   
@@ -118,7 +118,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Blast + Hmmsearch 鉴定一个基因家族</h1>
+			<h1> </h1>
 		</div>
 	
 
@@ -135,7 +135,20 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hmmsearch -o trifida.hmmsearch.log --tblout trifida.hmmsearch.tblout MIP.hmm  longest.trifida.pep.fa</span><br><span class="line"></span><br><span class="line">awk '&#123;if ($1!~/^#/)print $1&#125;' trifida.hmmsearch.tblout &gt; trifida.hmmsearch.seqid</span><br><span class="line"></span><br><span class="line">makeblastdb -in longest.trifida.pep.fa   -title trifida -dbtype prot -parse_seqids -out trifida</span><br><span class="line"></span><br><span class="line">blastp -db trifida -query at.MIP.pep.fa -evalue 1e-3 -outfmt 6 &gt; trifida.blastp</span><br><span class="line"></span><br><span class="line">awk '&#123;print $2&#125;' trifida.blastp | sort | uniq &gt; trifida.blastp.seqid</span><br><span class="line"></span><br><span class="line">cat trifida.hmmsearch.seqid trifida.blastp.seqid | sort | uniq &gt; trifida.MIP.seqid</span><br></pre></td></tr></table></figure>
+	  <ol>
+<li>合并单个vcf样本为merged vcd</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ls *vcf | while read line; do bgzip -c $&#123;line&#125; &gt; $&#123;line&#125;.gz; tabix $&#123;line&#125;.gz; done</span><br><span class="line"></span><br><span class="line">bcftools merge *gz -o 95.merged.vcf</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用beagle填补空缺的基因型</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Xmx64g -jar ~/software/beagle.18May20.d20.jar gt=95.merged.vcf  out=95.merged.beagle.vcf impute=true</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用plink计算pca所需要的协方差矩阵</li>
+</ol>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(tidyverse)</span><br><span class="line"><span class="keyword">library</span>(ggsci)</span><br><span class="line"><span class="keyword">library</span>(ggplot2)</span><br><span class="line">pca &lt;- read_table2(<span class="string">"pca.eigenvec"</span>, col_names = <span class="literal">FALSE</span>)</span><br><span class="line">eigenval &lt;- scan(<span class="string">"pca.eigenval"</span>)</span><br><span class="line"><span class="comment"># remove nuisance column</span></span><br><span class="line">pca &lt;- pca[,-<span class="number">1</span>]</span><br><span class="line">names(pca)[<span class="number">1</span>] &lt;- <span class="string">"ind"</span></span><br><span class="line">names(pca)[<span class="number">2</span>:ncol(pca)] &lt;- paste0(<span class="string">"PC"</span>, <span class="number">1</span>:(ncol(pca)-<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">sample &lt;- rep(<span class="literal">NA</span>, length(pca$ind))</span><br><span class="line">sample[grep(<span class="string">"HGDP00"</span>, pca$ind)] &lt;- <span class="string">"Japanese"</span></span><br><span class="line">sample[grep(<span class="string">"HGDP01"</span>, pca$ind)] &lt;- <span class="string">"NorthernHan"</span></span><br><span class="line">sample[grep(<span class="string">"HG00"</span>, pca$ind)] &lt;- <span class="string">"SouthernHan"</span></span><br><span class="line"></span><br><span class="line">b &lt;- ggplot(pca, aes(PC1, PC2, col = sample)) + geom_point(size = <span class="number">3</span>)+</span><br><span class="line">    scale_color_npg()+</span><br><span class="line">    coord_equal() + </span><br><span class="line">    theme_light()+</span><br><span class="line">    xlab(paste0(<span class="string">"PC1 ("</span>, signif(pve$pve[<span class="number">1</span>], <span class="number">3</span>), <span class="string">"%)"</span>)) + </span><br><span class="line">    ylab(paste0(<span class="string">"PC2 ("</span>, signif(pve$pve[<span class="number">2</span>], <span class="number">3</span>), <span class="string">"%)"</span>)) +</span><br><span class="line">    theme(legend.title = element_text(colour=<span class="string">"black"</span>,size = <span class="number">16</span>))+</span><br><span class="line">    theme(legend.text  = element_text(colour=<span class="string">"black"</span>,size = <span class="number">12</span>))+</span><br><span class="line">  labs(fill = <span class="string">"Sample"</span>)</span><br></pre></td></tr></table></figure>
 
 	  
 	</div>
@@ -146,13 +159,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2020/05/15/PAML/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2020/04/22/Nature 配色风格pal_npg/" type="button" class="btn btn-default ">Next<i
+    <a href="/2020/12/08/1K_genome/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -181,7 +193,7 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2020-04-29 
+	2020-12-14 
 	</div>
 	
 
@@ -189,14 +201,6 @@ var _hmt = _hmt || [];
     
 
 	<!-- tags -->
-	
-	<div class="meta-widget">
-	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
-    <ul id="tags" class="tag_box list-unstyled collapse in">	  
-	    
-  <li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
-    </ul>
-	</div>
 		
 
 	<!-- toc -->

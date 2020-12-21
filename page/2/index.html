@@ -143,6 +143,36 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/15/查询以及下载ncbi基因组数据/" >一个可以下载ncbi中指定物种的基因组的脚本</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>RT</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for  NCBI</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#@author:shy</span></span><br><span class="line"><span class="comment"># This script is used to get genome sequence and annotation file within the taxon you want </span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests, json</span><br><span class="line"><span class="keyword">import</span> urllib.request, urllib.error</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> xlwt</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-q"</span>, <span class="string">"--query"</span>, required=<span class="literal">True</span>,</span><br><span class="line">	help=<span class="string">"query Species/Genera/Family/Order/GCA/GCF"</span>)</span><br><span class="line"></span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">findMarginb = re.compile(<span class="string">r'math"&gt;(.*?)&lt;/h1&gt;'</span>)</span><br><span class="line">findNcbi_id = re.compile(<span class="string">r'/assembly/(.*?)" ref='</span>)</span><br><span class="line">findSample_id = re.compile(<span class="string">r'[1-9]\d*"&gt;(.*?)&lt;/a&gt;'</span>)</span><br><span class="line">findCov = re.compile(<span class="string">r'Genome coverage: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;&lt;dt&gt;'</span>)</span><br><span class="line">Seq_tech = re.compile(<span class="string">r'Sequencing technology: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">name_find = re.compile(<span class="string">r';unlock"&gt;(.*?)&lt;/a&gt;&lt;/dd&gt;&lt;dt&gt;'</span>)</span><br><span class="line">GCA_find = re.compile(<span class="string">r'GenBank assembly accession: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">GCF_find = re.compile(<span class="string">r'RefSeq assembly accession: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">Date_find = re.compile(<span class="string">r'Date: &lt;/dt&gt;&lt;dd&gt;(.*?)&lt;/dd&gt;'</span>)</span><br><span class="line">PRJN_find = re.compile(<span class="string">r'href="/bioproject/(.*?)/"&gt;'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    baseurl  = <span class="string">"https://www.ncbi.nlm.nih.gov/assembly/&#123;&#125;"</span>.format(args[<span class="string">"query"</span>])</span><br><span class="line">    getData(baseurl)</span><br><span class="line">    <span class="comment">#for row in NCBI_id:</span></span><br><span class="line">        <span class="comment">#new_url = "https://www.ncbi.nlm.nih.gov/assembly/&#123;&#125;/".format(row)</span></span><br><span class="line">        <span class="comment">#getSeq(new_url)</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getData</span><span class="params">(baseurl)</span>:</span></span><br><span class="line">    datalist = []</span><br><span class="line">    data =[]</span><br><span class="line">    html = askURL(baseurl)</span><br><span class="line">    soup = BeautifulSoup(html,<span class="string">"html.parser"</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> soup.find_all(<span class="string">'div'</span>,class_=<span class="string">"col margin_r0 nine_col"</span>):</span><br><span class="line">        item = str(item)</span><br><span class="line">        data.append(item)<span class="comment"># save all info which class in item</span></span><br><span class="line">        <span class="comment">#print(item)</span></span><br><span class="line">        <span class="comment">#Ncbi_id = re.findall(findNcbi_id,item)[0]</span></span><br><span class="line">        <span class="comment">#Sample_id = re.findall(findSample_id,item)[0]</span></span><br><span class="line">        <span class="comment">#print(Ncbi_id)</span></span><br><span class="line">        Cov = re.findall(findCov,item)[<span class="number">0</span>]</span><br><span class="line">        tech = re.findall(Seq_tech,item)[<span class="number">0</span>]</span><br><span class="line">        name = re.findall(name_find,item)[<span class="number">0</span>]</span><br><span class="line">        GCA = re.findall(GCA_find,item)[<span class="number">0</span>]</span><br><span class="line">        GCF = re.findall(GCF_find,item)[<span class="number">0</span>]</span><br><span class="line">        Date = re.findall(Date_find,item)[<span class="number">0</span>]</span><br><span class="line">        PRJN = re.findall(PRJN_find,item)[<span class="number">0</span>]</span><br><span class="line">        Marginb = re.findall(findMarginb,item)[<span class="number">0</span>]</span><br><span class="line">        <span class="comment">#print(item)</span></span><br><span class="line">        print(name+<span class="string">'\t'</span>+PRJN+<span class="string">'\t'</span>+Marginb+<span class="string">'\t'</span>+Cov+<span class="string">'\t'</span>+tech+<span class="string">'\t'</span>+GCA+<span class="string">'\t'</span>+GCF+<span class="string">'\t'</span>+Date)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> datalist</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">askURL</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="comment"># simulate browser head info </span></span><br><span class="line">    head = &#123;</span><br><span class="line">        <span class="string">"User-Agent"</span>:<span class="string">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36"</span></span><br><span class="line">        &#125;</span><br><span class="line">    requset = urllib.request.Request(url,headers=head)</span><br><span class="line"></span><br><span class="line">    html = <span class="string">""</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = urllib.request.urlopen(requset)</span><br><span class="line">        html = response.read().decode(<span class="string">"utf-8"</span>)</span><br><span class="line">    <span class="keyword">except</span> urllib.error.HTTPError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">if</span> hasattr(e,<span class="string">"code"</span>):</span><br><span class="line">            print(e.code)</span><br><span class="line">        <span class="keyword">if</span> hasattr(e,<span class="string">"reason"</span>):</span><br><span class="line">            print(e.reason)</span><br><span class="line">    <span class="keyword">return</span> html</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/05/15/查询以及下载ncbi基因组数据/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/15/详细注释的OrthoFinder/" >详细一点的Orthofinder，与之前英文的没区别</a>
 		</h3>
 		</div>
@@ -221,55 +251,6 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
-<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
-<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
-<p>这一篇用branch sites model的</p>
-<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
-<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
-<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
-<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
-<p>####1.WGD</p>
-<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
-<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
-<p>####2.Tandem and Proximal</p>
-<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
-<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
-<p>####3.Dispersed</p>
-<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
-<p>####4.Transposed</p>
-<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
-<p>NOTE！</p>
-<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
-<p>NOTE！</p>
-<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
-
-	
-	</div>
-  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2020/05/15/OrthoFinde/" >OrthoFinder 寻找同源基因</a>
 		</h3>
 		</div>
@@ -311,6 +292,55 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2020/05/15/OrthoFinde/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
+<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
+<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
+<p>这一篇用branch sites model的</p>
+<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
+<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
+<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
+<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
+<p>####1.WGD</p>
+<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
+<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
+<p>####2.Tandem and Proximal</p>
+<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
+<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
+<p>####3.Dispersed</p>
+<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
+<p>####4.Transposed</p>
+<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
+<p>NOTE！</p>
+<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
+<p>NOTE！</p>
+<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
+
+	
+	</div>
+  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -570,40 +600,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/21/MAKER相关操作/" >MAKER相关操作</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>####maker pipeline</p>
-<p>1.Initial MAKER Analysis</p>
-<p>2.Training Gene Prediction (snap, augustus) </p>
-<p>3.Round 2 MAKER Analysis</p>
-<p>4.Training Gene Prediction (snap, augustus)</p>
-<p>5.Round 3 MAKER Analysis</p>
-<p>6.Create Maker standard gene set file</p>
-<p>7.PASA </p>
-	
-	</div>
-  <a type="button" href="/2019/08/21/MAKER相关操作/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -653,37 +649,37 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
-		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
 			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
 		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+		
+			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+		
 			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
 		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
 		
 			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
 		
 			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
 		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
 			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
 		
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
+		
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+		
 			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -695,6 +691,10 @@ var _hmt = _hmt || [];
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2020/12/14/vcf2PCA/" ><i class="fa fa-file-o"></i></a>
+      </li>
     
       <li>
         <a href="/2020/12/08/1K_genome/" ><i class="fa fa-file-o"></i>主要记录千人基因组数据分析</a>
@@ -710,10 +710,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2020/06/22/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率_update</a>
-      </li>
-    
-      <li>
-        <a href="/2020/06/16/WGCNA/" ><i class="fa fa-file-o"></i></a>
       </li>
     
   </ul>
