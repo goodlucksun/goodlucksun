@@ -143,6 +143,41 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/25/wget_Ensembl/" >下载鸟类的基因组1) Ensembl</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件"><a href="#如何从ENSEMBL数据库-下载里面所有鸟类的-基因组-蛋白序列-cds序列-和gff3注释文件" class="headerlink" title="如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件"></a>如何从ENSEMBL数据库 下载里面所有鸟类的 基因组 蛋白序列 cds序列 和gff3注释文件</h1><p>去年下过一次 但是当时没有存下过程<br>首先进入Ensmbl数据库下载 all Species list (首页给出的Sp list 只有动物的)<br>然后根据图片和common name挑选出哪些是鸟类，并把前两列存在一个新的txt文件中</p>
+<p>38bird.ensembl.list.txt</p>
+<p>然后观察ftp网址发现，只需要有scientific name就可以下载，但是所有字母都为小写，且string之间有下划线</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;&apos; &apos;s/ /_/g&apos; 38bird.ensembl.list.txt</span><br><span class="line">awk &apos;&#123;print $2&#125;&apos; 38bird.ensembl.list.txt &gt; specific_name.list</span><br><span class="line">cat scientific_name.list | tr  &apos;[A-Z]&apos; &apos;[a-z]&apos; &gt; xiaoxie.scientific.list</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以根据 xiaoxie.scientific.list 循环输出wget下载命令,用wget -c 可以续传，因为下载速度实在太慢了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/cds/*.cds.all.fa.gz&apos;</span><br><span class="line">done &gt; download_cds.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/gff3/&apos;$&#123;line&#125;&apos;/*.100.gff3.gz&apos;</span><br><span class="line">done &gt; download_gff3.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c  ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/pep/*.100.protein.gz&apos;</span><br><span class="line">done &gt; download_protein.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">less xiaoxie.scientific.list | while read line</span><br><span class="line">do</span><br><span class="line">echo &apos;wget -c ftp://ftp.ensembl.org/pub/release-100/fasta/&apos;$&#123;line&#125;&apos;/dna/*.dna_sm.toplevel.fa.gz&apos;</span><br><span class="line">done &gt; download_genome.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">nohup sh *.sh &gt; run_wget.log</span><br></pre></td></tr></table></figure>
+
+
+	
+	</div>
+  <a type="button" href="/2020/05/25/wget_Ensembl/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/15/查询以及下载ncbi基因组数据/" >一个可以下载ncbi中指定物种的基因组的脚本</a>
 		</h3>
 		</div>
@@ -569,37 +604,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/08/29/HMM_example/" >HMM 隐式马尔可夫模型</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-08-29  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例"><a href="#Hidden-Markov-Model-隐含马尔可夫模型和-Viterbi-algorithm-维特比算法示例" class="headerlink" title="Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例"></a>Hidden Markov Model 隐含马尔可夫模型和 Viterbi algorithm 维特比算法示例</h2><p>基本概念：首先它得是一个统计模型，通过已有的样本来预测马尔可夫过程中的隐含参数。</p>
-<p>可见状态链：观测得到的样本组成的数据集</p>
-<p>隐含状态链：样本背后的隐含的数据集</p>
-<p>转换概率 transition probability：可随意设定转换概率，根据不同的转换概率会得到不同的HMM模型</p>
-<p>输出概率 emission probability：从隐含状态转换为可见状态时的概率，也可自由设定</p>
-	
-	</div>
-  <a type="button" href="/2019/08/29/HMM_example/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -649,37 +653,39 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
-		
 			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
 			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
 		
-			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
 		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+		
+			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+		
+			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+		
 			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
 		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
+		
+			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
+		
+			<li><a href="/tags/grabber/">grabber<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
 			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
 		
 			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
-		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -693,7 +699,11 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2020/12/14/vcf2PCA/" ><i class="fa fa-file-o"></i></a>
+        <a href="/2020/12/22/grab_PGG/" ><i class="fa fa-file-o"></i>抓取PG的G网站上的各省份的输入的rs号的等位基因频率</a>
+      </li>
+    
+      <li>
+        <a href="/2020/12/22/可爱的人的喜好/" ><i class="fa fa-file-o"></i></a>
       </li>
     
       <li>
@@ -706,10 +716,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2020/07/02/mscanX/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2020/06/22/KaKs_calculator/" ><i class="fa fa-file-o"></i>KaKs 计算进化速率_update</a>
       </li>
     
   </ul>
