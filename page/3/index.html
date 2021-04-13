@@ -143,6 +143,55 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2020-05-15  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
+<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
+<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
+<p>这一篇用branch sites model的</p>
+<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
+<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
+<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
+<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
+<p>####1.WGD</p>
+<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
+<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
+<p>####2.Tandem and Proximal</p>
+<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
+<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
+<p>####3.Dispersed</p>
+<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
+<p>####4.Transposed</p>
+<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
+<p>NOTE！</p>
+<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
+<p>NOTE！</p>
+<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
+
+	
+	</div>
+  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2020/05/15/OrthoFinde/" >OrthoFinder 寻找同源基因</a>
 		</h3>
 		</div>
@@ -176,11 +225,10 @@ var _hmt = _hmt || [];
 <p>ls *tsv | while read line; do grep ‘ENSGALG00000001790.6’ ${line}; done</p>
 <h3 id="5-Orthogroups-comparisons-across-a-clade-of-species"><a href="#5-Orthogroups-comparisons-across-a-clade-of-species" class="headerlink" title="5. Orthogroups comparisons across a clade of species"></a>5. Orthogroups comparisons across a clade of species</h3><h4 id="overview-file-PATH"><a href="#overview-file-PATH" class="headerlink" title="overview file PATH"></a>overview file PATH</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/Orthogroups/Orthogroups.tsv</p>
 <h4 id="For-each-orthogroup-there-is-a-FASTA-file-in"><a href="#For-each-orthogroup-there-is-a-FASTA-file-in" class="headerlink" title="For each orthogroup there is a FASTA file in"></a>For each orthogroup there is a FASTA file in</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/Orthogroup_Sequences</p>
-<h4 id="which-contains-the-sequences-for-the-genes-in-that-orthogroup"><a href="#which-contains-the-sequences-for-the-genes-in-that-orthogroup" class="headerlink" title="which contains the sequences for the genes in that orthogroup."></a>which contains the sequences for the genes in that orthogroup.</h4><h2 id="Other-scipts"><a href="#Other-scipts" class="headerlink" title="Other scipts"></a>Other scipts</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># reformat.py</span><br><span class="line">import sys</span><br><span class="line">i=1</span><br><span class="line">with open(sys.argv[1]) as input_gff:</span><br><span class="line">    sp_name = input_gff.name.replace(&apos;.gff3&apos;,&apos;&apos;)</span><br><span class="line">    for row in input_gff:</span><br><span class="line">        lst1 = row.split(&apos;\t&apos;)</span><br><span class="line">        if &quot;gene_id&quot; in lst1[8]:</span><br><span class="line">            lst1[8] = &quot;ID=&quot;+sp_name+&quot;_&quot;+str(i)</span><br><span class="line">            new_list=&apos;\t&apos;.join(lst1)</span><br><span class="line">            print(new_list)</span><br><span class="line">            i+=1</span><br><span class="line">        else:</span><br><span class="line">            lst1[8] = &quot;Parent=&quot;+sp_name+&quot;_&quot;+str(i-1)</span><br><span class="line">            new_list=&apos;\t&apos;.join(lst1)</span><br><span class="line">            print(new_list)</span><br><span class="line">```python</span><br></pre></td></tr></table></figure>
+<h4 id="which-contains-the-sequences-for-the-genes-in-that-orthogroup"><a href="#which-contains-the-sequences-for-the-genes-in-that-orthogroup" class="headerlink" title="which contains the sequences for the genes in that orthogroup."></a>which contains the sequences for the genes in that orthogroup.</h4><h2 id="Other-scipts"><a href="#Other-scipts" class="headerlink" title="Other scipts"></a>Other scipts</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># reformat.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_gff:</span><br><span class="line">    sp_name = input_gff.name.replace(<span class="string">'.gff3'</span>,<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_gff:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"gene_id"</span> <span class="keyword">in</span> lst1[<span class="number">8</span>]:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"ID="</span>+sp_name+<span class="string">"_"</span>+str(i)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br><span class="line">            i+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"Parent="</span>+sp_name+<span class="string">"_"</span>+str(i<span class="number">-1</span>)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br></pre></td></tr></table></figure>
 
-<p>#reformat.py2<br>import sys<br>i=1<br>with open(sys.argv[1]) as input_gff:<br>    sp_name = input_gff.name.replace(‘assemble.remove_mRNA.gff3’,’best_assembled’)<br>    for row in input_gff:<br>        lst1 = row.split(‘\t’)<br>        if “TU” in lst1[8]:<br>            lst1[8] = “ID=”+sp_name+”<em>“+str(i)<br>            new_list=’\t’.join(lst1)<br>            print(new_list)<br>            i+=1<br>        else:<br>            lst1[8] = “Parent=”+sp_name+”</em>“+str(i-1)<br>            new_list=’\t’.join(lst1)<br>            print(new_list)</p>
-<pre><code class="python"></code></pre>
-
+<p>#reformat.py2</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_gff:</span><br><span class="line">    sp_name = input_gff.name.replace(<span class="string">'assemble.remove_mRNA.gff3'</span>,<span class="string">'best_assembled'</span>)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_gff:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"TU"</span> <span class="keyword">in</span> lst1[<span class="number">8</span>]:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"ID="</span>+sp_name+<span class="string">"_"</span>+str(i)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br><span class="line">            i+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"Parent="</span>+sp_name+<span class="string">"_"</span>+str(i<span class="number">-1</span>)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br></pre></td></tr></table></figure>
 	
 	</div>
   <a type="button" href="/2020/05/15/OrthoFinde/#more" class="btn btn-default more">Read More</a>
@@ -566,45 +614,45 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
+		
+			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
+		
+			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
+		
+			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
+		
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
+		
+			<li><a href="/tags/variants-calling/">variants calling<span>1</span></a></li>
+		
+			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
+		
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+		
+			<li><a href="/tags/ortholog/">ortholog<span>2</span></a></li>
+		
+			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
+		
+			<li><a href="/tags/Python/">Python<span>1</span></a></li>
+		
+			<li><a href="/tags/grabber/">grabber<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+		
 			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
 		
 			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
 		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
-		
-			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
-		
 			<li><a href="/tags/NGS/">NGS<span>1</span></a></li>
 		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
-		
 			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
-		
-			<li><a href="/tags/ortholog/">ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/variants-calling/">variants calling<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
-		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
-		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-			<li><a href="/tags/grabber/">grabber<span>1</span></a></li>
-		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
-		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -622,6 +670,10 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
+        <a href="/2021/04/13/othmcl/" ><i class="fa fa-file-o"></i>orthomcl鉴定直系同源基因</a>
+      </li>
+    
+      <li>
         <a href="/2021/04/06/Inparanoid/" ><i class="fa fa-file-o"></i>Inparanoid</a>
       </li>
     
@@ -631,10 +683,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2021/02/14/CV记录/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2020/12/29/bwa_picard_pipeline/" ><i class="fa fa-file-o"></i>二代重测序流程</a>
       </li>
     
   </ul>
