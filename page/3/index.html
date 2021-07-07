@@ -143,266 +143,6 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2020/05/15/PAML/" >PAML and MCScanX-transposed</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>通常师姐她们做的PAML选择压力检验 是为了分析一个基因，或者多个基因串联，构建的系统发育树中，收选择的物种是谁，在不同的物种当中是否具有不同的选择方向。</p>
-<p>意思也就是在这篇文章中Molecular Evolution of the TET Gene Family in Mammals，TET有三个直系同源基因，然后把这三个基因对应的20个物种分别建树，先用sites model中的模型M0（假设比对中所有密码子位点都为一个ω）看每个基因的进化速率</p>
-<p>Selection pressure causes differentiation of the SPL gene family in the Juglandaceae</p>
-<p>这一篇用branch sites model的</p>
-<p>branch sites model 是相对于集合了branch model和sites model的，因为他允许了在model中sites的omega值不同的同时也允许了branch的omega也不相同。即反馈到ctl文件中就是 Model =2 Nsite =2，代表了branch model中的foreground ： background 和Sites Model中的M2 model W0 = 0 ;W1 = 1; W2 &gt; 1</p>
-<p>对于ModelA和ModelA null 的比较，Null 在检测中强制fix omega =1，就代表着backgroud的sites均处于negative selection,.foreground中的sites均处于neutral selection 而在modelA中 foreground 的sites全部处于positive selection </p>
-<p>但是但是但是 PAML这个软件的目的就是检测正选择，而当输入的序列过于相似的时候，很少量的正选择的位点就很难反馈到模型上，十分容易造成正选择模型和凌假设模型差异不显著</p>
-<p>NOTE:NG86 assumes no transition-transversion rate difference and no codon usage bias.</p>
-<p>####1.WGD</p>
-<p>Whole-genome duplications (WGDs) have occurred in thelineages of plants [1], animals [2,3] and fungi [4,5], with possibleconsequences including evolution of novel or modified genefunctions [6,7,8,9], and/or provision of ‘‘buffer capacity’’ [10,11]or  genetic  redundancy  that  increases  genetic  robustness[12,13,14,15,16,17].  Genome  duplication  may  also  increaseopportunities for nonreciprocal recombination [18,19,20], permit-ting or causing duplicated genes to evolve in concert for a period oftime. Rapid DNA loss and restructuring of low-copy DNA[21,22,23,24], retrotransposon activation [25,26,27] and epigeneticchanges [28,29,30,31,32,33] following WGD may further providematerials for evolutionary change</p>
-<p>全基因组重复，基因组复制也可能增加不可逆重组的机会[18，19，20]，允许或导致复制的基因在一段时间内协同进化</p>
-<p>####2.Tandem and Proximal</p>
-<p>Tandem duplicates  are  consecutive  in  the  genome  while  proximal duplicates are near one another but separated by a few gene</p>
-<p>These two gene duplication modes are presumed to arise throughunequal crossing over [36] or localized transposon activitie</p>
-<p>####3.Dispersed</p>
-<p>Dispersed duplicates are neither adjacent to each other in thegenome nor within homeologous chromosome segments </p>
-<p>####4.Transposed</p>
-<p>DNA  transposons  such  aspackmules  (rice)  [39],  helitrons  (maize)  [40],  and  CACTAelements (sorghum) [27] may relocate duplicated genes or genesegments to new chromosomal positions (referred to as DNA basedtransposed duplication). RNA based transposed duplication, oftenreferred to as retrotransposition, typically creates a single-exonretrocopy from a multi-exon parental gene, by reverse transcrip-tion of a spliced messenger RNA. It is presumed that the retrocopyduplicates only the transcribed sequence of the parental gene,detached from the parental promoter. The new retrogene is oftendeposited in a novel chromosomal environment with new (i.e. non-ancestral) neighboring genes and, having lost its native promoter,is only likely to survive as a functional gene if a new promoter is acquired [41,42]</p>
-<p>NOTE！</p>
-<p>A transposed duplicate pairs must be meet the following criteria: one gene existed in its ancestral locus, and the other was located in a non-ancestral locus (<a href="https://www.frontiersin.org/articles/10.3389/fpls.2018.00161/full#B87" target="_blank" rel="noopener">Wang Y. et al., 2011</a>).</p>
-<p>NOTE！</p>
-<p>If a pair of transposed duplicated genes comprised an ancestral gene with more than two exons and a novel transposed copy without an intron, then this pair was inferred to be derived from RNA-based transposition (retro transposition).</p>
-
-	
-	</div>
-  <a type="button" href="/2020/05/15/PAML/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/05/15/OrthoFinde/" >OrthoFinder 寻找同源基因</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="ortholog-identification"><a href="#ortholog-identification" class="headerlink" title="ortholog identification"></a>ortholog identification</h1><h2 id="in-order-to-keep-gene-id-format-consistantly-use-awk-and-python-and-gffread-and-transeq-for-refomating"><a href="#in-order-to-keep-gene-id-format-consistantly-use-awk-and-python-and-gffread-and-transeq-for-refomating" class="headerlink" title="in order to keep gene id format consistantly,use awk and python and gffread and transeq for refomating"></a>in order to keep gene id format consistantly,use awk and python and gffread and transeq for refomating</h2><h3 id="base-pipeline"><a href="#base-pipeline" class="headerlink" title="base pipeline"></a>base pipeline</h3><h3 id="1-gene-and-mRNA-will-cause-redirect-error-remove-first"><a href="#1-gene-and-mRNA-will-cause-redirect-error-remove-first" class="headerlink" title="1. gene and mRNA will cause redirect error, remove first"></a>1. gene and mRNA will cause redirect error, remove first</h3><p>awk ‘{if($3 != “mRNA”)print $0}’ Prunella_strophita_assemble.evm.gff3  &gt; Prunella_strophita_assemble.remove_mRNA.gff3</p>
-<h3 id="2-replace-gene-id"><a href="#2-replace-gene-id" class="headerlink" title="2. replace gene id"></a>2. replace gene id</h3><p>python reformat.py2 Prunella_strophita_assemble.remove_mRNA.gff3 &gt;  Prunella_strophita.best_assembled.gff3</p>
-<h3 id="3-extract-cds-sequence"><a href="#3-extract-cds-sequence" class="headerlink" title="3. extract cds sequence"></a>3. extract cds sequence</h3><p>gffread Prunella_strophita.best_assembled.gff3 -g Prunella_strophita_assemble.fa -x Prunella_strophita.best_assembled.cds.fa</p>
-<h3 id="4-cds2protein"><a href="#4-cds2protein" class="headerlink" title="4. cds2protein"></a>4. cds2protein</h3><p>transeq -sequence Prunella_strophita.best_assembled.cds.fa -outseq Prunella_strophita.best_assembled.pep.fa</p>
-<h3 id="5-remove-the-info-added-by-transeq"><a href="#5-remove-the-info-added-by-transeq" class="headerlink" title="5. remove the info added by transeq"></a>5. remove the info added by transeq</h3><p>sed -i ‘s/(.<em>)_1(.</em>)/\1\2/g’ Prunella_strophita.best_assembled.pep.fa</p>
-<h2 id="shell-pipeline"><a href="#shell-pipeline" class="headerlink" title="shell pipeline"></a>shell pipeline</h2><p>ls *gff3 | sed ‘s/.gff3//g’ | while read line;<br>do python reformat.py ${line}.gff3  &gt; ${line}.refomat.gff3;<br>gffread ${line}.refomat.gff3 -g ${line}.fa  -w ${line}.cdna.fa;<br>echo “TransDecoder.LongOrfs -t “${line}”.cdna.fa &amp;” &gt;&gt; run_TransDecoder.LongOrfs.sh<br>echo “TransDecoder.Predict -t “${line}”.cdna.fa &amp;” &gt;&gt; run_TransDecoder.Predict.sh<br>done</p>
-<h1 id="use-TransDecoder-to-predict-ORF-region"><a href="#use-TransDecoder-to-predict-ORF-region" class="headerlink" title="use TransDecoder to predict ORF region"></a>use TransDecoder to predict ORF region</h1><p>nohup sh run_TransDecoder.LongOrfs.sh &gt; run_TransDecoder.LongOrfs.log<br>nohup sh run_TransDecoder.Predict.sh &gt; run_TransDecoder.Predict.log</p>
-<h1 id="generate-longest-transcripts-and-remove-duplicated-sequence-in-pep-file"><a href="#generate-longest-transcripts-and-remove-duplicated-sequence-in-pep-file" class="headerlink" title="generate longest transcripts and remove duplicated sequence in pep file"></a>generate longest transcripts and remove duplicated sequence in pep file</h1><p>ls *.transdecoder.pep | while read line<br>do<br>/usr/bin/perl retrive_longest_splicing_variant.pl ${line} longest.${line}<br>/usr/bin/perl rm_dup_fasta.pl longest.${line} temp.longest.${line}<br>awk -F ‘#’ ‘{if($0 ~”^&gt;”){print $1}else{print $0}}’ temp.${line} &gt;   final.${line}<br>done </p>
-<h1 id="rename-file"><a href="#rename-file" class="headerlink" title="rename file"></a>rename file</h1><p>rename .cdna.fa.transdecoder.pep .pep.fa <em>.cdna.fa.transdecoder.pep<br>rename final.longest.P P final.longest.Prunella_</em></p>
-<h2 id="download-Gallus-genome-from-Ensembl-database-and-remove-reduant-transcripts"><a href="#download-Gallus-genome-from-Ensembl-database-and-remove-reduant-transcripts" class="headerlink" title="download Gallus genome from Ensembl database and remove reduant transcripts"></a>download Gallus genome from Ensembl database and remove reduant transcripts</h2><p>wget <a href="ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.all.fa.gz" target="_blank" rel="noopener">ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.all.fa.gz</a><br>gunzip Gallus_gallus.GRCg6a.pep.all.fa.gz</p>
-<p>python ~/software/OrthoFinder/tools/primary_transcript.py Gallus_gallus.GRCg6a.pep.all.fa<br>mv /home/sunhaoyun/data/Prunella_genome/primary_transcripts/Gallus_gallus.GRCg6a.pep.all.fa Gallus.pep.fa</p>
-<h2 id="run-OrthoFinder"><a href="#run-OrthoFinder" class="headerlink" title="run OrthoFinder"></a>run OrthoFinder</h2><p>~/software/OrthoFinder/orthofinder -f pep -S diamond</p>
-<h1 id="analyse-result"><a href="#analyse-result" class="headerlink" title="analyse result"></a>analyse result</h1><h3 id="1-overview-how-many-genes-were-assigned-to-orthogroups"><a href="#1-overview-how-many-genes-were-assigned-to-orthogroups" class="headerlink" title="1. overview how many genes were assigned to orthogroups"></a>1. overview how many genes were assigned to orthogroups</h3><h4 id="PATH"><a href="#PATH" class="headerlink" title="PATH"></a>PATH</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/Prunella_sp19_with_Gallus/Comparative_Genomics_Statistics/Statistics_Overall.tsv</p>
-<h3 id="2-check-the-percentages-on-a-per-species-basis-here"><a href="#2-check-the-percentages-on-a-per-species-basis-here" class="headerlink" title="2. check the percentages on a per species basis here"></a>2. check the percentages on a per species basis here</h3><h4 id="PATH-1"><a href="#PATH-1" class="headerlink" title="PATH"></a>PATH</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/CComparative_Genomics_Statistics/Statistics_PerSpecies.tsv</p>
-<h3 id="3-species-tree"><a href="#3-species-tree" class="headerlink" title="3. species tree"></a>3. species tree</h3><p>####PATH<br>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/Species_Tree/SpeciesTree_rooted.txt</p>
-<h3 id="NOTE"><a href="#NOTE" class="headerlink" title="NOTE"></a>NOTE</h3><h3 id="This-speceis-tree-may-have-some-error"><a href="#This-speceis-tree-may-have-some-error" class="headerlink" title="This speceis tree may have some error"></a>This speceis tree may have some error</h3><h3 id="If-the-species-tree-is-not-correct-then-this-will-not-impact-the-orthogroup-inference"><a href="#If-the-species-tree-is-not-correct-then-this-will-not-impact-the-orthogroup-inference" class="headerlink" title="If the species tree is not correct then this will not impact the orthogroup inference,"></a>If the species tree is not correct then this will not impact the orthogroup inference,</h3><h3 id="but-it-might-affect-the-orthologue-inference-in-some-of-the-gene-trees-which-have-gene-duplication-events"><a href="#but-it-might-affect-the-orthologue-inference-in-some-of-the-gene-trees-which-have-gene-duplication-events" class="headerlink" title="but it might affect the orthologue inference in some of the gene trees which have gene duplication events."></a>but it might affect the orthologue inference in some of the gene trees which have gene duplication events.</h3><h3 id="4-find-out-Gallus-orthologues-are-in-the-other-speceis"><a href="#4-find-out-Gallus-orthologues-are-in-the-other-speceis" class="headerlink" title="4. find out Gallus orthologues are in  the other speceis"></a>4. find out Gallus orthologues are in  the other speceis</h3><h4 id="such-as-methyltransferase-like-21C-gene-METTL21C-plays-an-important-role-in-chicken-muscle-development"><a href="#such-as-methyltransferase-like-21C-gene-METTL21C-plays-an-important-role-in-chicken-muscle-development" class="headerlink" title="such as methyltransferase-like 21C gene (METTL21C) plays an important role in chicken muscle development"></a>such as methyltransferase-like 21C gene (METTL21C) plays an important role in chicken muscle development</h4><h4 id="GgMETTL21C1-corresponding-gene-id-is-ENSGALG00000001790-6"><a href="#GgMETTL21C1-corresponding-gene-id-is-ENSGALG00000001790-6" class="headerlink" title="GgMETTL21C1 corresponding gene id is ENSGALG00000001790.6"></a>GgMETTL21C1 corresponding gene id is ENSGALG00000001790.6</h4><h4 id="PATH-2"><a href="#PATH-2" class="headerlink" title="PATH"></a>PATH</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/Orthologues/Orthologues_Gallus.pep/</p>
-<p>ls *tsv | while read line; do grep ‘ENSGALG00000001790.6’ ${line}; done</p>
-<h3 id="5-Orthogroups-comparisons-across-a-clade-of-species"><a href="#5-Orthogroups-comparisons-across-a-clade-of-species" class="headerlink" title="5. Orthogroups comparisons across a clade of species"></a>5. Orthogroups comparisons across a clade of species</h3><h4 id="overview-file-PATH"><a href="#overview-file-PATH" class="headerlink" title="overview file PATH"></a>overview file PATH</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/Orthogroups/Orthogroups.tsv</p>
-<h4 id="For-each-orthogroup-there-is-a-FASTA-file-in"><a href="#For-each-orthogroup-there-is-a-FASTA-file-in" class="headerlink" title="For each orthogroup there is a FASTA file in"></a>For each orthogroup there is a FASTA file in</h4><p>/home/public/Prunella/Prunella_genome/Sunhaoyun_genome/OrthoFinder/Prunella_sp19_with_Gallus/Orthogroup_Sequences</p>
-<h4 id="which-contains-the-sequences-for-the-genes-in-that-orthogroup"><a href="#which-contains-the-sequences-for-the-genes-in-that-orthogroup" class="headerlink" title="which contains the sequences for the genes in that orthogroup."></a>which contains the sequences for the genes in that orthogroup.</h4><h2 id="Other-scipts"><a href="#Other-scipts" class="headerlink" title="Other scipts"></a>Other scipts</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># reformat.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_gff:</span><br><span class="line">    sp_name = input_gff.name.replace(<span class="string">'.gff3'</span>,<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_gff:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"gene_id"</span> <span class="keyword">in</span> lst1[<span class="number">8</span>]:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"ID="</span>+sp_name+<span class="string">"_"</span>+str(i)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br><span class="line">            i+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"Parent="</span>+sp_name+<span class="string">"_"</span>+str(i<span class="number">-1</span>)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br></pre></td></tr></table></figure>
-
-<p>#reformat.py2</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">with</span> open(sys.argv[<span class="number">1</span>]) <span class="keyword">as</span> input_gff:</span><br><span class="line">    sp_name = input_gff.name.replace(<span class="string">'assemble.remove_mRNA.gff3'</span>,<span class="string">'best_assembled'</span>)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> input_gff:</span><br><span class="line">        lst1 = row.split(<span class="string">'\t'</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">"TU"</span> <span class="keyword">in</span> lst1[<span class="number">8</span>]:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"ID="</span>+sp_name+<span class="string">"_"</span>+str(i)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br><span class="line">            i+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            lst1[<span class="number">8</span>] = <span class="string">"Parent="</span>+sp_name+<span class="string">"_"</span>+str(i<span class="number">-1</span>)</span><br><span class="line">            new_list=<span class="string">'\t'</span>.join(lst1)</span><br><span class="line">            print(new_list)</span><br></pre></td></tr></table></figure>
-	
-	</div>
-  <a type="button" href="/2020/05/15/OrthoFinde/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/04/29/identify/" >Blast + Hmmsearch 鉴定一个基因家族</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-04-29  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hmmsearch -o trifida.hmmsearch.log --tblout trifida.hmmsearch.tblout MIP.hmm  longest.trifida.pep.fa</span><br><span class="line"></span><br><span class="line">awk '&#123;if ($1!~/^#/)print $1&#125;' trifida.hmmsearch.tblout &gt; trifida.hmmsearch.seqid</span><br><span class="line"></span><br><span class="line">makeblastdb -in longest.trifida.pep.fa   -title trifida -dbtype prot -parse_seqids -out trifida</span><br><span class="line"></span><br><span class="line">blastp -db trifida -query at.MIP.pep.fa -evalue 1e-3 -outfmt 6 &gt; trifida.blastp</span><br><span class="line"></span><br><span class="line">awk '&#123;print $2&#125;' trifida.blastp | sort | uniq &gt; trifida.blastp.seqid</span><br><span class="line"></span><br><span class="line">cat trifida.hmmsearch.seqid trifida.blastp.seqid | sort | uniq &gt; trifida.MIP.seqid</span><br></pre></td></tr></table></figure>
-
-
-	
-	</div>
-  <a type="button" href="/2020/04/29/identify/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2020/04/22/Nature 配色风格pal_npg/" >ggsci自动生成适合学术期刊的配色</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2020-04-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>最近做了很多图被说不好看。想到ggsci可以自动给分组添加颜色，就想看看他可不可以把颜色的十六进制码输出出来，然后发现是有这个函数的。</p>
-<p>ggsci提供以下颜色</p>
-<blockquote>
-<p>Name    Scales    Palette Types    Palette Generator</p>
-<p>NPG    scale_color_npg() scale_fill_npg()    “nrc”    pal_npg()</p>
-<p>AAAS    scale_color_aaas() scale_fill_aaas()    “default”    pal_aaas()</p>
-<p>NEJM    scale_color_nejm() scale_fill_nejm()    “default”    pal_nejm()</p>
-<p>Lancet    scale_color_lancet() scale_fill_lancet()    “lanonc”    pal_lancet()</p>
-<p>JAMA    scale_color_jama() scale_fill_jama()    “default”    pal_jama()</p>
-<p>JCO    scale_color_jco() scale_fill_jco()    “default”    pal_jco()</p>
-<p>UCSCGB    scale_color_ucscgb() scale_fill_ucscgb()    “default”    pal_ucscgb()</p>
-<p>D3    scale_color_d3()</p>
-</blockquote>
-	
-	</div>
-  <a type="button" href="/2020/04/22/Nature 配色风格pal_npg/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/12/21/mysql/" >OrthoMCL进行同源基因比对</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-12-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="以root账户登陆mysql"><a href="#以root账户登陆mysql" class="headerlink" title="以root账户登陆mysql"></a>以root账户登陆mysql</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 创建本地登录的账户</span><br><span class="line">create user &apos;mysql&apos;@&apos;localhost&apos; identified by &apos;111111&apos;;</span><br><span class="line"></span><br><span class="line"># 创建远程可登录的账户</span><br><span class="line">create user &apos;mysql&apos;@&apos;%&apos; identified by &apos;111111&apos;;</span><br><span class="line"></span><br><span class="line"># 用户创建完成后，刷新授权</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line"># 创建一个新的数据库</span><br><span class="line">create database orthomcl DEFAULT CHARSET utf8 COLLATE utf8_general_ci;</span><br><span class="line"></span><br><span class="line"># 授权</span><br><span class="line">GRANT ALL PRIVILEGES ON orthomcl.* TO &apos;orthomcl&apos;@&apos;localhost&apos;   IDENTIFIED BY &apos;111111&apos;;</span><br><span class="line">GRANT ALL PRIVILEGES ON orthomcl.* TO &apos;orthomcl&apos;@&apos;%&apos;   IDENTIFIED BY &apos;111111&apos;;</span><br><span class="line">flush privileges;</span><br><span class="line"></span><br><span class="line"># 查看结果</span><br><span class="line">show databases;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">perl scripts/orthomcl-setup-database.pl --user orthomcl --password 111111 --host 127.0.0.1 --database orthomcl --outfile configure_outfile.conf [--no-create-database]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">perl scripts/orthomcl-pipeline.pl -i ../../data/orthomcl/ -o ../../data/orthomcl_out -m configure_outfile.conf --nocompliant</span><br></pre></td></tr></table></figure>
-
-<p>Warning: directory “../../data/orthomcl_out” already exists, are you sure you want to store data here [Y]? Y</p>
-<p>Starting OrthoMCL pipeline on: Sun Dec 15 11:12:16 2019</p>
-<p>Git commit: 08bd2baf43db6e35afb3e22e95dce8a3f740729c</p>
-<p>=Stage 1: Validate Files =</p>
-<p>Validating Pcollaris_S26913_per_pep.fasta … 6276 sequences</p>
-<p>Validating Pocularis_EAK479_pep.fasta … 6224 sequences</p>
-<p>Validating Prubeculoides_QHH0839_pep.fasta … 6704 sequences</p>
-<p>Validating Pimmaculata_XZ14285_pep.fasta … 5791 sequences</p>
-<p>Validating Pkoslowi_26923_pep.fasta … 11783 sequences</p>
-<p>Validating Pcollaris_PA20150614-Sichuan_pep.fasta … 8328 sequences</p>
-<p>Validating Prubida_2S_63614_pep.fasta … 12875 sequences</p>
-<p>Validating Pstrophita_assemble_pep.fasta … 20581 sequences</p>
-<p>Validating Pcollaris_130562_Jon_Italy_pep.fasta … 6855 sequences</p>
-<p>Validating Patrogularis_141230_pep.fasta … 10880 sequences</p>
-<p>Validating Pmodularis_117541_pep.fasta … 8978 sequences</p>
-<p>Validating Pmontanella_m80200_pep.fasta … 8534 sequences</p>
-<p>Validating Pcollaris_S1318_taiwan_pep.fasta … 14461 sequences</p>
-<p>Validating Pocularis_MR1290_pep.fasta … 6774 sequences</p>
-<p>Validating Phimalayana_66660_pep.fasta … 6852 sequences</p>
-<p>Validating Phimalayana_57883_pep.fasta … 7552 sequences</p>
-<p>Validating Pfulvescens_QHH0845_pep.fasta … 9746 sequences</p>
-<p>Validating Gallus_gallus_pep.fasta … 28444 sequences</p>
-<p>Validated 18 files</p>
-<p>Stage 1 took 0.17 minutes </p>
-<p>=Stage 2: Validate Database=</p>
-<p>Warning: some tables exist already in database dbi:mysql:orthomcl_new:127.0.0.1:mysql_local_infile, user=root, database_name=orthomcl_new. Do you want to remove (y/n)? y</p>
-<p>Executing: ‘drop database orthomcl_new’</p>
-<p>Executing: ‘create database orthomcl_new’</p>
-<p>Successfully removed old database entries</p>
-<p>Stage 2 took 0.02 minutes </p>
-<p>=Stage 3: Load OrthoMCL Database Schema=</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclInstallSchema “/home/sunhaoyun/software/orthomcl-pipeline/configure_outfile.conf” “/home/sunhaoyun/data/orthomcl_out/log/orthomclSchema.log” 1&gt;/home/sunhaoyun/data/orthomcl_out/log/3.loadschema.stdout.log 2&gt;/home/sunhaoyun/data/orthomcl_out/log/3.loadschema.stderr.log</p>
-<p>Stage 3 took 0.00 minutes </p>
-<p>=Stage 4: Adjust Fasta=</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_S26913_per_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_S26913_per_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pocularis_EAK479_pep “/home/sunhaoyun/data/orthomcl/Pocularis_EAK479_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Prubeculoides_QHH0839_pep “/home/sunhaoyun/data/orthomcl/Prubeculoides_QHH0839_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pimmaculata_XZ14285_pep “/home/sunhaoyun/data/orthomcl/Pimmaculata_XZ14285_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pkoslowi_26923_pep “/home/sunhaoyun/data/orthomcl/Pkoslowi_26923_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_PA20150614-Sichuan_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_PA20150614-Sichuan_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Prubida_2S_63614_pep “/home/sunhaoyun/data/orthomcl/Prubida_2S_63614_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pstrophita_assemble_pep “/home/sunhaoyun/data/orthomcl/Pstrophita_assemble_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_130562_Jon_Italy_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_130562_Jon_Italy_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Patrogularis_141230_pep “/home/sunhaoyun/data/orthomcl/Patrogularis_141230_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pmodularis_117541_pep “/home/sunhaoyun/data/orthomcl/Pmodularis_117541_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pmontanella_m80200_pep “/home/sunhaoyun/data/orthomcl/Pmontanella_m80200_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pcollaris_S1318_taiwan_pep “/home/sunhaoyun/data/orthomcl/Pcollaris_S1318_taiwan_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pocularis_MR1290_pep “/home/sunhaoyun/data/orthomcl/Pocularis_MR1290_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Phimalayana_66660_pep “/home/sunhaoyun/data/orthomcl/Phimalayana_66660_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Phimalayana_57883_pep “/home/sunhaoyun/data/orthomcl/Phimalayana_57883_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Pfulvescens_QHH0845_pep “/home/sunhaoyun/data/orthomcl/Pfulvescens_QHH0845_pep.fasta” 1</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclAdjustFasta Gallus_gallus_pep “/home/sunhaoyun/data/orthomcl/Gallus_gallus_pep.fasta” 1</p>
-<p>Stage 4 took 0.08 minutes </p>
-<p>=Stage 5: Filter Fasta=</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/orthomclSoftware-v2.0.9/bin/orthomclFilterFasta “/home/sunhaoyun/data/orthomcl_out/compliant_fasta” 10 20</p>
-<p>Stage 5 took 0.12 minutes </p>
-<p>=Stage 6: Split Fasta=</p>
-<p>splitting /home/sunhaoyun/data/orthomcl_out/blast_dir/goodProteins.fasta into 4 pieces</p>
-<p>jStage 6 took 0.42 minutes </p>
-<p>=Stage 7: Format Database=</p>
-<p>/home/sunhaoyun/software/orthomcl-pipeline/blast-2.2.26/bin/formatdb -i “/home/sunhaoyun/data/orthomcl_out/blast_dir/goodProteins.fasta” -p “T” -l “/home/sunhaoyun/data/orthomcl_out/log/formatdb.log” 1&gt;/home/sunhaoyun/data/orthomcl_out/log/7.format-stdout.log 2&gt;/home/sunhaoyun/data/orthomcl_out/log/7.format-stderr.log</p>
-
-	
-	</div>
-  <a type="button" href="/2019/12/21/mysql/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
 			<a href="/2019/12/04/shimei/" >建一颗ML树</a>
 		</h3>
 		</div>
@@ -614,45 +354,45 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/grabber/">grabber<span>1</span></a></li>
+		
+			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
+		
+			<li><a href="/tags/Python/">Python<span>1</span></a></li>
+		
 			<li><a href="/tags/GiagaScience/">GiagaScience<span>1</span></a></li>
 		
 			<li><a href="/tags/ncbi/">ncbi<span>1</span></a></li>
 		
-			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
-		
-			<li><a href="/tags/Ensembl/">Ensembl<span>2</span></a></li>
-		
-			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
-		
-			<li><a href="/tags/variants-calling/">variants calling<span>1</span></a></li>
-		
-			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
-		
-			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
-		
-			<li><a href="/tags/ortholog/">ortholog<span>2</span></a></li>
+			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
 		
 			<li><a href="/tags/Mysql-OrthoMCL/">Mysql, OrthoMCL<span>1</span></a></li>
 		
-			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+			<li><a href="/tags/HMM/">HMM<span>1</span></a></li>
 		
-			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
-		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-			<li><a href="/tags/grabber/">grabber<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
-		
-			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
-		
-			<li><a href="/tags/gene-family/">gene family<span>1</span></a></li>
+			<li><a href="/tags/Ortholog/">Ortholog<span>1</span></a></li>
 		
 			<li><a href="/tags/Phylogeny/">Phylogeny<span>1</span></a></li>
 		
+			<li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+		
+			<li><a href="/tags/KaKscalculator-R/">KaKscalculator,R<span>1</span></a></li>
+		
+			<li><a href="/tags/NCBI/">NCBI<span>1</span></a></li>
+		
+			<li><a href="/tags/ortholog/">ortholog<span>1</span></a></li>
+		
 			<li><a href="/tags/NGS/">NGS<span>1</span></a></li>
 		
+			<li><a href="/tags/1000-Genomes/">1000 Genomes<span>1</span></a></li>
+		
 			<li><a href="/tags/OrthoFinder/">OrthoFinder<span>1</span></a></li>
+		
+			<li><a href="/tags/variants-calling/">variants calling<span>1</span></a></li>
+		
+			<li><a href="/tags/Markdown-maker/">Markdown, maker<span>2</span></a></li>
+		
+			<li><a href="/tags/gene-duplication/">gene duplication<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -666,6 +406,10 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2021/05/27/原始数据整理/" ><i class="fa fa-file-o"></i></a>
+      </li>
+    
+      <li>
         <a href="/2021/04/26/GATK_WDL/" ><i class="fa fa-file-o"></i>GATK and WDL流处理</a>
       </li>
     
@@ -674,15 +418,11 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
-        <a href="/2021/04/06/Inparanoid/" ><i class="fa fa-file-o"></i>Inparanoid</a>
+        <a href="/2020/12/29/bwa_picard_pipeline/" ><i class="fa fa-file-o"></i>二代重测序流程</a>
       </li>
     
       <li>
-        <a href="/2021/03/26/Python 卡方检验/" ><i class="fa fa-file-o"></i></a>
-      </li>
-    
-      <li>
-        <a href="/2021/02/14/CV记录/" ><i class="fa fa-file-o"></i></a>
+        <a href="/2020/12/22/grab_PGG/" ><i class="fa fa-file-o"></i>抓取PGG的网站上的各省份的输入的rs号的等位基因频率</a>
       </li>
     
   </ul>
